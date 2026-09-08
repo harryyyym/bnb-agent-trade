@@ -123,7 +123,7 @@ export default async function Home() {
               the same Container as the headline, so its left edge is the
               page's left edge. */}
           <Container className="relative">
-            <div className="animate-rise" style={{ animationDelay: "1.4s" }}>
+            <div className="animate-rise pt-4 md:pt-8" style={{ animationDelay: "1.4s" }}>
               <AskFold asks={getAsks()} denominator={getAskDenominator()} />
             </div>
           </Container>

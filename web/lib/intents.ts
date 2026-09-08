@@ -11,7 +11,7 @@ export interface Intent {
   /** Stable id, and the slug the answer links to. */
   key: string;
   category: Category;
-  /** The job, as a visitor would name it. */
+  /** The job, in the words the marketplace tabs use, so one vocabulary runs across the site. */
   title: string;
   /** One line: what an agent in this category does. */
   sub: string;
@@ -24,7 +24,7 @@ export const INTENTS: readonly Intent[] = [
   {
     key: "health-factor-monitoring",
     category: "health factor monitoring",
-    title: "Protect a position from liquidation",
+    title: "Watch a lending position",
     sub: "Watches a health factor and repays before it crosses",
     example: "Protect my Venus position from liquidation",
     keys: [
@@ -47,7 +47,7 @@ export const INTENTS: readonly Intent[] = [
   {
     key: "rebalancing",
     category: "rebalancing",
-    title: "Keep a liquidity position in range",
+    title: "Rebalance a position",
     sub: "Moves a concentrated band as the price moves",
     example: "Keep my PancakeSwap position in range",
     keys: [
@@ -69,7 +69,7 @@ export const INTENTS: readonly Intent[] = [
   {
     key: "yield-optimisation",
     category: "yield optimisation",
-    title: "Earn more on idle assets",
+    title: "Find better yield",
     sub: "Reads rates across venues and reports where to sit",
     example: "Find better yield for 2 BNB",
     keys: [
@@ -93,7 +93,7 @@ export const INTENTS: readonly Intent[] = [
   {
     key: "grid-trading",
     category: "grid trading",
-    title: "Trade a price range",
+    title: "Run a grid",
     sub: "Places a grid between two prices and refills the fills",
     example: "Run a grid on BNB between two prices",
     keys: ["grid", "trade", "trading", "buy", "sell", "price", "spread", "volatility", "ladder", "levels", "swing"],

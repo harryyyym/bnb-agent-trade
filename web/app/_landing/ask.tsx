@@ -17,7 +17,7 @@
 // the whole vocabulary is one readable file. Every figure arrives from the
 // server as props; nothing here computes one, and no model writes any of it.
 import { ArrowUp, Layers } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ListTable, Row } from "@/app/marketplace/row";
 import { Button } from "@/components/button";
 import { CategoryIcon } from "@/components/category-icon";
@@ -67,6 +67,7 @@ export function AskFold({ asks, denominator }: { asks: Ask[]; denominator: AskDe
   const [question, setQuestion] = useState("");
   const [asked, setAsked] = useState<Ask | null>(null);
   const [rotation, setRotation] = useState(0);
+  const box = useRef<HTMLTextAreaElement>(null);
 
   const match = useMemo(() => matchIntent(asks, question), [asks, question]);
   const example = asks[rotation % asks.length]?.example ?? "";
@@ -83,6 +84,15 @@ export function AskFold({ asks, denominator }: { asks: Ask[]; denominator: AskDe
     if (match) setAsked(match);
   };
 
+  // A chip fills the field and hands the question to the send control rather
+  // than answering behind the reader's back: the three parts are one action,
+  // and the button is what performs it.
+  const take = (next: Ask) => {
+    setQuestion(next.example);
+    setAsked(null);
+    box.current?.focus();
+  };
+
   return (
     <div>
       {/* Sized and shaped the way an assistant's prompt box is: not the full
@@ -90,9 +100,10 @@ export function AskFold({ asks, denominator }: { asks: Ask[]; denominator: AskDe
           foot row inside the field, and the jobs as pills underneath rather
           than crowded into the foot. Checked against Gemini, Copilot, Manus,
           Mistral and Langdock on Mobbin. */}
-      <div className="max-w-3xl">
+      <div className="max-w-4xl">
         <InputGroup className="rounded-2xl shadow-sm">
           <InputGroupTextarea
+            ref={box}
             aria-label="What do you need done?"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
@@ -109,14 +120,14 @@ export function AskFold({ asks, denominator }: { asks: Ask[]; denominator: AskDe
               }
             }}
             placeholder={example}
-            rows={2}
-            className="min-h-20"
+            rows={3}
+            className="min-h-32 text-lg md:text-lg"
           />
           <InputGroupAddon align="block-end">
             {/* What the box reads, in the slot an assistant gives its model
                 picker. Not a control: there is one corpus and it is named. */}
-            <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Layers aria-hidden className="size-3.5" />
+            <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Layers aria-hidden className="size-4" />
               Reads {fmtInt(denominator.shelved)} agents on the shelf
             </span>
             <div className="ml-auto flex items-center gap-2">
@@ -127,9 +138,9 @@ export function AskFold({ asks, denominator }: { asks: Ask[]; denominator: AskDe
                 aria-label="Ask"
                 disabled={!match}
                 onClick={send}
-                className="rounded-full"
+                className="size-10 rounded-full"
               >
-                <ArrowUp aria-hidden />
+                <ArrowUp aria-hidden className="size-5" />
               </UIButton>
             </div>
           </InputGroupAddon>
@@ -140,13 +151,11 @@ export function AskFold({ asks, denominator }: { asks: Ask[]; denominator: AskDe
             <UIButton
               key={a.key}
               type="button"
-              variant={asked?.key === a.key ? "secondary" : "outline"}
+              variant={match?.key === a.key ? "secondary" : "outline"}
               size="sm"
+              aria-pressed={match?.key === a.key}
               className="rounded-full"
-              onClick={() => {
-                setQuestion(a.example);
-                setAsked(a);
-              }}
+              onClick={() => take(a)}
             >
               <CategoryIcon category={a.category} size={16} />
               {a.title}
