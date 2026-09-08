@@ -20,7 +20,7 @@ import { Container } from "./_landing/ui";
  * no BNB Chain registry, so every 8004scan.io/agents/{56,97}/<id> renders
  * "Agent Not Found" (checked 2026-09-06). The registry contract on BscScan is
  * the one place the full set of ids is actually readable. This is why
- * lib/format.ts no longer exports SCAN_BASE — see AGENTS.md, Key external facts.
+ * lib/format.ts no longer exports SCAN_BASE: no explorer indexes the BNB Chain registries.
  */
 const REGISTRY_URL = registryUrl(56);
 
