@@ -7,7 +7,7 @@ export const SITE_DESCRIPTION =
 /*
  * The PUBLIC repository, which is not the one this site is built from.
  * The working repository is private; the public repo
- * `bnb-agent-trade` (renamed from bnb-survival-suite on 2026-09-08) is what AGENTS.md names as the public link (D12) and is
+ * `bnb-agent-trade` is the public repository, and is
  * what the deliverable manifests are published under. Every GitHub link on the
  * site derives from this constant — nav, footer, `Report a listing`, and the
  * manifest links on the landing and /hiring — so pointing it at the private

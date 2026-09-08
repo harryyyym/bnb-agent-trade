@@ -88,7 +88,7 @@ export function getChainStats(chain: number): ChainStats | undefined {
   return STATS.chains[String(chain) as "56" | "97"];
 }
 
-/** Our three, in landing order: SurvivalGuard, Dark Survivor, Pancake Ranger. */
+/** The featured three, in landing order: SurvivalGuard, Dark Survivor, Pancake Ranger. */
 export function getFeatured(): ShelfRow[] {
   const team = ROWS.filter((r) => r.operator === "team");
   const rank = (r: ShelfRow) => {
