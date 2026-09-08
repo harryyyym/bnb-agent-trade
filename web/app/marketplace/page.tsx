@@ -10,6 +10,8 @@ import { footerLine, isReachable, type ChainBlock } from "@/lib/format";
 import { getProbeSnapshot } from "@/lib/live";
 import { getChainStats, getLiteRows } from "@/lib/shelf";
 import type { LiteRow } from "@/lib/types";
+import { getAskDenominator, getAsks } from "@/lib/ask";
+import { AskBox } from "./ask";
 import { parseListParams } from "./filters";
 import { MarketplaceList } from "./list";
 
@@ -91,6 +93,14 @@ export default async function MarketplacePage(props: { searchParams: Promise<Sea
                 label="Answering now"
                 value={answering}
               />
+            </div>
+            {/* The front door. A visitor says what they need, and the page
+                answers with what the shelf holds for that kind of work before
+                it shows a row: the denominator, the category's counts, the
+                agent with the most settlement and whether it answers. The
+                answer is generated from the shelf, not written by a model. */}
+            <div className="animate-rise" style={{ animationDelay: "0.3s" }}>
+              <AskBox asks={getAsks()} denominator={getAskDenominator()} />
             </div>
           </header>
           <MarketplaceList
