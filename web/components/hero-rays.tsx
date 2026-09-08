@@ -4,7 +4,7 @@ import { useReducedMotion } from "motion/react";
 import dynamic from "next/dynamic";
 
 /**
- * The hero's light source (DESIGN.md §6, §9): React Bits' `LightRays`, vendored
+ * The hero's light source: React Bits' `LightRays`, vendored
  * in `components/vendor/light-rays.jsx`, driven to one hue on a near-black
  * ground. It replaces the breathing `hero-glow` rather than stacking on it —
  * three light sources behind 60px type is busier, not more premium.
@@ -12,7 +12,7 @@ import dynamic from "next/dynamic";
  * Four things here are load-bearing and none of them is obvious.
  *
  * 1. **`saturation={0}` is what makes the light yellow.** The shader hard-codes
- *    a vertical ramp before it applies our colour: `fragColor.x *= 0.1 + b*0.8`,
+ *    a vertical ramp before it applies the brand colour: `fragColor.x *= 0.1 + b*0.8`,
  *    `.y *= 0.3 + b*0.6`, `.z *= 0.5 + b*0.5`, where `b` is 1 at the top of the
  *    canvas and 0 at the bottom. At the bottom the per-channel multipliers are
  *    1:3:5, so BNB yellow arrives on screen as olive-green across the lower half
@@ -29,7 +29,7 @@ import dynamic from "next/dynamic";
  *    blank. It would work in dev and fail on a visitor's machine.
  *
  * 3. **Reduced motion is not covered by any of the five mechanisms in
- *    DESIGN.md §9.** This is a requestAnimationFrame loop writing a GL uniform:
+ *    the design system** This is a requestAnimationFrame loop writing a GL uniform:
  *    `MotionConfig` governs motion components, the `@media` block governs CSS
  *    keyframes, and neither reaches it. So it takes the "not rendered at all"
  *    row, like `components/beam.tsx` — and leaves a static gradient behind, so
@@ -48,7 +48,7 @@ import dynamic from "next/dynamic";
 const LightRays = dynamic(() => import("./vendor/light-rays.jsx"), { ssr: false });
 
 /**
- * DESIGN.md §6 hero backdrop: one light source and nothing else. There used to
+ * one light source and nothing else. There used to
  * be a masked GridPattern under the rays; with the rays in place it was a
  * second texture behind 60px type, and the mockup frame below brings its own
  * lines.

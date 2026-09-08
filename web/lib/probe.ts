@@ -464,7 +464,7 @@ export async function probeEndpoint(
   return { word: "unreachable", code: null, latencyMs: null, checkedAt };
 }
 
-/** Our own health endpoints: 2xx means `live`; anything else reads like a third-party probe. */
+/** The featured agents' health endpoints: 2xx means `live`; anything else reads like a third-party probe. */
 export async function probeStatusUrl(statusUrl: string, timeoutMs = PROBE_TIMEOUT_MS): Promise<ProbeResult> {
   const checkedAt = new Date().toISOString();
   const u = safeUrl(statusUrl);

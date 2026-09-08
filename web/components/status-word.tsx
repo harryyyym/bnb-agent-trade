@@ -14,11 +14,11 @@ function sentence(s: string): string {
 }
 
 /**
- * DESIGN.md §7 status word: an 8px dot and a sentence-case word at `text-sm`.
- * `live` (a request-time read of one of our own health endpoints) is a filled
+ * an 8px dot and a sentence-case word at `text-sm`.
+ * `live` (a request-time read of one of the featured agents' health endpoints) is a filled
  * green dot, `responds` a green ring, `gated` and `no public endpoint` a grey
  * ring, `unreachable` solid red. Only the dot carries hue; the word keeps its
- * grey-ramp tone (docs/marketplace/design.md §3 for the semantics).
+ * grey-ramp tone.
  *
  * Server component, and it stays one: the provenance is the `title` attribute,
  * so every route that shows a status word ships no JavaScript for it. A client
@@ -47,8 +47,8 @@ export function StatusWord({
       {dot ? (
         <span aria-hidden className="relative flex size-2 shrink-0">
           {/*
-            Only `live` breathes (DESIGN.md §9). It is the one status read at
-            request time against our own health endpoint, so it is the one word
+            Only `live` breathes. It is the one status read at
+            request time against a featured agent's health endpoint, so it is the one word
             on the page that is true *now* rather than at the last five-minute
             sweep — the ring says so without a second label. `responds` is a
             ring already and stays still, or the difference would be lost.

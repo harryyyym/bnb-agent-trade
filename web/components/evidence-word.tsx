@@ -8,7 +8,7 @@ export function tierLabel(tier: Tier): string {
 }
 
 /**
- * DESIGN.md §7 evidence word: sentence case at `text-xs`, grey ramp only,
+ * sentence case at `text-xs`, grey ramp only,
  * never coloured. Server component; the provenance is the `title` attribute.
  * As with `StatusWord` there is no `hint` prop: wrap the word in `<Hint>` at a
  * client call site instead of importing the tooltip into every route.

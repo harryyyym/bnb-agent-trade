@@ -4,8 +4,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useRef, type ReactNode } from "react";
 
 /**
- * The hero's visual anchor (DESIGN.md §6). Measured against the references the
- * owner picked, a premium landing fills its first screen with one large surface
+ * The hero's visual anchor. Measured against the reference sites, a premium landing fills its first screen with one large surface
  * — Achilles, the closest of the three to this product, uses its own UI. So
  * does this: the frame below holds the real marketplace table, cropped by the
  * fold so the page reads as having somewhere to go.

@@ -1,7 +1,7 @@
 // /hiring — Pay, Authorize, Receive. The header takes a screen of its own: the
 // three layers as one flow strip on a surface, then job 853 as a framed timeline
 // at the container's full width — this page's one artefact and its one border
-// beam. Below it, at the DESIGN.md §6
+// beam. Below it, at the the design system
 // section rhythm, the three rail cards whose internals align on a subgrid, the
 // authority models as a table with an icon tile per model and bound agent
 // counts, four questions as collapsible panels, and a closing call to action.
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     "Pay an agent through escrow or per call. Grant it authority only if it should act on your position. Everything it does lands on BNB Chain.",
 };
 
-/** DESIGN.md §8 hiring-model icons. */
+/** the design system hiring-model icons. */
 const AUTHORITY_ICON: Record<Authority, LucideIcon> = {
   advice: Lightbulb,
   session: KeyRound,
@@ -61,7 +61,7 @@ const AUTHORITY_ICON: Record<Authority, LucideIcon> = {
   none: Eye,
 };
 
-/** One line per model (docs/marketplace/design.md §5, Authorize). */
+/** One line per model. */
 const AUTHORITY_TEXT: Record<Authority, string> = {
   advice: "Returns a plan, quote or ready-to-broadcast calldata; you sign and broadcast, nothing moves without your signature.",
   session:
@@ -99,7 +99,7 @@ export default function HiringPage() {
     <>
       <SiteNav />
       {/*
-        One idea per screen (DESIGN.md §6 section rhythm). The header owns the
+        One idea per screen. The header owns the
         fold — the claim, the three layers as one strip on a surface, and then
         the page's one real artefact, a job that settled on chain, cropped by
         the fold. Every section below is 128px apart, 192px from `md`, and
@@ -110,7 +110,7 @@ export default function HiringPage() {
           <HeroBackdrop />
           <Container className="relative flex flex-col gap-12 md:gap-16">
             {/* Not BlurFade: the header plays before any scroll, so it rises on
-                mount with 28px of travel (DESIGN.md §9). */}
+                mount with 28px of travel. */}
             <div className="animate-rise" style={{ animationDelay: "0.05s" }}>
               <PageHead
                 eyebrow="How hiring works"
@@ -132,12 +132,12 @@ export default function HiringPage() {
                     }
                   />
                 </div>
-                {/* DESIGN.md §6 mockup frame, the fold's one large surface: the
+                {/* the fold's one large surface: the
                     one thing on this page that actually happened, at the width
                     it earns, carrying the page's one border beam. It rises on
                     mount rather than riding `HeroShowcase` — a scroll-linked
                     `useTransform` is stopped by none of the four reduced-motion
-                    mechanisms in DESIGN.md §9, and left this frame tilted 22° at
+                    mechanisms, and left this frame tilted 22° at
                     45% opacity for a visitor who asked for less motion. */}
                 <div className="animate-rise" style={{ animationDelay: "0.7s" }}>
                   <MockupFrame
@@ -254,7 +254,7 @@ export default function HiringPage() {
           <Container>
             <BlurFade inView offset={24}>
               <SectionHead title="Who gets authority, and how much" description="By what the agents on this marketplace say they do." />
-              {/* An icon tile per model (DESIGN.md §6 card anatomy): five rows of
+              {/* An icon tile per model: five rows of
                   prose became five objects, and every row stays the same height. */}
               <div className="mt-12">
                 <Table>

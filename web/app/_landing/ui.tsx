@@ -1,10 +1,10 @@
 // Shared page primitives for the landing, hiring, payments and not-found pages
-// (DESIGN.md §6 layout patterns). Server components; the only client children
+// Server components; the only client children
 // are Avatar (image fallback), CountUp (inside Stat) and the stock Separator.
 //
 // Every primitive comes from components/ui as generated: Card for panels, Item
 // for list rows, Separator for rules, Badge behind components/tag. Nothing here
-// sets a size that is not on the DESIGN.md §4 / §5 scales.
+// sets a size that is not on the the design system / §5 scales.
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 
 export { Container };
 
-/** DESIGN.md §6 page header: optional eyebrow · h1 · lead · optional actions row. */
+/** optional eyebrow · h1 · lead · optional actions row. */
 export function PageHead({
   eyebrow,
   title,
@@ -51,7 +51,7 @@ export function PageHead({
 }
 
 /**
- * DESIGN.md §6 section head: h2 + description on the left, a secondary line
+ * h2 + description on the left, a secondary line
  * (`aside`) or a ghost action on the right. Content follows at `mt-6`.
  */
 export function SectionHead({
@@ -86,7 +86,7 @@ export function ListEnd() {
   return <Separator />;
 }
 
-/** DESIGN.md §4 eyebrow role, for the pages that set it on a `<th>` or `<dt>`. */
+/** for the pages that set it on a `<th>` or `<dt>`. */
 export const EYEBROW = "text-xs font-medium tracking-wider text-muted-foreground uppercase";
 
 /** A step number in a small tile — the one place a number is a badge. */
@@ -99,9 +99,9 @@ export function StepNumber({ n }: { n: number }) {
 }
 
 /**
- * Hiring rail card (docs/marketplace/design.md §6) on the stock Card, one grid
+ * Hiring rail card on the stock Card, one grid
  * row per region — header, blurb, steps, note — placed on the parent's subgrid
- * from `md` (DESIGN.md §6 card grid), so three cards in a row start their step
+ * from `md`, so three cards in a row start their step
  * lists on the same line whatever the blurb length.
  */
 export function RailCard({
@@ -216,7 +216,7 @@ export function AgentRow({
   const c = row.commerce;
   const settled = c && c.completed > 0;
   const jobs = settled ? fmtInt(c.completed) : DASH;
-  // One owner for the disclosure (docs/marketplace/design.md §5): this surface
+  // One owner for the disclosure: this surface
   // used to key the sentence off `commerceSelfHire` alone, which is false for
   // the one agent that has both an own-wallet job and a third-party buyer.
   const note = soldNote(row);
@@ -265,7 +265,7 @@ export function AgentRow({
             <span className="flex w-20 shrink-0 flex-col items-end font-mono text-base tabular-nums">
               {showJobs ? <span title={title}>{jobs}</span> : null}
               {/* Three words in an 80px column; the sentence rides in the title
-                  where it is true (docs/marketplace/design.md §5). */}
+                  where it is true. */}
               {showJobs && note ? (
                 <span className="font-sans text-xs whitespace-nowrap text-muted-foreground" title={note.title}>
                   {note.short}
@@ -286,8 +286,8 @@ export function AgentRow({
 }
 
 /**
- * The curation funnel (docs/marketplace/design.md §6): six stat cells on one
- * equal-column grid (DESIGN.md §6 stat strip), from every id registered on BNB
+ * The curation funnel: six stat cells on one
+ * equal-column grid, from every id registered on BNB
  * Chain down to the ones a stranger has actually paid for. Every value is a
  * number, so every one counts up (`Stat`); provenance rides the cell's `title`.
  */
@@ -308,11 +308,10 @@ export function FunnelStrip({
 }
 
 /**
- * A "How hiring works" card (docs/marketplace/design.md §6) on the stock Card:
+ * A "How hiring works" card on the stock Card:
  * icon tile + step eyebrow and title, one-sentence claim, one real artefact
  * (`vignette`, a mono code block on a secondary ground), then bound counts in
- * the footer. Each card is a subgrid of its parent's rows (DESIGN.md §6 card
- * grid), so three siblings keep their claims, artefacts and footers on the same
+ * the footer. Each card is a subgrid of its parent's rows, so three siblings keep their claims, artefacts and footers on the same
  * lines whatever the length of the claim.
  */
 export function HiringCard({
@@ -326,7 +325,7 @@ export function HiringCard({
   n: number;
   title: string;
   claim: string;
-  /** DESIGN.md §8 hiring icon: CreditCard, KeyRound, PackageCheck. */
+  /** CreditCard, KeyRound, PackageCheck. */
   icon: ReactNode;
   vignette: ReactNode;
   facts: Array<{ label: string; value: ReactNode; title?: string }>;

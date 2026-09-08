@@ -2,7 +2,7 @@ import { Bot, Grid3x3, HeartPulse, Scale, TrendingUp, type LucideIcon } from "lu
 import type { Category } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-/** DESIGN.md §8 category icons — lucide, one per category. */
+/** the design system — lucide, one per category. */
 export const CATEGORY_ICON: Record<Category, LucideIcon> = {
   rebalancing: Scale,
   "grid trading": Grid3x3,

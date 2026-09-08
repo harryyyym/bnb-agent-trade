@@ -5,7 +5,7 @@ import { statusChecked } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 /**
- * `Status checked N min ago` — the fixed status-freshness line (docs/marketplace/design.md §5):
+ * `Status checked N min ago` — the fixed status-freshness line:
  * marketplace toolbar, profile facts strip. Renders with the server's clock
  * first so SSR and the first client paint agree, then re-reads the clock every
  * 30 s while the value comes from the probe loop. Build-time results carry a

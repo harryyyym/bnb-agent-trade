@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * A number that counts up once when it scrolls into view (DESIGN.md §9), built
+ * A number that counts up once when it scrolls into view, built
  * on motion's `animate` + `useInView`. It server-renders the *final* value, so
  * a crawler or a no-JS visitor sees the real figure — the reason Magic UI's
  * NumberTicker, which renders 0 until hydration, is not used on a site whose

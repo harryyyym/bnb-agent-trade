@@ -1,5 +1,5 @@
 // Root not-found. It cannot see params, so the copy is generic; the counts bind
-// to shelf-stats. One screen, treated as a screen (DESIGN.md §6 hero): the grid
+// to shelf-stats. One screen, treated as a screen: the grid
 // and glow behind it, the two figures the old description carried in a sentence
 // raised to stat size, and the two ways out. The footer line every page carries
 // closes it.
@@ -35,7 +35,7 @@ export default function NotFound() {
           <HeroBackdrop />
           <Container className="relative flex flex-col gap-12">
             {/* The rise is a mount animation, stopped and left visible by the
-                reduced-motion block in globals.css (DESIGN.md §9). */}
+                reduced-motion block in globals.css. */}
             <div className="flex max-w-2xl flex-col gap-4">
               <span
                 className="animate-rise flex size-9 items-center justify-center rounded-lg bg-secondary"
@@ -54,7 +54,7 @@ export default function NotFound() {
                 id does not exist.
               </p>
             </div>
-            {/* DESIGN.md §6 stat strip. The description used to carry both
+            {/* the design system. The description used to carry both
                 figures inside one 14px sentence; they are the only thing this
                 page can actually tell you, so they are the page. */}
             <dl
@@ -65,8 +65,7 @@ export default function NotFound() {
               <Stat label="Registered ids" value={stats.registered} size="lg" caption="on BNB Chain" />
             </dl>
             <div className="animate-rise flex flex-wrap gap-3" style={{ animationDelay: "0.6s" }}>
-              {/* The nav already carries this link as the view's one `default` button
-                  (DESIGN.md §7); the page's copy is `outline`. */}
+              {/* The nav already carries this link as the view's one `default` button; the page's copy is `outline`. */}
               <Button href="/marketplace" variant="outline" size="lg">
                 Explore all agents
               </Button>

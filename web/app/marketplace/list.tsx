@@ -250,7 +250,7 @@ export function MarketplaceList({
       {/* Seeded mode replaces the catalogue, and the page heading above still
           counts the chain one, so the swap has to announce itself. Unmissable
           and in plain words: a reader must never have to infer that a number
-          on screen is invented. Amber is the demo lane's colour (DESIGN.md §1.4). */}
+          on screen is invented. Amber is the demo lane's colour. */}
       {seeded ? (
         <div className="flex gap-3 rounded-xl border border-warning/40 bg-warning/10 p-4">
           <FlaskConical aria-hidden className="mt-0.5 size-4 shrink-0 text-warning" />
@@ -280,7 +280,7 @@ export function MarketplaceList({
         {/* The order, said out loud. A default sort a reader cannot explain is
             worse than no default: this one names its terms and its exceptions.
 
-            It is a section head (DESIGN.md §6), not a caption: the group name
+            It is a section head, not a caption: the group name
             at the sub-section role beside an icon tile, with the rule under it
             at secondary size. As a 12px uppercase eyebrow over 12px grey prose
             it was the quietest thing on a page whose whole argument it states,

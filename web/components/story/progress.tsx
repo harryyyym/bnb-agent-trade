@@ -7,7 +7,7 @@ import { useReducedMotion, useScroll, useSpring, useTransform, motion } from "mo
  * scrolls — Medium's, nothing more. Chapter navigation is the table of
  * contents' job.
  *
- * Scroll-linked, so DESIGN.md §9's guard applies: under reduced motion the
+ * Scroll-linked, so the design system's guard applies: under reduced motion the
  * spring is dropped and the bar follows the finger directly — tracking scroll
  * is not an animation, but a spring that overshoots is.
  */

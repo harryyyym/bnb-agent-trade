@@ -18,10 +18,10 @@ function stripArrow(children: ReactNode): ReactNode {
 }
 
 /**
- * DESIGN.md §7 Button: the stock shadcn Button plus href behaviour. An internal
+ * the design system Button: the stock shadcn Button plus href behaviour. An internal
  * href renders next/link and ends with an ArrowRight icon, an external href
  * opens in a new tab (rel="noopener noreferrer") and ends with ArrowUpRight;
- * `arrow={false}` opts out. Arrows are lucide icons (DESIGN.md §8), never the
+ * `arrow={false}` opts out. Arrows are lucide icons, never the
  * text glyphs, and nudge 2px on hover (§9).
  *
  * There is deliberately no `disabled`: an unavailable action is not rendered.

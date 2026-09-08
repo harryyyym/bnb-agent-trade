@@ -30,7 +30,7 @@ const sheetLinkClass = (active: boolean) =>
  * `Explore agents` CTA it used to carry was removed on 2026-09-08 so the banner
  * reads identically on the landing, the marketplace, payments and the reports.
  * Below `lg` the links move into a stock Sheet behind a Menu icon button
- * (DESIGN.md §6). Client only for usePathname and the Sheet.
+ *. Client only for usePathname and the Sheet.
  */
 export function NavLinks() {
   const pathname = usePathname() ?? "/";
@@ -63,7 +63,7 @@ export function NavLinks() {
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          {/* `icon-lg` is 40px — the touch floor in DESIGN.md §10; no smaller stock size reaches it. */}
+          {/* `icon-lg` is 40px — the touch floor the design system; no smaller stock size reaches it. */}
           <UIButton variant="outline" size="icon-lg" className="lg:hidden" aria-label="Open menu">
             <Menu />
           </UIButton>

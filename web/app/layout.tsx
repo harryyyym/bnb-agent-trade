@@ -6,7 +6,7 @@ import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
-// DESIGN.md §3 fonts: Geist Sans for all text, Geist Mono for data.
+// the design system fonts: Geist Sans for all text, Geist Mono for data.
 const sans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={cn("dark h-full", sans.variable, mono.variable)}>
       <body className="min-h-full overflow-x-hidden font-sans">
         {/*
-          Sections enter with Magic UI's BlurFade (DESIGN.md §9), which is a
+          Sections enter with Magic UI's BlurFade, which is a
           client component: it server-renders its children inside
           `style="opacity:0;filter:blur(6px);transform:translateY(-6px)"` and
           only reveals them once motion hydrates. The words are in the HTML, so

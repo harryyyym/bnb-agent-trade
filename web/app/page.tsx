@@ -1,7 +1,7 @@
-// / — landing (docs/marketplace/design.md §6). The hero says what the catalogue is and
+// / — landing. The hero says what the catalogue is and
 // what has actually been paid for; the funnel shows how it was cut down; the
 // anchor is a live slice of the marketplace itself, rendered by the marketplace's
-// own row; then our own three on the same scale, recent settlements, and how
+// own row; then the featured three on the same scale, recent settlements, and how
 // hiring works. Server component, revalidated every 30s.
 import { CreditCard, KeyRound, PackageCheck } from "lucide-react";
 import { Button } from "@/components/button";
@@ -76,13 +76,13 @@ export default async function Home() {
       */}
       <main className="space-y-32 md:space-y-48">
         {/* `gap-12` sets the hero's own rhythm — copy, product, trust strip —
-            so no child carries a margin (DESIGN.md §5). */}
+            so no child carries a margin. */}
         <section className="relative flex min-h-svh flex-col gap-12 overflow-hidden pt-28 md:pt-36">
           <HeroBackdrop />
           <Container className="relative">
             {/* Not BlurFade: the hero is the one thing on the page that plays
                 before a scroll, so it rises on mount, line by line, with enough
-                travel to be seen (DESIGN.md §9). */}
+                travel to be seen. */}
             <div className="flex max-w-4xl flex-col gap-6">
               <span
                 className={cn("animate-rise", EYEBROW)}
@@ -90,7 +90,7 @@ export default async function Home() {
               >
                 BNB Smart Chain · ERC-8004 · ERC-8183
               </span>
-              {/* Word by word (DESIGN.md §9): Magic UI's TextAnimate, blur-in-up,
+              {/* Word by word: Magic UI's TextAnimate, blur-in-up,
                   50ms between words, so the headline is read in the order it is
                   written. The highlighted figure is its own element and rises
                   with the second line. */}
@@ -127,7 +127,7 @@ export default async function Home() {
             </div>
           </Container>
           {/* The fold's one large surface: the real marketplace, not a picture
-              of one. In the same Container as the headline (DESIGN.md §11), so
+              of one. In the same Container as the headline, so
               its left edge is the page's left edge. */}
           <Container className="relative">
             <div className="animate-rise" style={{ animationDelay: "1.4s" }}>
@@ -191,8 +191,7 @@ export default async function Home() {
                 }
               />
               {/* A card grid, not the table: three items with room for a
-                  sentence each is what a directory's Featured section is for
-                  (DESIGN.md §6), and the table itself is one click away. The
+                  sentence each is what a directory's Featured section is for, and the table itself is one click away. The
                   subgrid keeps the three cards' figures on one line. */}
               {/* Three columns from `lg`. At `md` they were 213px wide — the
                   name, the meta line and the description all cut mid-word in a

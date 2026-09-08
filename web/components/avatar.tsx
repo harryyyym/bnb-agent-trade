@@ -6,7 +6,7 @@ import { Avatar as AvatarTile } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { Identicon } from "./identicon";
 
-/** DESIGN.md §7 avatar sizes: 32 table · 40 row · 56 card · 64 card page · 80 profile. */
+/** 32 table · 40 row · 56 card · 64 card page · 80 profile. */
 const SIZE_CLASS: Record<number, string> = {
   32: "size-8",
   40: "size-10",
@@ -29,7 +29,7 @@ const SIZE_CLASS: Record<number, string> = {
  * Radix preloads with `new Image()` and keeps the element out of the tree until
  * that resolves, which drops it from the server-rendered HTML and makes lazy
  * loading inert. The stock `ui/avatar` root supplies the tile; the radius is
- * `rounded-lg` rather than the stock circle (DESIGN.md §3).
+ * `rounded-lg` rather than the stock circle.
  */
 export function Avatar({
   image,

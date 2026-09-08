@@ -290,7 +290,7 @@ export default function ReportPage() {
                 label={
                   <>
                     median paired gap in cost-inclusive terminal equity, the keeper minus the modelled operator, on the{" "}
-                    <strong>{n0(mixture.material)} of {n0(mixture.nPairs)}</strong> paths, {pct(mixture.materialFraction)}, 
+                    <strong>{n0(mixture.material)} of {n0(mixture.nPairs)}</strong> paths, {pct(mixture.materialFraction)},
                     where protection binds. Basis points of each path&rsquo;s own opening equity.
                   </>
                 }
@@ -533,7 +533,7 @@ export default function ReportPage() {
                   <code className="num">exploratory.survivalUncertainty</code> in T1-confirmatory.json, rather
                   than by this page.</p>
                 <p className="fig-dek">Rows are ordered by availability, not by height, and the two humans without a colour are the
-                  exploratory arms. <strong>Survival is a secondary here and can never be the headline</strong>, 
+                  exploratory arms. <strong>Survival is a secondary here and can never be the headline</strong>,
                   an arm that closes the whole position survives everything, and the primary barely moves on
                   this axis: the median paired gap against the realistic human is{" "}
                   <Num>{bps(CLOCK.medianGapAvsH2WorkBps)}</Num> in working hours against{" "}
@@ -547,7 +547,7 @@ export default function ReportPage() {
                 <p className="fig-dek">intervals read from the study, not computed here: Wilson score at {CI} over the
                   clustering-adjusted n, with the change between clocks from a{" "}
                   {n0(CLOCK.uncertainty.iters)}-resample bootstrap over whole paths · exploratory, uncorrected</p>
-              
+
               </details>
             </div>
 
@@ -828,7 +828,7 @@ export default function ReportPage() {
                   confirmatory pooled median, <Num>{bps(MIXTURE.pooledMedianBps)}</Num>.</p>
                 <p className="fig-dek">every count tallied from T1-runs.jsonl and checked against the published mixture before drawing;
                   material median off by {sci(MIXTURE.medianDeviation)} bps</p>
-              
+
               </details>
             </div>
 
@@ -969,7 +969,7 @@ export default function ReportPage() {
                 <p className="fig-dek">intervals read from T1-confirmatory.json, not computed here; every median re-derived from
                   T1-runs.jsonl before drawing, worst disagreement with the published figure{" "}
                   {sci(PER_CELL_METHOD.worstMedianDeviation)}</p>
-              
+
               </details>
             </div>
 
@@ -1219,7 +1219,7 @@ export default function ReportPage() {
 
             <p>
               <strong>The agent&rsquo;s per-book cost is deliberately an upper bound.</strong> A keeper batching
-              consecutive nonces lands all three books in one block, which would make the marginal cost zero, 
+              consecutive nonces lands all three books in one block, which would make the marginal cost zero,
               and zero would decide the parallelism question by assumption rather than by measurement. So the
               agent is charged a whole block per book and every figure on this page understates it. The same
               rule runs the other way on the liquidator: the three books draw three independent searchers, so
@@ -1342,7 +1342,7 @@ export default function ReportPage() {
               <Num>×{n1(METHOD.cost.maxRatioTrueOverMemo)}</Num>; on paths where it keeps falling the memo
               overstates it. Quoting the memo would have been the flattering choice on most paths and the wrong
               one on all of them, so this study prints the terminal-equity cost and puts the memo beside it.
-              Gas is charged in numeraire rather than in the chain&rsquo;s own token, a disclosed compromise, 
+              Gas is charged in numeraire rather than in the chain&rsquo;s own token, a disclosed compromise,
               and the bound on the error it introduces is computed from the run rather than assumed:{" "}
               <Num>{n3(METHOD.gas.maxMarkErrorBps)} bps</Num> at worst, against effects measured in hundreds.
             </p>

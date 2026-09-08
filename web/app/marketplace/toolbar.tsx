@@ -138,10 +138,10 @@ function Toggle({
  * Line 3 — venue, what the agent is allowed to do, how it takes payment, the
  * two switches and the sort. `Status checked …` is not here: with it on this
  * line the sort control wrapped onto a line of its own at 1440, so it sits in
- * the list header beside the row count (docs/marketplace/design.md §5).
+ * the list header beside the row count.
  *
  * Every control carries the number of agents it would leave, computed against
- * the filters already applied (docs/marketplace/design.md §3).
+ * the filters already applied.
  */
 export function Toolbar({
   input,

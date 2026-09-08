@@ -12,7 +12,7 @@ import type { ReactNode } from "react";
  * `offsetDistance`, a CSS keyframe, or an imperative `animate()` call, which is
  * why three other mechanisms exist: the `@media` block in globals.css, the
  * `useReducedMotion()` guard in components/beam.tsx, and the one in
- * components/count-up.tsx. DESIGN.md §9 has the table; do not delete any of
+ * components/count-up.tsx. the design system table; do not delete any of
  * them on the assumption that this line covers them.
  *
  * Nothing else is mounted globally: the sonner Toaster lives in the one

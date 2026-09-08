@@ -4,12 +4,12 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * DESIGN.md §3 — tokens. The site is dark-only: :root and .dark carry the same
+ * the design system — tokens. The site is dark-only: :root and .dark carry the same
  * values and app/layout.tsx puts `dark` on <html> so the `dark:` variants inside
  * the generated shadcn components resolve. shadcn's semantic names *are* the
  * palette; there is no second set of names. Everything else here is the stock
  * shadcn base layer plus the Magic UI marquee keyframes — no custom utilities,
- * no custom type ramp (DESIGN.md §4 uses Tailwind's scale at the call site).
+ * no custom type ramp.
  */
 :root,
 .dark {
@@ -34,7 +34,7 @@
   --input: rgba(234, 236, 239, 0.14);
   --ring: #f0b90b;
 
-  /* Meaningful hues beyond the shadcn set (DESIGN.md §1.4). */
+  /* Meaningful hues beyond the shadcn set. */
   --success: #0ecb81;
   --warning: #f59e0b;
 
@@ -92,7 +92,7 @@
   --radius-2xl: calc(var(--radius) + 8px);
 
   /*
-   * DESIGN.md §9, the live dot. A ring expanding out from behind a filled dot,
+   * the live dot. A ring expanding out from behind a filled dot,
    * slow enough to read as breathing rather than as a radar sweep. Its own
    * animation rather than Tailwind's 1s `animate-ping`, so the duration is a
    * token and not an arbitrary value at the call site.
@@ -111,7 +111,7 @@
   }
 
   /*
-   * DESIGN.md §9, the hero. A slow rise on first paint and a slow breath on the
+   * the hero. A slow rise on first paint and a slow breath on the
    * backdrop glow: the two motions a visitor sees before they have scrolled
    * anything, and the reason the page reads as alive rather than as a poster.
    */
@@ -175,7 +175,7 @@
 }
 
 /*
- * The hero's backdrop glow (DESIGN.md §6). A named utility rather than an
+ * The hero's backdrop glow. A named utility rather than an
  * arbitrary value at the call site: §1.2 keeps sizes on the scale, and a
  * decorative gradient has no place on it.
  */
@@ -208,7 +208,7 @@
     @apply bg-background text-foreground antialiased;
   }
   /* Tailwind v4 dropped `cursor: pointer` on buttons; shadcn's docs restore it
-     here (DESIGN.md §10). */
+     here. */
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
@@ -219,7 +219,7 @@
 }
 
 /*
- * DESIGN.md §9, reduced motion. `MotionConfig reducedMotion="user"`
+ * reduced motion. `MotionConfig reducedMotion="user"`
  * (components/providers.tsx) stops motion's transform animations, but it cannot
  * touch a CSS keyframe loop: the logo marquee kept scrolling for a visitor who
  * had asked for reduced motion (measured, not assumed). The border beam — the

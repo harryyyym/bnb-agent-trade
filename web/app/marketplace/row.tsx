@@ -34,10 +34,10 @@ import { cn } from "@/lib/utils";
 import { COLUMN_SORT, type SortKey } from "./filters";
 
 /*
- * The marketplace table (DESIGN.md §6 Table, docs/marketplace/design.md §3).
+ * The marketplace table.
  *
  * Six columns from `xl`, every one of which varies; the widths live in the
- * <colgroup> below, the one place DESIGN.md §1.2 allows an arbitrary width, and
+ * <colgroup> below, the one place the design system arbitrary width, and
  * the Agent column takes what is left. Below `xl` the same cells become a
  * 12-column grid — tick and agent on the first line, proof / sold / response /
  * action on the next — so nothing overflows at 390px and no cell has to be a
@@ -53,7 +53,7 @@ import { COLUMN_SORT, type SortKey } from "./filters";
 /** A body cell: a block in the stacked row below `xl`, a table cell above it. */
 const CELL = "block p-0 whitespace-normal xl:table-cell xl:px-2 xl:py-4";
 
-/** Column headers are the eyebrow role (DESIGN.md §4). */
+/** Column headers are the eyebrow role. */
 const HEAD = `h-auto px-2 py-3 ${EYEBROW}`;
 
 export type ColumnKey = keyof typeof COLUMN_SORT;
@@ -63,7 +63,7 @@ export interface SortState {
   onSort: (s: SortKey) => void;
 }
 
-/** `ANSWERS` becomes `Answers`, `3RD` becomes `3rd`: the proof words keep their names, in sentence case (DESIGN.md §4). */
+/** `ANSWERS` becomes `Answers`, `3RD` becomes `3rd`: the proof words keep their names, in sentence case. */
 function sentence(word: string): string {
   return word.charAt(0) + word.slice(1).toLowerCase();
 }
@@ -228,7 +228,7 @@ export function ProofCell({ row }: { row: LiteRow }) {
              * be `text-muted-foreground/50`, which measured 2.42:1 against the
              * page — a little over half the 4.5:1 it needs, and one of 59
              * contrast failures on this route that all came from opacity
-             * modifiers layered on healthy tokens. DESIGN.md §3 says text
+             * modifiers layered on healthy tokens. the design system
              * opacity is not a system; this is what it means in practice. A
              * word that holds is a bordered chip at full contrast; a word that
              * does not is plain muted text with no chip at all, which is
@@ -336,8 +336,7 @@ export function Row({
           <div className="flex min-w-0 flex-1 flex-col gap-1">
             {/* Wraps where the row stacks — on a phone a name on two lines beats
                 "Canned Health G…" — and truncates against the column where it is
-                a table cell, so every row in the table keeps one height
-                (DESIGN.md §6); the full name rides in the title. */}
+                a table cell, so every row in the table keeps one height; the full name rides in the title. */}
             <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 xl:flex-nowrap">
               <Link href={href} title={row.name} className="min-w-0 max-w-full text-base font-medium xl:truncate">
                 {row.name}
@@ -394,8 +393,7 @@ export function Row({
         {/* The self-hire disclosure rides with the number at every width, in
             the three-word form the 128px column has room for. Only the
             all-operator shape carries the sentence: on the mixed shape
-            SELF_HIRE_NOTE would be false, so `soldNote` withholds it
-            (docs/marketplace/design.md §5). `whitespace-nowrap` because the
+            SELF_HIRE_NOTE would be false, so `soldNote` withholds it. `whitespace-nowrap` because the
             landing's framed table leaves the cell 83px at a 640px viewport,
             2px under the text. */}
         {note ? (
@@ -422,7 +420,7 @@ export function Row({
             their right inset and went ragged. */}
         <div className="flex xl:justify-end">
           {/* Not a brand fill: thirty yellow buttons down a page would spend the one
-              highlight DESIGN.md §1.3 reserves. The word carries the difference —
+              highlight the design system reserves. The word carries the difference —
               `Hire` at full contrast, `Open` on the grey ramp. */}
           <Button
             asChild

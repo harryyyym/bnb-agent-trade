@@ -219,7 +219,7 @@ export function relTime(input: string | number | Date | null | undefined, now: n
 
 /**
  * "Status checked 2 min ago" when the probe loop has run; build-time results
- * are labelled with their date instead (docs/marketplace/design.md §5, status freshness).
+ * are labelled with their date instead.
  */
 export function statusChecked(
   checkedAt: string | null | undefined,
@@ -338,9 +338,9 @@ function skillText(doc: ShelfDoc | null | undefined): string {
 }
 
 /**
- * Rails inferred from the agent card only (docs/marketplace/design.md §5, Hiring model):
+ * Rails inferred from the agent card only:
  * `negotiate` / `notify_funded` skills or `erc8183` services → ERC-8183 escrow;
- * `x402` services or `x402Support` → x402 pay per call. Our own rows take escrow.
+ * `x402` services or `x402Support` → x402 pay per call. The featured rows take escrow.
  */
 export function railsOf(row: RailSource): Rail[] {
   const skills = skillText(row.doc);
@@ -378,7 +378,7 @@ function sessionLike(row: AuthoritySource): boolean {
   return /grantsession|session|altana/.test(text) || (/permission/.test(text) && /revoke/.test(text));
 }
 
-/** Authority model from `mode`, team custody and the agent's own words (docs/marketplace/design.md §5, Authorize). */
+/** Authority model from `mode`, team custody and the agent's own words. */
 export function authorityOf(row: AuthoritySource): Authority {
   if (row.mode === "advise") return "advice";
   if (row.mode !== "execute") return "none";
@@ -398,7 +398,7 @@ export const AUTHORITY_LABEL: Record<Authority, string> = {
 
 type StepsSource = AuthoritySource & Pick<ShelfRow, "operator" | "name">;
 
-/** Profile Hire steps. Our three carry hand-written steps matching their real flows. */
+/** Profile Hire steps. The featured three carry hand-written steps matching their real flows. */
 export function hireSteps(row: StepsSource): string[] {
   if (row.operator === "team") {
     if (/pancake ranger/i.test(row.name)) {
@@ -458,8 +458,8 @@ export function isReachable(word: ShelfProbe["word"] | ProbeResult["word"]): boo
 }
 
 /**
- * Status word (docs/marketplace/design.md §3). `live` is green and reserved for request-time
- * reads of our own health endpoints; `responds` is foreground, never green.
+ * Status word. `live` is green and reserved for request-time
+ * reads of the featured agents' health endpoints; `responds` is foreground, never green.
  */
 export function statusWord(
   probe: ShelfProbe | ProbeResult,
@@ -496,7 +496,7 @@ export function toneClass(tone: Tone): string {
   }
 }
 
-/** Evidence word (docs/marketplace/design.md §3): grey ramp only, never coloured. */
+/** Evidence word: grey ramp only, never coloured. */
 export function evidenceWord(tier: Tier): { word: Tier; tone: "fg70" | "muted"; title: string } {
   switch (tier) {
     case "SETTLED ON CHAIN":
@@ -518,8 +518,7 @@ export function evidenceClass(tone: "fg70" | "muted"): string {
 
 /**
  * The four claims a marketplace row makes about itself, every one of them
- * checkable by the reader without trusting this site (docs/marketplace/design.md §3,
- * Proof cell). They are not a ladder: the gaps carry the meaning — an agent with
+ * checkable by the reader without trusting this site. They are not a ladder: the gaps carry the meaning — an agent with
  * thirty settled jobs and a dead endpoint reads `PAID 3RD RAIL` with `ANSWERS`
  * dim, which is exactly what it is.
  */
@@ -579,7 +578,7 @@ export function canHire(row: ProofSource): boolean {
 /**
  * `Testnet · Health factor · Venus · Advise, you sign` — the chain leads the
  * meta line rather than sitting on the name as a badge: it is one of two values
- * on every row, and as a badge it cost the name 70px and pushed our own
+ * on every row, and as a badge it cost the name 70px and pushed the featured
  * SurvivalGuard to "SurvivalGua…" beside its other two badges. A seeded row
  * has no chain and says so on the name instead (see below).
  */
@@ -604,7 +603,7 @@ export function metaLine(row: LiteRow, max?: number): string {
 }
 
 /**
- * The self-hire disclosure, in the two shapes docs/marketplace/design.md §5
+ * The self-hire disclosure, in the two shapes the copy rules
  * requires, and in one place so no surface can invent a third.
  *
  * `commerceSelfHire` means only that *some* completed job was bought by the
@@ -621,8 +620,7 @@ export function soldNote(row: {
   commerceSelfHire: boolean;
   commerceOutsideClients: number;
 }): { short: string; title?: string } | null {
-  // 2026-09-08: the self-hire disclosure is no longer shown anywhere on the site
-  // (owner's ruling); the ranking rule that sorts operator-bought rows below
+  // The self-hire disclosure is no longer shown anywhere on the site; the ranking rule that sorts operator-bought rows below
   // third-party-paid rows still runs in the shelf builder.
   void row;
   return null;
@@ -630,7 +628,7 @@ export function soldNote(row: {
 
 /**
  * The same disclosure as a sentence, for the profile and any other surface with
- * room for one (docs/marketplace/design.md §5). Reads the buyers, never the
+ * room for one. Reads the buyers, never the
  * flag, so the mixed shape is described as what it is.
  */
 export function selfHireSentence(row: { commerceSelfHire: boolean; commerceOutsideClients: number }): string | null {
@@ -736,7 +734,7 @@ export function queryScore(row: LiteRow, q: string): number {
   return 10;
 }
 
-/** Probe words in the order the status disc treats them (docs/marketplace/design.md §3). */
+/** Probe words in the order the status disc treats them. */
 export function statusDot(word: ProbeWord): "green-solid" | "green-ring" | "muted-ring" | "red-solid" {
   switch (word) {
     case "live":

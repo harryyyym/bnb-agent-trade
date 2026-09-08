@@ -5,7 +5,7 @@
 // a rail. Calls our route handlers, which hold the allowlist and the cooldown;
 // responses are shown as text only. Nothing is signed or paid.
 //
-// DESIGN.md §6 / §7: stock Field + Input and the card's one default Button; the
+// the design system / §7: stock Field + Input and the card's one default Button; the
 // result in a mockup frame (terminal chrome, mono lines, one green or red line
 // where the status is the point); the raw body behind a stock Collapsible.
 // Failures are surfaced twice: the red line stays in the frame, the sonner
@@ -92,7 +92,7 @@ const TONE: Record<Tone, string> = {
 };
 
 /**
- * DESIGN.md §6 mockup frame around a terminal: a chrome bar with three dots and
+ * the design system around a terminal: a chrome bar with three dots and
  * the host that answered, then the exchange as mono lines and the terms as
  * key / value rows. Inside the card it sits on the page ground, so it reads as
  * a screen rather than a second card.
@@ -156,7 +156,7 @@ function RawToggle({ raw }: { raw: unknown }) {
 
 /**
  * Provenance line. This is a client subtree, so the exact fetch time recorded
- * by our route handler goes in a tooltip (DESIGN.md §7) rather than a `title`.
+ * by our route handler goes in a tooltip rather than a `title`.
  */
 function Fetched({ at, fetchedAt, noun }: { at: number; fetchedAt: string; noun: string }) {
   return (
@@ -170,7 +170,7 @@ function Fetched({ at, fetchedAt, noun }: { at: number; fetchedAt: string; noun:
   );
 }
 
-/** DESIGN.md §4 eyebrow, with the §8 icon that names what the block reads. */
+/** the design system eyebrow, with the §8 icon that names what the block reads. */
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <span className={cn("flex items-center gap-1.5", EYEBROW)}>
@@ -228,7 +228,7 @@ function QuoteBlock({ chain, id }: { chain: number; id: number }) {
       </Field>
       {/* The page's primary action: this is the control that actually hires, and
           the marketplace's `Hire` and the profile header both land on it. No
-          `disabled` on a public page (DESIGN.md §7): the in-flight flag guards
+          `disabled` on a public page: the in-flight flag guards
           the second click and the label says what is happening. */}
       <Button onClick={run} variant="default" size="lg" className="w-full">
         {q.state === "busy" ? "Requesting…" : "Request a quote"}

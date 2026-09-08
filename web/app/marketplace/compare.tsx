@@ -270,8 +270,7 @@ function FactRow({ fact, differs }: { fact: Fact; differs?: boolean }) {
  * the reader finds out comparison exists: its resting state is not a label, it
  * is the instruction — "Tick up to three rows to put them side by side".
  *
- * The other place on this page motion is free (DESIGN.md §9 forbids it on the
- * table body, which re-renders on every filter; the dock does not). Each
+ * The other place on this page motion is free. Each
  * ticked agent arrives with its own BlurFade, stepped, and the action cluster
  * re-enters when the second tick turns "Tick one more" into the button — the
  * one moment on the page where an act of the reader's produces a new control,

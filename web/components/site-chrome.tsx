@@ -8,7 +8,7 @@ import { Logo, type LogoName } from "./logo";
 import { NavLinks } from "./nav-links";
 
 /**
- * DESIGN.md §6 page shell, the header: sticky, 64px, translucent with a blur so
+ * the header: sticky, 64px, translucent with a blur so
  * the hero backdrop reads through, a hairline underneath. Wordmark left, links
  * and the primary `sm` CTA right (`NavLinks`); a Menu icon button below `md`.
  */

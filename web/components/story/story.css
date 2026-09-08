@@ -8,7 +8,7 @@
  * Plain CSS scoped to `.story`, imported by the two routes only, no @apply: the
  * same precedent as report.css. Tokens come from globals.css; nothing here
  * writes a hex. Type sizes are the page's own scale (18px body on a research
- * page, DESIGN.md §12 precedent) and are deliberately not the 14–16px UI ramp.
+ * page, the design system precedent) and are deliberately not the 14–16px UI ramp.
  *
  * Every number on these pages is a string read from a generated module; this
  * file only decides where it sits and how large it is.

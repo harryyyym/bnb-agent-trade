@@ -19,7 +19,7 @@ export type CategorySlug =
 
 export type Tier = "SETTLED ON CHAIN" | "TX ON FILE" | "ENDPOINT RESPONDS" | "IDENTITY ONLY";
 
-/** `live` is only produced by the probe loop for our own health endpoints. */
+/** `live` is only produced by the probe loop for the featured agents' health endpoints. */
 export type ProbeWord = "live" | "responds" | "gated" | "unreachable" | "no-public";
 
 export type Mode = "monitor" | "advise" | "execute";

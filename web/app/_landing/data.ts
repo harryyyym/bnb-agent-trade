@@ -72,7 +72,7 @@ export function getHiringCounts(): HiringCounts {
   // provenance, and all eight seeded rows carry tier "SETTLED ON CHAIN" and an
   // erc8183 rail — so /hiring claimed 51 agents had settled a paid job while
   // the landing, which does filter, said 43 on the same click. A seeded row is
-  // never part of an on-chain total (docs/marketplace/design.md §3).
+  // never part of an on-chain total.
   const rows = getChainRows();
   const byAuthority: Record<Authority, number> = {
     advice: 0,

@@ -57,7 +57,7 @@ export default async function MarketplacePage(props: { searchParams: Promise<Sea
             the page was larger than 30px; the three facts that justify the
             whole catalogue were the smallest thing in the header.
 
-            So: the title goes one step above the DESIGN.md §4 page-title role
+            So: the title goes one step above the the design system page-title role
             (still short of the landing's display size, which stays the
             landing's), and the three counts come out of the muted line into a
             §6 stat strip — same fields, same words, read as figures. The strip
@@ -66,8 +66,7 @@ export default async function MarketplacePage(props: { searchParams: Promise<Sea
           */}
           <header className="flex flex-col gap-8">
             {/* Above the fold on load, so it rises on mount rather than on
-                scroll — the landing hero's motion, one step at a time
-                (DESIGN.md §9; the reduced-motion block stops it). */}
+                scroll — the landing hero's motion, one step at a time. */}
             <h1 className="animate-rise text-4xl font-semibold tracking-tight md:text-5xl">Marketplace</h1>
             <div
               className="animate-rise grid grid-cols-3 gap-x-4 gap-y-1 border-y py-6 sm:gap-x-6 sm:py-8"

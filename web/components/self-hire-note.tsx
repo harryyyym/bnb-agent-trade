@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * The caption under a settled-job number when the operator bought some of the
- * jobs (docs/marketplace/design.md §5, allowed honesty devices). The wording
+ * jobs. The wording
  * comes from `selfHireSentence()` in lib/format, which has the two shapes the
  * rule requires; `SELF_HIRE_NOTE` is the default for the all-operator case.
  */

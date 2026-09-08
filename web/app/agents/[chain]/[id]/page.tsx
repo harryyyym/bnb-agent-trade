@@ -1,4 +1,4 @@
-// Agent profile — one agent (docs/marketplace/design.md §6). Server component;
+// Agent profile — one agent. Server component;
 // every number binds to the shelf row, shelf-stats or the probe snapshot;
 // missing renders "—". Nothing here touches the network: third-party endpoints
 // are read only by the probe loop and by the quote / x402 route handlers on
@@ -9,13 +9,13 @@
 // path is cached for `revalidate` seconds. Not force-dynamic — that would
 // discard the revalidate window.
 //
-// Layout (DESIGN.md §5 section rhythm, §6 layout patterns). Three bands, 128px
+// Layout. Three bands, 128px
 // apart and 192px from `md`:
 //
 //   1. Identity and the facts band — the page's own first screen: the masked
 //      grid and the brand glow behind a breadcrumb, an 80px avatar, the name at
 //      display size, the badge row, one line and the actions, each rising on
-//      mount 0.1s apart; then the four cells docs/marketplace/design.md §3
+//      mount 0.1s apart; then the four cells the copy rules
 //      fixes, the two figures at the landing funnel's display size, counting up.
 //   2. The reading column beside the Hire card, on a 3:2 grid so the card is a
 //      450px panel rather than the 350px ribbon `lg:grid-cols-3` gave it, and
@@ -29,7 +29,7 @@
 //      twelve-row table, which halves the height and reads as a spec sheet.
 //
 // Stock shadcn throughout; the timeline, the mockup frame, the code block and
-// the step tile are DESIGN.md patterns composed here.
+// the step tile are the design system patterns composed here.
 import {
   Activity,
   Coins,
@@ -122,7 +122,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 // subject rather than a fact about the subject. `overflow-wrap` because the
 // registry holds 33-character single-token names.
 // The header rises on mount rather than on scroll, one element at a time — the
-// landing hero's `animate-rise`, 28px of travel and a 10px blur (DESIGN.md §9),
+// landing hero's `animate-rise`, 28px of travel and a 10px blur,
 // because this block is above the fold and BlurFade's inView never fires for it.
 const HEADER_STEPS = ["0.05s", "0.15s", "0.25s", "0.35s", "0.45s", "0.6s"] as const;
 /** The facts band closes the sequence, after the last header element. */
@@ -178,10 +178,10 @@ function FactList({ rows }: { rows: Array<[string, ReactNode]> }) {
 }
 
 /**
- * One cell of the facts band (docs/marketplace/design.md §3). A figure takes
+ * One cell of the facts band. A figure takes
  * the display size the landing's funnel uses and counts up; a word — the status
  * and the evidence tier — stays at the size its own component reads at, because
- * the label is what carries the hierarchy (DESIGN.md §6 stat strip) and
+ * the label is what carries the hierarchy and
  * `No public endpoint` at 48px would not fit a quarter of the container.
  */
 function Fact({
@@ -295,7 +295,7 @@ function SeededProfile({ row, line }: { row: ShelfRow; line: string }) {
               </p>
             </div>
 
-            {/* Before any number on the page. Amber is the seeded lane's colour (DESIGN.md §1.4). */}
+            {/* Before any number on the page. Amber is the seeded lane's colour. */}
             <div
               className="animate-rise flex flex-col gap-3 rounded-xl border border-warning/40 bg-warning/10 p-6 md:p-8"
               style={{ animationDelay: HEADER_STEPS[5] }}
@@ -456,7 +456,7 @@ export default async function AgentPage(props: Props) {
   const label = CATEGORY_LABEL[row.category];
   const sameWallet = !row.wallet || row.wallet.toLowerCase() === row.owner.toLowerCase();
 
-  // Our own rows without an app link fall back to the settled-job evidence entry.
+  // Featured rows without an app link fall back to the settled-job evidence entry.
   const jobEvidence = team?.evidence.find((e) => /\bjob\s+\d+/i.test(e.label));
   const jobNo = jobEvidence?.label.match(/\bjob\s+(\d+)/i)?.[1];
   const settlementCovered =
@@ -529,7 +529,7 @@ export default async function AgentPage(props: Props) {
         : undefined;
     const few = cm.completedJobIds.length <= 4;
     // Reads the buyers, not the flag: one listed agent has both an own-wallet
-    // job and a real third-party buyer (docs/marketplace/design.md §5).
+    // job and a real third-party buyer.
     const selfHire = selfHireSentence(row);
     events.push({
       icon: Coins,
@@ -728,7 +728,7 @@ export default async function AgentPage(props: Props) {
                 {firstSentence(row.description, 140)}
               </p>
               {/* The one brand button on this page is in the Hire card, which is
-                  where hiring happens (DESIGN.md §7, one `default` per view).
+                  where hiring happens.
                   The header's lead action is the filled secondary, so the row
                   still has a first among four. */}
               <div className="animate-rise flex flex-wrap gap-3" style={{ animationDelay: HEADER_STEPS[5] }}>
@@ -751,7 +751,7 @@ export default async function AgentPage(props: Props) {
               </div>
             </div>
 
-            {/* Facts band (docs/marketplace/design.md §3): four cells, one grid,
+            {/* Facts band: four cells, one grid,
                 the figures at the display size the landing's funnel uses. */}
             <dl
               className="animate-rise grid grid-cols-2 gap-x-8 gap-y-12 rounded-xl border bg-card p-6 shadow-sm md:p-8 lg:grid-cols-4"
@@ -832,7 +832,7 @@ export default async function AgentPage(props: Props) {
                 {row.services.length > 0 ? (
                   <BlurFade inView direction="up" offset={24} delay={0.05} className="flex flex-col gap-6">
                     <SectionHead title="Endpoints" description="From its registration" />
-                    {/* DESIGN.md §6 code block: these are URLs, so they are set
+                    {/* these are URLs, so they are set
                         as one, rather than as a hairline list of grey text. */}
                     <dl className="flex flex-col gap-3 rounded-lg border bg-secondary p-4 font-mono text-xs leading-relaxed">
                       {row.services.slice(0, 6).map((s, i) => {
@@ -861,7 +861,7 @@ export default async function AgentPage(props: Props) {
 
                 {/* The anchor. The one block on the page whose content is read
                     from the contracts, so it gets the product shot: a mockup
-                    frame carrying the page's one beam (DESIGN.md §6, §9). */}
+                    frame carrying the page's one beam. */}
                 <BlurFade inView direction="up" offset={24} delay={0.05} className="flex flex-col gap-6">
                   <SectionHead
                     title="Track record"
@@ -875,7 +875,7 @@ export default async function AgentPage(props: Props) {
                 </BlurFade>
               </div>
 
-              {/* Hire (docs/marketplace/design.md §6): rails, the two chain links, the
+              {/* Hire: rails, the two chain links, the
                   steps, price and custody, the demo lab, then the quote control —
                   the card's one primary, and the page's. A plain stack: nothing
                   here has a fixed height, so no block can run into the next.

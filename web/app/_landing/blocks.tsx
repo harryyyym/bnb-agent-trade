@@ -1,4 +1,4 @@
-// The DESIGN.md §6 visual blocks shared by the pages: the logo strip under the
+// The page primitives shared by the pages: the logo strip under the
 // hero, the mockup frame (table slices, the captured 402, the quote terminal),
 // the flow strip, the timeline, and the settled-job list on stock Items. Server
 // components, safe to import from a client island; Beam is the one client
@@ -45,7 +45,7 @@ import type { LiteRow, SettledJob } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { EYEBROW } from "./ui";
 
-/** The six sources the site reads from — its honest imagery (docs/marketplace/design.md §4). */
+/** The six sources the site reads from — its honest imagery. */
 const SOURCES: ReadonlyArray<{ name: LogoName; label: string }> = [
   { name: "bnbchain", label: "BNB Chain" },
   { name: "bscscan", label: "BscScan" },
@@ -56,7 +56,7 @@ const SOURCES: ReadonlyArray<{ name: LogoName; label: string }> = [
 ];
 
 /**
- * DESIGN.md §6 logo strip, as a Marquee: the official marks with their names,
+ * as a Marquee: the official marks with their names,
  * the one loop the motion rules allow, paused under the pointer.
  */
 export function LogoStrip() {
@@ -66,7 +66,7 @@ export function LogoStrip() {
       {/* `data-logo-strip` is the hook the reduced-motion block in globals.css
           uses: parked inside its own edge mask the strip clips, so under
           `reduce` the mask comes off, the repeats collapse to one and it wraps
-          into a static row (DESIGN.md §9). */}
+          into a static row. */}
       <Marquee
         pauseOnHover
         data-logo-strip
@@ -84,7 +84,7 @@ export function LogoStrip() {
 }
 
 /**
- * DESIGN.md §6 mockup frame: a real component presented as a product shot —
+ * a real component presented as a product shot —
  * a chrome bar with three dots and a title, then the live content. `beam` adds
  * the page's one BorderBeam, slow and brand-coloured at low opacity.
  */
@@ -102,7 +102,7 @@ export function MockupFrame({
   return (
     // `shadow-2xl`, the one place a shadow is larger than `shadow-sm`: a mockup
     // is presented as an object over a backdrop, not as a card on the page
-    // (DESIGN.md §3). Call sites do not pass a shadow.
+    // Call sites do not pass a shadow.
     <div className={cn("relative overflow-hidden rounded-xl border bg-card shadow-2xl", className)}>
       <div className="flex items-center gap-1.5 border-b px-4 py-2.5">
         <span aria-hidden className="size-2.5 rounded-full bg-muted-foreground/30" />
@@ -119,7 +119,7 @@ export function MockupFrame({
 /**
  * One settled ERC-8183 job on a stock Item: id (with its BscScan link) · agent
  * · budget in U with the BNB Chain mark · when · chain; the self-hire caption
- * where it applies (docs/marketplace/design.md §5).
+ * where it applies.
  */
 function SettlementItem({ job, contract }: { job: SettledJob; contract: string | null }) {
   const base = explorerBase(job.chain);
@@ -187,7 +187,7 @@ const FLOW: Record<3 | 4, { grid: string; arrow: string }> = {
 };
 
 /**
- * DESIGN.md §6 flow strip: three or four steps side by side, each an icon tile
+ * three or four steps side by side, each an icon tile
  * + title + one line, an ArrowRight between the columns once they sit in one
  * row (from `md` for three, `lg` for four).
  */
@@ -243,7 +243,7 @@ export interface TimelineEvent {
 }
 
 /**
- * DESIGN.md §6 timeline: a vertical rail, one icon node per event, title and
+ * The timeline: a vertical rail, one icon node per event, title and
  * caption on the left, the mono data and the link on the right (under the
  * caption on a phone). The rail runs node to node, so the last event ends the
  * sequence rather than trailing into its own caption.
@@ -297,7 +297,7 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
 }
 
 /**
- * DESIGN.md §6 card grid, the landing's Featured cards — the marketplace
+ * the landing's Featured cards — the marketplace
  * pattern every app directory converges on (Zendesk, Intercom, Miro, Patreon,
  * Webflow all ship it): icon, name, one line, and **one figure a stranger can
  * check**, under a heading that says what got the item in.
@@ -306,7 +306,7 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
  * whether its endpoint answers. Both are the same fields the marketplace table
  * sorts on, so the section cannot drift from the catalogue behind it, and the
  * self-hire disclosure travels with the number exactly as it does in a row
- * (docs/marketplace/design.md §5).
+ *.
  *
  * The card is a link, so its whole surface is the target; the action reads as a
  * button but is `aria-hidden` with no tab stop, because the card itself is
@@ -409,7 +409,7 @@ export function ScrollCue({ label }: { label: string }) {
 }
 
 /**
- * DESIGN.md §6 stat band: the curation funnel as the section's whole screen.
+ * the curation funnel as the section's whole screen.
  * Six figures at display size with the drop between them spelled out, because
  * the drop is the argument: the registry total against the listed total is the
  * one number pair that says what this site does. Every figure here, the section
@@ -427,7 +427,7 @@ export function FunnelBand({
       {cells.map((c, i) => {
         const prev = i > 0 ? cells[i - 1].value : null;
         const drop = prev && prev > 0 ? 1 - c.value / prev : null;
-        // Stepped per cell (DESIGN.md §9): six figures arriving one after
+        // Stepped per cell: six figures arriving one after
         // another read as a sequence, which is what a funnel is.
         return (
           <BlurFade key={c.label} inView delay={i * 0.06} offset={16} blur="8px" className="flex flex-col gap-2">

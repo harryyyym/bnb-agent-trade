@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * An outbound link in body text: new tab, `rel="noopener noreferrer"`, an
- * ArrowUpRight icon after the label (DESIGN.md §8 — the text glyph ↗ is gone).
+ * ArrowUpRight icon after the label.
  * The base sets the hover only, so a caller decides the resting colour.
  * Buttons stay `components/button`; this is for links inside a sentence.
  */

@@ -8,7 +8,7 @@ import { CategoryIcon } from "./category-icon";
 import { Logo } from "./logo";
 
 /**
- * DESIGN.md §7 tags, all on the stock shadcn Badge: `secondary` for tags and
+ * the design system tags, all on the stock shadcn Badge: `secondary` for tags and
  * chips, `outline` for facets like the chain. Sentence case, never brand.
  */
 
@@ -24,7 +24,7 @@ export function CategoryTag({ category, className }: { category: Category; class
 
 /**
  * The demo-lane marker. Every seeded row carries one, on the row and on the
- * profile; amber is reserved for it (DESIGN.md §1.4) so it cannot be mistaken
+ * profile; amber is reserved for it so it cannot be mistaken
  * for the evidence tiers. See agents/shelf/seeded.ts for what "seeded" means.
  */
 export function SeededTag({ className }: { className?: string }) {

@@ -1,5 +1,4 @@
-// Server start hook: begins the 5-minute endpoint probe loop (docs/marketplace/design.md §5,
-// status freshness) and warms the two chain reads the landing awaits. Node
+// Server start hook: begins the 5-minute endpoint probe loop and warms the two chain reads the landing awaits. Node
 // runtime only; never during `next build`; the loop itself is guarded by a
 // globalThis symbol so HMR and duplicate bundles cannot start it twice. Set
 // PROBE_LOOP=off to run the site on build-time results.

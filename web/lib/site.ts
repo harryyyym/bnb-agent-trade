@@ -23,10 +23,10 @@ export const NAV_LINKS = [
   { label: "Report", href: "/brief" },
 ] as const;
 
-/** Rows per marketplace page (docs/marketplace/design.md §3, table / list row). */
+/** Rows per marketplace page. */
 export const PAGE_SIZE = 30;
 
-/** Probe loop cadence (docs/marketplace/design.md §5, status freshness). */
+/** Probe loop cadence. */
 export const PROBE_INTERVAL_MS = 5 * 60_000;
 
 /** In-site quote request: default task text and its cap (profile Hire card and the quote route). */

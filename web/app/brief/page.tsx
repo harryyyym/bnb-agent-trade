@@ -9,7 +9,7 @@
  * come from the same module or from /report's `figures.generated.ts`. The
  * rulings the copy obeys — the measured arm leads the simulated one, the
  * 0-of-5 sits in the middle cell at full size, the retracted "wrong pool"
- * finding stays retracted — are in docs/marketplace/report-two-tier-spec.md.
+ * finding stays retracted — are in the report spec.
  */
 import type { Metadata } from "next";
 import Link from "next/link";

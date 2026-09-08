@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 /**
- * DESIGN.md §7 tooltip: the only place for provenance and method
+ * the design system tooltip: the only place for provenance and method
  * (`chain — read from BSC testnet 97 at block N`, `probe — 5 Sep 2026, 175 ms`).
  *
  * Client component. Use it inside a subtree that is already client-side; in a

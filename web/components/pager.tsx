@@ -23,7 +23,7 @@ function pageList(page: number, pages: number): Array<number | "…"> {
 
 /**
  * `Showing 1–30 of 268` + numbered pages with Prev / Next on the stock shadcn
- * Pagination (DESIGN.md §7). The ends are inert spans at 50% when there is
+ * Pagination. The ends are inert spans at 50% when there is
  * nowhere to go — no disabled control on a public page.
  *
  * Pass `onChange` for the client-filtered marketplace list (cells are buttons
@@ -93,7 +93,7 @@ export function Pager({
   /*
    * The end that has nowhere to go. It measured 2.42:1 at
    * `text-muted-foreground/50` — the universal look of a dead button, on a page
-   * that is not allowed to render one (DESIGN.md §7). `text-muted-foreground`
+   * that is not allowed to render one. `text-muted-foreground`
    * is 6.34:1 and reads as a label rather than as a broken control; the missing
    * hover and the missing pointer already say it is not clickable.
    */

@@ -54,7 +54,7 @@ function ReceiptRow({ label, note, children }: { label: string; note?: string; c
 /**
  * The x402 list, split where the evidence band changes. The order is the shelf's
  * own rank order and is never re-sorted — the walk only marks where a band
- * starts, which is how DESIGN.md §6 says a band is marked: a group header above
+ * starts, which is how the design system band is marked: a group header above
  * the rows and nothing different inside them.
  */
 function bandsOf(rows: readonly ShelfRow[]): Array<{ tier: Tier; rows: ShelfRow[] }> {
@@ -79,7 +79,7 @@ export default function PaymentsPage() {
     <>
       <SiteNav />
       {/*
-        One idea per screen (DESIGN.md §6 section rhythm). The fold belongs to the
+        One idea per screen. The fold belongs to the
         artefact — a real HTTP 402 exchange and the receipt it produced — rather
         than to a band of four icon tiles; the steps that explain it follow.
       */}
@@ -88,7 +88,7 @@ export default function PaymentsPage() {
           <HeroBackdrop />
           <Container className="relative flex flex-col gap-12 md:gap-16">
             {/* Not BlurFade: the header plays before any scroll, so it rises on
-                mount with 28px of travel (DESIGN.md §9). */}
+                mount with 28px of travel. */}
             <div className="animate-rise" style={{ animationDelay: "0.05s" }}>
               <PageHead
                 eyebrow="x402 pay per call"
@@ -112,13 +112,13 @@ export default function PaymentsPage() {
                     }
                   />
                 </div>
-                {/* DESIGN.md §6 mockup frame, the fold's one large surface: the
+                {/* the fold's one large surface: the
                     exchange and the receipt it produced are a single product
                     shot at the container's full width, cropped by the fold, and
                     carry this page's one border beam. It rises on mount rather
                     than riding `HeroShowcase` — a scroll-linked `useTransform`
                     is stopped by none of the four reduced-motion mechanisms in
-                    DESIGN.md §9, and left this frame tilted 22° at 45% opacity
+                    the design system, and left this frame tilted 22° at 45% opacity
                     for a visitor who asked for less motion (measured). */}
                 <div className="animate-rise" style={{ animationDelay: "0.5s" }}>
                   <MockupFrame
@@ -281,7 +281,7 @@ export default function PaymentsPage() {
                   aside={
                     // The count was a 14px line beside the heading; it is the
                     // one figure this section has, so it counts up at stat size
-                    // (DESIGN.md §4 stat, §9 CountUp).
+                    //.
                     <span className="flex flex-col gap-1 sm:items-end">
                       <span className="text-3xl font-semibold tracking-tight text-foreground tabular-nums md:text-4xl">
                         <CountUp value={rows.length} />

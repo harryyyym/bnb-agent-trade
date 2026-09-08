@@ -4,13 +4,13 @@ import { cn } from "@/lib/utils";
 import { CountUp } from "./count-up";
 
 /**
- * DESIGN.md §6 stat cell: eyebrow label over a big tabular figure over a
+ * eyebrow label over a big tabular figure over a
  * caption. Three steps: `default` for a strip of six, `lg` where a page leads
  * with three, `display` where the figure is the section (the profile's facts
  * panel, the landing's funnel). Numbers count up once (`CountUp`); strings render as-is; any other
  * node (a `StatusWord`, an evidence word on the profile facts strip) sits on
  * the value line as given. `highlight` is the one brand-coloured figure a page
- * is allowed (DESIGN.md §1.3). `title` carries the cell's provenance.
+ * is allowed. `title` carries the cell's provenance.
  */
 export function Stat({
   label,

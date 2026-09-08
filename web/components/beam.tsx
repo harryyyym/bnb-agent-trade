@@ -4,7 +4,7 @@ import { useReducedMotion } from "motion/react";
 import { BorderBeam } from "@/components/ui/border-beam";
 
 /**
- * The page's one border beam (DESIGN.md §9), absent for a visitor who asked for
+ * The page's one border beam, absent for a visitor who asked for
  * reduced motion.
  *
  * `MotionConfig reducedMotion="user"` in components/providers.tsx stops
