@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "jobId": 1026,
+  "chainId": 97,
+  "contracts": {
+    "commerce": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE",
+    "router": "0xD7d36D66d2F1B608A0F943f722D27e3744f66F25",
+    "policy": "0xd6a4217588F6B1F5657a92A3e94E6422aD771cEA"
+  },
+  "response": {
+    "content": "{\n  \"agent\": \"SurvivalGuard (ERC-8004 testnet #2009)\",\n  \"service\": \"Aave V3 health-factor guard; contract repays only the enrolled user's own debt from their buffer\",\n  \"health\": {\n    \"status\": 200,\n    \"body\": {\n      \"ok\": true,\n      \"chain\": \"mainnet\",\n      \"guard\": \"0x3b0249f10d6a975e0204cf62084317fa1fef31ac\",\n      \"sentinel\": {\n        \"running\": false,\n        \"lastTickAt\": 1788633159853,\n        \"tickCount\": 12481,\n        \"enabled\": true\n      },\n      \"ts\": 1788633170107\n    },\n    \"fetchedAt\": \"2026-09-05T18:32:50.107Z\"\n  },\n  \"evidence\": {\n    \"guardContract\": \"https://bscscan.com/address/0x3b0249f10d6a975e0204cf62084317fa1fef31ac\",\n    \"drillTx\": \"https://testnet.bscscan.com/tx/0xff314abe4f8c616f83a0d455aec342268b857d361c2904266008c3920ab7357b\"\n  },\n  \"generatedAt\": \"2026-09-05T18:32:50.108Z\"\n}",
+    "contentType": "application/json"
+  },
+  "metadata": {}
+}

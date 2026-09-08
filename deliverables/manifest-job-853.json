@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "jobId": 853,
+  "chainId": 97,
+  "contracts": {
+    "commerce": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE",
+    "router": "0xD7d36D66d2F1B608A0F943f722D27e3744f66F25",
+    "policy": "0xd6a4217588F6B1F5657a92A3e94E6422aD771cEA"
+  },
+  "response": {
+    "content": "{\n  \"agent\": \"Pancake Ranger (ERC-8004 testnet #2011)\",\n  \"position\": {\n    \"chain\": \"bsc-mainnet\",\n    \"pool\": \"WBNB/USDT 0.05% 0x36696169C63e42cd08ce11f5deeBbCeBae652050\",\n    \"tokenId\": 7268711,\n    \"ticks\": [\n      -66910,\n      -65000\n    ],\n    \"stakedIn\": \"MasterChef V3 0x556B9306565093C855AEA9AE92A594704c2Cd59e\",\n    \"mintTx\": \"0xebb5ccb4af24a0bd77407b9965b771ebc5b3cc4c9b512bcfa49f1fd5818ecb39\",\n    \"stakeTx\": \"0xdb723ffd7d8da4f2cf2a1e09c8afca54adc9f226fd24b8338b488b8c7067370d\"\n  },\n  \"generatedAt\": \"2026-09-01T05:44:28.759Z\"\n}",
+    "contentType": "application/json"
+  },
+  "metadata": {}
+}

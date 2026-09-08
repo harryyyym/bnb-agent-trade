@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "jobId": 1027,
+  "chainId": 97,
+  "contracts": {
+    "commerce": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE",
+    "router": "0xD7d36D66d2F1B608A0F943f722D27e3744f66F25",
+    "policy": "0xd6a4217588F6B1F5657a92A3e94E6422aD771cEA"
+  },
+  "response": {
+    "content": "{\n  \"agent\": \"Dark Survivor (ERC-8004 testnet #2010)\",\n  \"service\": \"on-chain activity alerts for any BSC wallet; read-only\",\n  \"health\": {\n    \"status\": 200,\n    \"body\": {\n      \"ok\": true\n    },\n    \"fetchedAt\": \"2026-09-05T18:33:24.877Z\"\n  },\n  \"evidence\": {\n    \"alertTx\": \"https://bscscan.com/tx/0x30ce652c8307c4543984e4b36afe21b39ef71c2b171a088a971f47506d4be342\"\n  },\n  \"generatedAt\": \"2026-09-05T18:33:24.878Z\"\n}",
+    "contentType": "application/json"
+  },
+  "metadata": {}
+}
