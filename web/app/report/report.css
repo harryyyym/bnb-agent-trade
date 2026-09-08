@@ -1,0 +1,1019 @@
+/*
+ * Report typography — scoped to /report and different from app typography on
+ * purpose. The marketplace is a 14–16px UI; a research page that inherits that
+ * reads as UI no matter how good the charts are.
+ *
+ * Plain CSS, no @apply and no Tailwind directives: this file is imported by the
+ * route and passes through PostCSS unchanged, so nothing here can perturb the
+ * utility layer the rest of the site is built from.
+ *
+ * Everything is under `.report`, which the route puts on <main>.
+ */
+
+.report {
+  /* One measure, one break-out, one gutter. Craft rule 1. */
+  --measure: 720px;
+  --wide: 900px;
+  --gutter: 0px;
+
+  /* Figure tokens. Vega writes these var() names verbatim into the SVG as
+     presentation attributes and the browser resolves them against this block,
+     so the figures read the stylesheet rather than being themed to match it. */
+  --fig-ink: var(--foreground);
+  --fig-muted: var(--muted-foreground);
+  --fig-grid: var(--chart-grid);
+  /* The null rule sat at --muted-foreground in the research prototype and read
+     too close to the gridlines. It is the one piece of chrome that earns its
+     ink, so it is brighter here and drawn at twice the gridline width. */
+  --fig-null: rgba(234, 236, 239, 0.34);
+  /* The page ground, for marks that punch themselves out of what they overlap.
+     A figure never PAINTS this — every SVG keeps `background: null` — it is
+     only ever a stroke on a mark that would otherwise merge into another. */
+  --fig-ground: var(--background);
+  /* The track behind a proportion bar: it carries the denominator, which is
+     what lets the clock figure drop its gridlines entirely. */
+  --fig-rail: rgba(234, 236, 239, 0.055);
+  --fig-font-sans: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
+  --fig-font-mono: var(--font-mono-src), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--foreground);
+}
+
+@media (min-width: 1280px) {
+  .report {
+    --gutter: 232px;
+  }
+}
+
+/* --- the grid -------------------------------------------------------------
+ * A gutter column (empty until the sticky table of contents lands in it) and a
+ * body column. The body column is itself a sub-grid of three widths: text,
+ * break-out for figures and wide tables, full for a rule that spans everything.
+ */
+
+.report-doc {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  max-width: calc(var(--wide) + var(--gutter));
+  margin-inline: auto;
+}
+
+.report-gutter {
+  grid-column: 1;
+}
+
+.report-flow {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(0, 1fr)
+    [text-start] minmax(0, var(--measure)) [text-end]
+    minmax(0, 1fr) [full-end];
+}
+
+.report-flow > * {
+  grid-column: text;
+  min-width: 0;
+}
+
+.report-flow > .breakout,
+.report-flow > .full {
+  grid-column: full;
+}
+
+/* --- prose ---------------------------------------------------------------- */
+
+.report p {
+  margin: 0 0 1.15em;
+}
+
+.report a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklab, var(--foreground) 32%, transparent);
+  text-underline-offset: 3px;
+}
+
+.report a:hover {
+  text-decoration-color: var(--brand);
+}
+
+.report strong {
+  font-weight: 600;
+}
+
+.report h1 {
+  font-size: clamp(34px, 2.2vw + 22px, 46px);
+  line-height: 1.08;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.report h2 {
+  /* The site nav is sticky, so an anchor target lands under it without this.
+     The contents rail is the highest-leverage thing on the page for a reader
+     with four minutes and it has to put the heading where they can see it. */
+  scroll-margin-top: 92px;
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  margin: 3.25rem 0 1rem;
+}
+
+.report h3 {
+  scroll-margin-top: 92px;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 600;
+  margin: 2rem 0 0.6rem;
+}
+
+/* Section numbers are free credibility. Mono, muted, hanging where there is room. */
+.report .secnum {
+  font-family: var(--fig-font-mono);
+  font-weight: 400;
+  font-size: 0.72em;
+  color: var(--muted-foreground);
+  margin-right: 0.7em;
+  letter-spacing: 0.02em;
+}
+
+.report .lede {
+  font-size: 21px;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+}
+
+/* Two text tones only: --foreground for body, --muted-foreground for
+   everything that is apparatus. */
+.report .muted {
+  color: var(--muted-foreground);
+}
+
+.report .num {
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9em;
+  letter-spacing: -0.02em;
+}
+
+.report .kicker {
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* The evidence label, in the same slot in every figure footer and beside every
+   claim that carries one. Placement is what makes it read as a system. */
+.report .evidence {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--fig-font-mono);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+.report .evidence-sim {
+  color: var(--chart-1);
+  border-color: color-mix(in oklab, var(--chart-1) 42%, transparent);
+}
+
+.report .evidence-modelled {
+  color: var(--chart-2);
+  border-color: color-mix(in oklab, var(--chart-2) 42%, transparent);
+}
+
+/* A margin note / callout that is not a card. A left rule, no box. */
+.report .note {
+  border-left: 2px solid var(--border);
+  padding-left: 1.1rem;
+  margin: 1.75rem 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+.report .note strong {
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.report .rule {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 3.5rem 0 0;
+}
+
+/* --- figures --------------------------------------------------------------
+ * Five parts, same order every time, all left-aligned to one edge. No card, no
+ * border, no shadow: figures sit on the ground. Craft rule 6.
+ */
+
+.report .fig {
+  margin: 3rem 0 3.25rem;
+}
+
+.report .fig-title {
+  font-size: 20px;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  margin: 0.6rem 0 0;
+  max-width: var(--measure);
+}
+
+.report .fig-dek {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+  margin: 0.55rem 0 0;
+  max-width: var(--measure);
+}
+
+.report .fig-plot {
+  margin-top: 1.6rem;
+  /* Vega emits width, height AND viewBox, so this scales correctly. */
+  overflow-x: auto;
+}
+
+/* The SVGs carry a viewBox; the old `min-width: 640px` stopped them using it, and
+   at 390px put 45.3% of every one of six charts behind a sideways drag on the
+   page a reader opens from a link. */
+.report .fig-plot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 639px) {
+  .report .fig-plot {
+    overflow-x: visible;
+  }
+}
+
+/* Bringhurst's 75-character ceiling for every prose element at its own size.
+   34.6em = 75 × 0.4616em; `em` resolves against the element's own font-size, so
+   one declaration covers the 15px figure dek — measured at 98 characters, the
+   only prose on the page outside Butterick's 45–90 — without naming it. */
+.report :is(p, li, dd, .lede, .fig-title, .fig-dek, .hero-what, .hero-ci, .closing-yes, .closing-no, .note, .defect-what) {
+  max-width: 34.6em;
+}
+
+/* A section linked from /brief lands under the sticky nav and the sticky rail
+   without this; globals.css sets scroll-padding-top for the nav alone. */
+.report :is(h2, h3, figure)[id] {
+  scroll-margin-block-start: 7.5rem;
+}
+
+/* Every figure sits in the break-out column, so there is ONE figure edge on the
+   page and one prose edge. Two of the six are drawn narrower than the column on
+   purpose — one of them is a slope chart, and stretching a slope chart flattens
+   the only thing it is a picture of — so those render at their natural size and
+   are left-aligned to the same edge rather than scaled up to fill it. */
+.report .fig-plot.natural svg {
+  width: auto;
+  max-width: 100%;
+}
+
+.report .fig-foot {
+  margin-top: 1.1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-soft);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.4rem;
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+.report .fig-foot a {
+  text-decoration-color: color-mix(in oklab, var(--foreground) 28%, transparent);
+}
+
+/* --- tables ---------------------------------------------------------------
+ * Horizontal hairlines only. No vertical rules, no zebra. Numbers right, text
+ * left, headers aligned to their column's data. Craft rule 11.
+ */
+
+.report .table-wrap {
+  overflow-x: auto;
+  margin: 1.5rem 0 1.75rem;
+}
+
+.report table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+.report thead th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  padding: 0 1rem 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.report tbody td {
+  padding: 0.62rem 1rem 0.62rem 0;
+  border-top: 1px solid var(--border-soft);
+  vertical-align: baseline;
+}
+
+.report tbody tr:first-child td {
+  border-top: 0;
+}
+
+.report td:last-child,
+.report th:last-child {
+  padding-right: 0;
+}
+
+.report .col-num {
+  text-align: right;
+  font-family: var(--fig-font-mono);
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.report .col-mono {
+  font-family: var(--fig-font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* An interval under its own point estimate, inside one cell.
+ *
+ * A separate column for every interval is the obvious layout and it is the
+ * wrong one here: the survival tables already run to eight columns and adding
+ * four more pushed the change column off a 1280 px screen, which is the width
+ * most of this page's readers have. The interval belongs to the number above it
+ * and reads as one cell — smaller, dimmer, right-aligned on the same edge — so
+ * the table keeps its column count and the uncertainty travels with its
+ * estimate rather than three columns away from it. */
+.report .ci {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+  letter-spacing: -0.01em;
+  margin-top: 0.15rem;
+}
+
+/* Weight, not colour, marks the headline row. */
+.report tbody tr.headline td {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* --- the corrections log --------------------------------------------------
+ * One block per defect. Weight, never colour, marks the ones a reader has to
+ * see: green and red are reserved for status on this site and a direction tag
+ * is not a status.
+ */
+
+.report .defects {
+  list-style: none;
+  margin: 2rem 0 2.25rem;
+  padding: 0;
+  counter-reset: defect;
+}
+
+.report .defects > li {
+  counter-increment: defect;
+  border-top: 1px solid var(--border-soft);
+  padding: 1.25rem 0 1.35rem;
+  display: grid;
+  gap: 0.45rem 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+.report .defects > li:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.report .defects > li:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.report .defect-moved {
+  margin: 0;
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.report .defect-moved::before {
+  content: counter(defect) " · ";
+}
+
+/* The three that flattered the result are the ones a reader is entitled to
+   assume were left in on purpose, so they are the ones set in ink. */
+.report .defect-toward {
+  color: var(--foreground);
+}
+
+.report .defect-what {
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.6;
+}
+
+.report .defect-delta {
+  margin: 0.15rem 0 0;
+  font-family: var(--fig-font-mono);
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.report .defect-delta .was {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.report .defect-delta .now {
+  color: var(--foreground);
+}
+
+.report .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- table of contents ----------------------------------------------------
+ * Sticky, in the reserved gutter. With a four-minute reader this is the
+ * highest-leverage skimmability feature on the page; below 1280px the gutter
+ * collapses and it is not rendered at all rather than stacked on top.
+ */
+
+.report .toc {
+  position: sticky;
+  top: 104px;
+  padding-right: 2rem;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.report .toc a.toc-back {
+  display: block;
+  grid-template-columns: none;
+  white-space: nowrap;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  text-decoration: none;
+  color: var(--foreground);
+}
+.report .toc a.toc-back:hover {
+  color: var(--brand);
+}
+
+/* Below 1280 the rail is display:none. Keep its first row as a fixed pill so the
+   return path survives on a phone, where the study is 49 screens long. */
+@media (max-width: 1279px) {
+  .report .toc {
+    display: block;
+    position: fixed;
+    top: auto; /* the sticky rule's top: 104px would otherwise stretch the box */
+    left: 12px;
+    bottom: 12px;
+    width: max-content;
+    z-index: 40;
+    padding: 0;
+  }
+  .report .toc > *:not(.toc-back) {
+    display: none;
+  }
+  .report .toc a.toc-back {
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    background: var(--card);
+    font-size: 13px;
+    line-height: 1;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.report .toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.report .toc a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  display: grid;
+  /* Wide enough for a "3.1" as well as a "3". */
+  grid-template-columns: 2.3em 1fr;
+}
+
+.report .toc a:hover {
+  color: var(--foreground);
+}
+
+.report .toc .n {
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+}
+
+/* Below 1280 the rail collapses to its return-row pill; the rule is with .toc-back above. */
+
+/* A disclosed table is subordinate to a promoted one, and one notch smaller
+   also keeps the widest of them inside the break-out without a scrollbar. */
+.report details table {
+  font-size: 14px;
+}
+
+.report details .col-num {
+  font-size: 12.5px;
+}
+
+.report details .col-mono {
+  font-size: 12.5px;
+}
+
+/* --- disclosures ---------------------------------------------------------- */
+
+.report details {
+  margin: 1.5rem 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.report summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.85rem 0;
+  font-size: 15px;
+  color: var(--muted-foreground);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.report summary::-webkit-details-marker {
+  display: none;
+}
+
+.report summary::before {
+  content: "+";
+  font-family: var(--fig-font-mono);
+  color: var(--muted-foreground);
+}
+
+.report details[open] summary::before {
+  content: "−";
+}
+
+.report summary:hover {
+  color: var(--foreground);
+}
+
+/* --- apparatus block ------------------------------------------------------ */
+
+.report .apparatus {
+  margin: 2rem 0 0;
+  padding: 1.4rem 0 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 0.55rem 1.5rem;
+  grid-template-columns: 1fr;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 640px) {
+  .report .apparatus {
+    grid-template-columns: 160px minmax(0, 1fr);
+  }
+}
+
+.report .apparatus dt {
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding-top: 0.22em;
+}
+
+.report .apparatus dd {
+  margin: 0;
+}
+
+@media (max-width: 639px) {
+  .report .apparatus dd {
+    margin-bottom: 0.6rem;
+  }
+}
+
+/* The artefact list inside the apparatus block. */
+.report .artefacts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.2rem;
+}
+
+/* --- the headline number --------------------------------------------------
+ * A plate, not a card: two hairlines and air, no border box, no fill, no
+ * radius, no shadow. The whole tile is left-aligned to the text measure like
+ * everything else on the page, because a centred number in a rounded box is
+ * the single strongest dashboard tell there is.
+ */
+
+.report .hero-stat {
+  margin: 2.25rem 0 0;
+  padding: 1.5rem 0 1.4rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.report .hero-num {
+  margin: 0;
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(52px, 6.2vw, 76px);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  color: var(--foreground);
+}
+
+.report .hero-unit {
+  margin: 0.55rem 0 0;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--foreground);
+}
+
+.report .hero-what {
+  margin: 0.75rem 0 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+  max-width: var(--measure);
+}
+
+/* The interval, beneath, in muted ink — and attached to the estimand it
+   actually belongs to, which is not the number above it. */
+.report .hero-ci {
+  margin: 0.9rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-soft);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+  max-width: var(--measure);
+}
+
+/* --- the reproduction command --------------------------------------------
+ * A terminal block, not a code card: hairline left rule, no fill, no radius.
+ */
+
+.report .term {
+  margin: 1.5rem 0 1.6rem;
+  padding: 0.15rem 0 0.15rem 1.1rem;
+  border-left: 1px solid var(--border);
+  overflow-x: auto;
+  font-family: var(--fig-font-mono);
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--muted-foreground);
+}
+
+.report .term code {
+  font: inherit;
+  white-space: pre;
+}
+
+/* --- limitations ----------------------------------------------------------
+ * Numbered, hairline-separated, the same block the corrections log uses. A
+ * study's limitations and its corrections are the same kind of object and they
+ * should not look like different kinds.
+ */
+
+.report .limits {
+  list-style: none;
+  margin: 2rem 0 2.5rem;
+  padding: 0;
+  counter-reset: limit;
+}
+
+.report .limits > li {
+  counter-increment: limit;
+  border-top: 1px solid var(--border-soft);
+  padding: 0.95rem 0 1rem 2.6rem;
+  position: relative;
+  font-size: 16.5px;
+  line-height: 1.6;
+}
+
+.report .limits > li::before {
+  content: counter(limit);
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.report .limits > li:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.report .limits > li:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+/* --- the closing statement ------------------------------------------------
+ * The last thing on the page is the sentence the study supports and the one it
+ * does not, side by side at the same weight. Weight and rule, never colour:
+ * green and red are status tokens on this site and a claim is not a status.
+ */
+
+.report .closing {
+  margin: 2rem 0 0;
+  padding: 1.6rem 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.report .closing-kicker {
+  margin: 0 0 0.55rem;
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.report .closing-yes {
+  margin: 0 0 1.8rem;
+  font-size: 18.5px;
+  line-height: 1.6;
+  color: var(--foreground);
+}
+
+/* The hairline belongs ABOVE the second kicker, not between it and its own
+   paragraph — otherwise the label reads as the end of the block above it. */
+.report .closing-yes + .closing-kicker {
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.report .closing-no {
+  margin: 0;
+  font-size: 18.5px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* --- print ---------------------------------------------------------------- */
+
+@media print {
+  .report {
+    --gutter: 0px;
+    font-size: 11pt;
+  }
+
+  .report .fig {
+    break-inside: avoid;
+  }
+}
+
+/* --- figure 5's inline key ------------------------------------------------
+ * Two comparison arms share the blue this page gives the modelled human and are
+ * told apart by fill, so the dek has to carry the glyph as well as the word.
+ * A key inside the sentence, not a legend beside the plot.
+ */
+
+.report .key {
+  font-family: var(--fig-font-mono);
+  font-size: 0.88em;
+  white-space: nowrap;
+  color: var(--foreground);
+}
+
+.report .key::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.42em;
+  border-radius: 50%;
+  vertical-align: 0.04em;
+}
+
+.report .key-hollow::before {
+  border: 1.6px solid var(--chart-2);
+}
+
+.report .key-solid::before {
+  background: var(--chart-2);
+}
+
+/* --- the story devices inside the report ----------------------------------
+ * The sticky-figure sections and the stat rows come from components/story;
+ * these lines only place them in the report's own grid.
+ */
+.report .report-scrolly {
+  margin: 2.5rem 0 1.5rem;
+}
+.report .report-scrolly + .fig-notes,
+.report .fig-notes {
+  margin: 0 0 2.5rem;
+  font-size: 14px;
+}
+.report .fig-notes summary {
+  cursor: pointer;
+  color: var(--muted-foreground);
+  font-family: var(--fig-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.report .fig-notes summary:hover {
+  color: var(--foreground);
+}
+.report .story-stats {
+  margin: 0 0 2rem;
+}
+.report .story-hero h1 {
+  max-width: 18em;
+}
+.report .toc {
+  display: none;
+}
+
+.report.story .kicker {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.report .fig-notes summary {
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 14px;
+}
+
+.report .scrolly-step > div {
+  max-width: 22em;
+}
+.report .scrolly-step p {
+  max-width: none;
+  margin: 0;
+}
+.report .story-stat .label,
+.report .story-stat .caption {
+  max-width: none;
+}
+
+/* report.css's own --wide (900px) was sized for the old single column; the story
+   shell needs the container the story stylesheet expects. */
+.report.story {
+  --wide: 72rem;
+}
+
+/* Evidence words are plain text now, in the chart footers and in the prose alike:
+   no box, no colour, the definition on hover. */
+.report.story .evidence,
+.report.story .evidence-sim,
+.report.story .evidence-modelled {
+  display: inline;
+  padding: 0;
+  border: 0;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: 0;
+  color: var(--muted-foreground);
+  text-transform: lowercase;
+}
+
+/* --- the report on the brief's shell (2026-09-08) --------------------------------
+ * One left-aligned article column, the same as /brief: no centred 720px text
+ * column inside the wider one, prose capped at 44em, figures on the full column.
+ */
+.report .report-flow {
+  grid-template-columns: [full-start text-start] minmax(0, 1fr) [text-end full-end];
+}
+.report :is(p, li, dd, .lede, .note, .defect-what, .closing-yes, .closing-no) {
+  max-width: 44em;
+}
+.report .apparatus,
+.report .table-wrap {
+  max-width: none;
+}
+.report .story-stats {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 44em;
+}
+.report .story-stat {
+  border-right: 0;
+  margin-right: 0;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  column-gap: 1.5rem;
+  align-items: baseline;
+}
+.report .story-stat:last-child {
+  border-bottom: 0;
+}
+.report .story-stat .label {
+  grid-row: 1 / span 2;
+  font-size: 17px;
+  color: var(--foreground);
+  max-width: none;
+}
+.report .story-stat .caption {
+  grid-column: 2;
+  max-width: none;
+}
+.report .story-stat .value {
+  font-size: 21px;
+  line-height: 1.3;
+}
+.report.story .apparatus dt,
+.report.story .defect-moved {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Chapter heads on the brief's scale: 32/600, the number as a quiet prefix,
+   4.5rem of air above instead of a rule. */
+.report.story h2 {
+  font-size: clamp(28px, 0.8vw + 20px, 32px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 4.5rem 0 1.5rem;
+  max-width: 18em;
+}
+.report.story h2 .secnum {
+  font-family: var(--fig-font-mono);
+  font-size: 14px;
+  color: var(--muted-foreground);
+  margin-right: 0.75em;
+}
+.report.story h3 {
+  font-size: 21px;
+  font-weight: 600;
+  margin: 2.5rem 0 1rem;
+}
+.report.story .closing {
+  border: 0;
+  padding-left: 0;
+}
+.report.story .closing-kicker {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.report.story .limits,
+.report.story .limits > li:last-child,
+.report.story .defects,
+.report.story .defects > li:last-child {
+  border-bottom: 0;
+}

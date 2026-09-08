@@ -1,0 +1,188 @@
+{
+  "builtAt": "2026-09-07T05:08:31.085Z",
+  "chains": {
+    "56": {
+      "builtAt": "2026-09-06T15:00:02.513Z",
+      "chain": 56,
+      "chainLabel": "BSC mainnet",
+      "registry": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+      "block": 120156048,
+      "platformHosts": {
+        "metadata.evoevo.ai": 112769,
+        "q402.quackai.ai": 4979,
+        "termix-platform-prod.s3.ap-southeast-1.amazonaws.com": 27377,
+        "evoevo.ai": 7058
+      },
+      "registered": 336222,
+      "resolvedMetadata": 158579,
+      "eligible": 1152,
+      "shelved": 132,
+      "onTracks": 48,
+      "byCategory": {
+        "health factor monitoring": 12,
+        "rebalancing": 14,
+        "grid trading": 10,
+        "other": 84,
+        "yield optimisation": 12
+      },
+      "byTier": {
+        "SETTLED ON CHAIN": 3,
+        "ENDPOINT RESPONDS": 126,
+        "IDENTITY ONLY": 3
+      },
+      "byProbe": {
+        "responds": 112,
+        "gated": 17,
+        "unreachable": 3
+      },
+      "byConfidence": {
+        "high": 34,
+        "medium": 12,
+        "low": 2
+      },
+      "rejectedByReason": {
+        "no name": 256,
+        "metadata unresolved": 6865,
+        "description under 40 chars": 16333,
+        "empty tokenURI": 18755,
+        "endpoint not public": 396,
+        "name under 3 chars": 317,
+        "no description": 147,
+        "no endpoint": 138687,
+        "email-like name": 386,
+        "description is one repeated character": 16,
+        "test-style name": 373,
+        "manual reject (review verdict)": 1,
+        "describes a token, not a service": 3,
+        "name is one repeated character": 53,
+        "name over 80 chars": 4,
+        "test-style description": 3,
+        "platform-issued metadata not fetched": 152023,
+        "platform profile page, not an agent service": 400,
+        "platform identity without a service description": 52,
+        "duplicate of": 473,
+        "platform instance of": 474,
+        "below the Other bar": 73
+      },
+      "commerce": {
+        "contract": "0xea4daa3100a767e86fded867729ae7446476eba6",
+        "jobCounter": 56716,
+        "block": 120159464,
+        "providers": 33,
+        "token": "U"
+      },
+      "reputation": {
+        "contract": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+        "agentsWithFeedback": 27
+      }
+    },
+    "97": {
+      "builtAt": "2026-09-07T05:08:31.078Z",
+      "chain": 97,
+      "chainLabel": "BSC testnet",
+      "registry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+      "block": 129467692,
+      "platformHosts": {},
+      "registered": 2193,
+      "resolvedMetadata": 1468,
+      "eligible": 291,
+      "shelved": 136,
+      "onTracks": 101,
+      "byCategory": {
+        "health factor monitoring": 25,
+        "grid trading": 28,
+        "yield optimisation": 24,
+        "rebalancing": 24,
+        "other": 35
+      },
+      "byTier": {
+        "SETTLED ON CHAIN": 40,
+        "ENDPOINT RESPONDS": 80,
+        "IDENTITY ONLY": 16
+      },
+      "byProbe": {
+        "responds": 100,
+        "gated": 9,
+        "unreachable": 26,
+        "no-public": 1
+      },
+      "byConfidence": {
+        "medium": 28,
+        "high": 69,
+        "low": 4
+      },
+      "rejectedByReason": {
+        "test-style name": 183,
+        "description under 40 chars": 472,
+        "endpoint not public": 300,
+        "empty tokenURI": 19,
+        "metadata unresolved": 706,
+        "no endpoint": 58,
+        "no description": 50,
+        "boilerplate description": 17,
+        "manual reject (review verdict)": 17,
+        "name under 3 chars": 15,
+        "name over 80 chars": 2,
+        "test-style description": 4,
+        "Studio default name and no agent card at the endpoint": 52,
+        "name is one repeated character": 1,
+        "no name": 1,
+        "platform identity without a service description": 5,
+        "duplicate of": 111,
+        "below the Other bar": 44
+      },
+      "commerce": {
+        "contract": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+        "jobCounter": 1027,
+        "block": 129306072,
+        "providers": 202,
+        "token": "U"
+      },
+      "reputation": {
+        "contract": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+        "agentsWithFeedback": 3
+      }
+    }
+  },
+  "registered": 338415,
+  "resolvedMetadata": 160047,
+  "eligible": 1443,
+  "shelved": 268,
+  "onTracks": 149,
+  "byChain": {
+    "56": 132,
+    "97": 136
+  },
+  "byCategory": {
+    "health factor monitoring": 37,
+    "grid trading": 38,
+    "yield optimisation": 36,
+    "rebalancing": 38,
+    "other": 119
+  },
+  "byTier": {
+    "SETTLED ON CHAIN": 43,
+    "ENDPOINT RESPONDS": 206,
+    "IDENTITY ONLY": 19
+  },
+  "byProbe": {
+    "responds": 212,
+    "gated": 26,
+    "unreachable": 29,
+    "no-public": 1
+  },
+  "byConfidence": {
+    "medium": 40,
+    "high": 103,
+    "low": 6
+  },
+  "selfHire": 17,
+  "seeded": 8,
+  "seededByCategory": {
+    "health factor monitoring": 2,
+    "grid trading": 2,
+    "yield optimisation": 2,
+    "rebalancing": 1,
+    "other": 1
+  }
+}

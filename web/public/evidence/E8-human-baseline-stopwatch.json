@@ -1,0 +1,36 @@
+{
+  "$schema": "termix-human-baseline-stopwatch/v1",
+  "whatThisIs": "The human arm of the four hired tasks, timed by stopwatch by a team member on 2026-09-08, one attempt each, in the order the brief's table lists them. The arm-B recorder (docs/termix/harness/src/arms/arm-b.ts) was not used, so there is no mtime anchor, no screen-recording hash and no rubric score: this file carries elapsed time only, as reported by the operator, and the page labels it as self-reported.",
+  "operator": "team member",
+  "dateUtc": "2026-09-08",
+  "method": "stopwatch",
+  "scored": false,
+  "runs": [
+    {
+      "taskId": "T1",
+      "elapsed": "6:10",
+      "elapsedSeconds": 370
+    },
+    {
+      "taskId": "T3",
+      "elapsed": "13:32",
+      "elapsedSeconds": 812
+    },
+    {
+      "taskId": "T4",
+      "elapsed": "10:42",
+      "elapsedSeconds": 642
+    },
+    {
+      "taskId": "T6",
+      "elapsed": "2:25",
+      "elapsedSeconds": 145
+    }
+  ],
+  "costU": 0,
+  "limitations": [
+    "Self-reported stopwatch times by a team member who had seen the agents' deliverables; not the arm-B protocol in HUMAN-RUNS.md.",
+    "One attempt per task, one operator; no interval is claimed.",
+    "Not scored against the rubric."
+  ]
+}

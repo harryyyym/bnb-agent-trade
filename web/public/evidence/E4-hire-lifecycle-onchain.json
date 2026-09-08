@@ -1,0 +1,1191 @@
+{
+  "$schema": "termix-hire-lifecycle/v1",
+  "whatThisIs": "The on-chain lifecycle of every ERC-8183 hire in this report, recovered from BNB Chain testnet after the fact because the hire artefacts did not record it. It supplies the four transaction hashes per hire that protocol s3.2 requires, and it replaces E1's polled delivery latency with a latency derived from block timestamps.",
+  "producedBy": "docs/termix/harness/src/recover-hire-lifecycle.ts",
+  "recoveredAtUtc": "2026-09-06T11:05:47.657Z",
+  "readOnly": "eth_getLogs, eth_getTransactionByHash, eth_getTransactionReceipt, eth_getBlockByNumber, web3_sha3 only.",
+  "chainId": 97,
+  "commerceContract": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE",
+  "scanWindow": {
+    "fromBlock": 129390000,
+    "toBlock": 129435000,
+    "fixedAndPublished": true,
+    "fromBlockUtc": "2026-09-06T05:20:13Z",
+    "toBlockUtc": "2026-09-06T10:57:44Z",
+    "why": "Fixed constants in the script, not `latest`, so the scan is reproducible. The window opens about 10 minutes before the first job was created and closes about 6 hours after the last one, which is what makes 'jobs 1032 and 1038 were never submitted' a statement about the chain rather than about when we stopped looking."
+  },
+  "servedBy": "https://bsc-testnet-rpc.publicnode.com",
+  "eventSignatureVerification": [
+    {
+      "event": "created",
+      "signature": "JobCreated(uint256,address,address,address,uint256,address)",
+      "topic0": "0xb0f0239bfdd96453e24733e18bfc24b70d8fadf123dd977473518dd577ee79b9",
+      "verifiedBy": "web3_sha3 on a BNB Chain node"
+    },
+    {
+      "event": "budget",
+      "signature": "BudgetSet(uint256,uint256)",
+      "topic0": "0x869e2577b006bf47ee981cf6fec2e25583548081c14b98deab587f77b5068038",
+      "verifiedBy": "web3_sha3 on a BNB Chain node"
+    },
+    {
+      "event": "funded",
+      "signature": "JobFunded(uint256,address,address,uint256)",
+      "topic0": "0xbdb056de345bfeadca7c9fd7df6430bdb83c677c8eefbb601dff56f34d3dac52",
+      "verifiedBy": "web3_sha3 on a BNB Chain node"
+    },
+    {
+      "event": "submitted",
+      "signature": "JobSubmitted(uint256,address,bytes32)",
+      "topic0": "0x80c17db79857f338a6a6df68a6883ecc0ce78e2202fe61ed979733573f40538e",
+      "verifiedBy": "web3_sha3 on a BNB Chain node"
+    },
+    {
+      "event": "completed",
+      "signature": "JobCompleted(uint256,address,bytes32)",
+      "topic0": "0x0fd54bd364fa9e67f17b091aefe930932c09fe7651cf5ad02c71a418f3341444",
+      "verifiedBy": "web3_sha3 on a BNB Chain node"
+    },
+    {
+      "event": "paid",
+      "signature": "PaymentReleased(uint256,address,uint256)",
+      "topic0": "0x21d71db5be59bb9fa133895586b7404307dd33fb93b16db09dc6f1d9d7d231b0",
+      "verifiedBy": "web3_sha3 on a BNB Chain node"
+    }
+  ],
+  "unknownTopicsInWindow": [],
+  "howToReproduce": "cd docs/termix/harness && npx tsx src/recover-hire-lifecycle.ts",
+  "corrections": {
+    "deliveryLatency": "E1 s2 published 30 / 46 / 46 / 30 seconds for jobs 1033 / 1034 / 1035 / 1037, from polling getJob every 15 s. Those numbers are close to CREATED -> SUBMITTED, not FUNDED -> SUBMITTED: the poll loop started when the job was created, and create plus budget plus fund is three transactions of the buyer's own before the provider can see anything. The honest figure for the agent's work is funded -> submitted, and it is SHORTER, so the correction is against our own interest on the agent side and is made anyway.",
+    "gas": "protocol s2 predicted a six-transaction hire at ~0.00012 tBNB from an observed gasPrice of 0.1 gwei. Every transaction in this window settled at effectiveGasPrice 0, so the true buyer-side gas cost of every hire is exactly 0 tBNB. Gas USED is real and is reported; gas PAID was zero. A testnet with a zero gas price is not evidence about mainnet economics and the report must not present it as such.",
+    "jobStatus": "E1 s2 marked job 1033 COMPLETED. Its own artefact says SUBMITTED, and the chain says the job was submitted and later settled by the buyer. The E1 cell was wrong and is corrected there."
+  },
+  "totals": {
+    "jobsFound": 6,
+    "jobsWithSubmit": 4,
+    "fundedToSubmittedSecondsTotal": 120,
+    "createdToSubmittedSecondsTotal": 149,
+    "buyerGasUsedTotal": 6622317,
+    "buyerGasCostTbnbTotal": 0,
+    "escrowPaidU": 0.015,
+    "escrowStrandedU": 0.011,
+    "strandedJobs": [
+      {
+        "jobId": 1032,
+        "agent": "2003 Canned Health Guard",
+        "priceU": 0.001,
+        "fundedAtUtc": "2026-09-06T07:02:03Z",
+        "noSubmitThroughBlock": 129435000,
+        "noSubmitThroughUtc": "2026-09-06T10:57:44Z"
+      },
+      {
+        "jobId": 1038,
+        "agent": "1840 Relic Health Factor Monitor",
+        "priceU": 0.01,
+        "fundedAtUtc": "2026-09-06T07:17:21Z",
+        "noSubmitThroughBlock": 129435000,
+        "noSubmitThroughUtc": "2026-09-06T10:57:44Z"
+      }
+    ]
+  },
+  "limitations": [
+    "Block timestamps have one-second resolution and a BSC block is produced roughly every 0.75 s on chain 97, so each latency below carries about +/-1 s. That is an order of magnitude better than the +/-15 s poll it replaces.",
+    "funded -> submitted is the interval in which the provider could act. It is not the provider's compute time: a watcher polls the commerce contract, so part of the interval is that poll's own period, which we cannot see.",
+    "The buyer's own minutes — writing the task sentence, requesting the quote, deciding to fund — are outside every figure here and were never stopwatched.",
+    "effectiveGasPrice was 0 on every transaction. No mainnet cost claim can be derived from this."
+  ],
+  "jobs": [
+    {
+      "jobId": 1032,
+      "agent": {
+        "erc8004Id": 2003,
+        "name": "Canned Health Guard",
+        "registeredWallet": "0xD885bd3eEa76c3bDE6B49D7A16D5BAa35ce2F1D7"
+      },
+      "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+      "priceRawU": "1000000000000000",
+      "priceU": 0.001,
+      "rawArtefact": {
+        "file": "hire-97-2003-job-1032.json",
+        "sha256": "9e9715b85daf04c8dae5854cd6ecd66adf5f418d302d775ceebbbf0fe264193a"
+      },
+      "statusInRawArtefact": "FUNDED",
+      "onChainOutcome": "FUNDED, never submitted",
+      "lifecycleComplete": false,
+      "steps": [
+        {
+          "step": "create",
+          "event": "JobCreated(uint256,address,address,address,uint256,address)",
+          "topic0": "0xb0f0239bfdd96453e24733e18bfc24b70d8fadf123dd977473518dd577ee79b9",
+          "txHash": "0xf32dda1ddf3a06787643e9b62b816af3d81eec4f976d9d43dbed56f1d1b934b9",
+          "block": 129403560,
+          "blockTimestamp": 1788678115,
+          "blockUtc": "2026-09-06T07:01:55Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x41528812",
+          "gasUsed": 488863,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1032"
+            },
+            {
+              "name": "client",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7"
+            }
+          ],
+          "data": "0x000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25000000000000000000000000000000000000000000000000000000006a9d2174000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25"
+        },
+        {
+          "step": "budget",
+          "event": "BudgetSet(uint256,uint256)",
+          "topic0": "0x869e2577b006bf47ee981cf6fec2e25583548081c14b98deab587f77b5068038",
+          "txHash": "0xac332521e322af5f1a41f1a2d2227565b6d82cfba5ec3f617421a154a005c5ba",
+          "block": 129403571,
+          "blockTimestamp": 1788678120,
+          "blockUtc": "2026-09-06T07:02:00Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xdd4ae9d4",
+          "gasUsed": 96162,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1032"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "fund",
+          "event": "JobFunded(uint256,address,address,uint256)",
+          "topic0": "0xbdb056de345bfeadca7c9fd7df6430bdb83c677c8eefbb601dff56f34d3dac52",
+          "txHash": "0x39e8946dfdcc24dd4ce680027ceb2743db3f1cc8eace29674ac24aa1ade4d7aa",
+          "block": 129403576,
+          "blockTimestamp": 1788678123,
+          "blockUtc": "2026-09-06T07:02:03Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xd2e13f50",
+          "gasUsed": 107329,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1032"
+            },
+            {
+              "name": "payer",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        }
+      ],
+      "derived": {
+        "note": "Every figure below comes from BLOCK TIMESTAMPS on chain 97, not from polling. The polled figures published in E1 s2 are reproduced beside them so the difference is visible rather than quietly corrected.",
+        "quoteNegotiatedAtUnix": 1788678111,
+        "quotedCompletionSeconds": 120,
+        "fundedToSubmittedSeconds": null,
+        "createdToSubmittedSeconds": null,
+        "submittedToSettledSeconds": null,
+        "createdToSettledSeconds": null,
+        "submitSentByRegisteredWallet": null,
+        "submitSender": null,
+        "buyerGasUsedTotal": 692354,
+        "buyerGasCostWei": "0",
+        "buyerGasCostTbnb": 0,
+        "providerGasUsedTotal": 0,
+        "providerGasCostWei": "0",
+        "providerGasCostTbnb": 0,
+        "payoutRecipient": null
+      }
+    },
+    {
+      "jobId": 1033,
+      "agent": {
+        "erc8004Id": 2003,
+        "name": "Canned Health Guard",
+        "registeredWallet": "0xD885bd3eEa76c3bDE6B49D7A16D5BAa35ce2F1D7"
+      },
+      "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+      "priceRawU": "1000000000000000",
+      "priceU": 0.001,
+      "rawArtefact": {
+        "file": "hire-97-2003-job-1033.json",
+        "sha256": "4a8ace45f45892d56cec606475157abded0ebccf1c4b61cd8581b728e9c2e146"
+      },
+      "statusInRawArtefact": "SUBMITTED",
+      "onChainOutcome": "SUBMITTED and SETTLED",
+      "lifecycleComplete": true,
+      "steps": [
+        {
+          "step": "create",
+          "event": "JobCreated(uint256,address,address,address,uint256,address)",
+          "topic0": "0xb0f0239bfdd96453e24733e18bfc24b70d8fadf123dd977473518dd577ee79b9",
+          "txHash": "0x32715569610ac61aa6fdde15cd28a6bbe7f046c0398159bc3c388be3fc019b46",
+          "block": 129404922,
+          "blockTimestamp": 1788678728,
+          "blockUtc": "2026-09-06T07:12:08Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x41528812",
+          "gasUsed": 920398,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1033"
+            },
+            {
+              "name": "client",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7"
+            }
+          ],
+          "data": "0x000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25000000000000000000000000000000000000000000000000000000006a9d23da000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25"
+        },
+        {
+          "step": "budget",
+          "event": "BudgetSet(uint256,uint256)",
+          "topic0": "0x869e2577b006bf47ee981cf6fec2e25583548081c14b98deab587f77b5068038",
+          "txHash": "0x96a347bdf7ccb49237423a6fb51885175175f9a6d39d6409ee74fb4e870af8bc",
+          "block": 129404932,
+          "blockTimestamp": 1788678733,
+          "blockUtc": "2026-09-06T07:12:13Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xdd4ae9d4",
+          "gasUsed": 96162,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1033"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "fund",
+          "event": "JobFunded(uint256,address,address,uint256)",
+          "topic0": "0xbdb056de345bfeadca7c9fd7df6430bdb83c677c8eefbb601dff56f34d3dac52",
+          "txHash": "0xc69d31e911425e27e9722d22bb75fab019130aa03bc84bffb5682f3d087b29da",
+          "block": 129404937,
+          "blockTimestamp": 1788678735,
+          "blockUtc": "2026-09-06T07:12:15Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xd2e13f50",
+          "gasUsed": 107329,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1033"
+            },
+            {
+              "name": "payer",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "submit",
+          "event": "JobSubmitted(uint256,address,bytes32)",
+          "topic0": "0x80c17db79857f338a6a6df68a6883ecc0ce78e2202fe61ed979733573f40538e",
+          "txHash": "0x51ae5fa69bad3d6d67a3aae4a4d0bdd2112f45e240102b29845daf5ffae45994",
+          "block": 129404988,
+          "blockTimestamp": 1788678758,
+          "blockUtc": "2026-09-06T07:12:38Z",
+          "from": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x9e63798d",
+          "gasUsed": 217616,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1033"
+            },
+            {
+              "name": "provider",
+              "value": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7"
+            }
+          ],
+          "data": "0x36876332f7fddf6249f5c8a4d6f5eecdb11a85713205ce9ea75ea610ffa1f8de"
+        },
+        {
+          "step": "payout",
+          "event": "PaymentReleased(uint256,address,uint256)",
+          "topic0": "0x21d71db5be59bb9fa133895586b7404307dd33fb93b16db09dc6f1d9d7d231b0",
+          "txHash": "0x0804d30bf1d1ed4d2252d14108a69b949b447c8d809ddced6f0ba7d20ac9c6b6",
+          "block": 129407167,
+          "blockTimestamp": 1788679739,
+          "blockUtc": "2026-09-06T07:28:59Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1033"
+            },
+            {
+              "name": "recipient",
+              "value": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "settle",
+          "event": "JobCompleted(uint256,address,bytes32)",
+          "topic0": "0x0fd54bd364fa9e67f17b091aefe930932c09fe7651cf5ad02c71a418f3341444",
+          "txHash": "0x0804d30bf1d1ed4d2252d14108a69b949b447c8d809ddced6f0ba7d20ac9c6b6",
+          "block": 129407167,
+          "blockTimestamp": 1788679739,
+          "blockUtc": "2026-09-06T07:28:59Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1033"
+            },
+            {
+              "name": "module",
+              "value": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25"
+            }
+          ],
+          "data": "0x85bf18bc2ca1d797a2eb656e3ed3092023283af3714e18d3f13f4d3921885d96"
+        }
+      ],
+      "derived": {
+        "note": "Every figure below comes from BLOCK TIMESTAMPS on chain 97, not from polling. The polled figures published in E1 s2 are reproduced beside them so the difference is visible rather than quietly corrected.",
+        "quoteNegotiatedAtUnix": 1788678726,
+        "quotedCompletionSeconds": 120,
+        "fundedToSubmittedSeconds": 23,
+        "createdToSubmittedSeconds": 30,
+        "submittedToSettledSeconds": 981,
+        "createdToSettledSeconds": 1011,
+        "submitSentByRegisteredWallet": true,
+        "submitSender": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7",
+        "buyerGasUsedTotal": 1241520,
+        "buyerGasCostWei": "0",
+        "buyerGasCostTbnb": 0,
+        "providerGasUsedTotal": 217616,
+        "providerGasCostWei": "0",
+        "providerGasCostTbnb": 0,
+        "payoutRecipient": "0xd885bd3eea76c3bde6b49d7a16d5baa35ce2f1d7"
+      }
+    },
+    {
+      "jobId": 1034,
+      "agent": {
+        "erc8004Id": 2005,
+        "name": "Canned Range Keeper",
+        "registeredWallet": "0x0eAc2F4d215A416f891C43BFFa83329Ec249AD5a"
+      },
+      "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+      "priceRawU": "1000000000000000",
+      "priceU": 0.001,
+      "rawArtefact": {
+        "file": "hire-97-2005-job-1034.json",
+        "sha256": "f99f3a3a64d69ade07923c7b2edf824f15c98276cbd9022a85090a6d06e986e2"
+      },
+      "statusInRawArtefact": "SUBMITTED",
+      "onChainOutcome": "SUBMITTED and SETTLED",
+      "lifecycleComplete": true,
+      "steps": [
+        {
+          "step": "create",
+          "event": "JobCreated(uint256,address,address,address,uint256,address)",
+          "topic0": "0xb0f0239bfdd96453e24733e18bfc24b70d8fadf123dd977473518dd577ee79b9",
+          "txHash": "0x99766be3d5300c56038f3e756d874db1079fff390703d6a03dd9b368d113d88f",
+          "block": 129405189,
+          "blockTimestamp": 1788678849,
+          "blockUtc": "2026-09-06T07:14:09Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x41528812",
+          "gasUsed": 942889,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1034"
+            },
+            {
+              "name": "client",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0x0eac2f4d215a416f891c43bffa83329ec249ad5a"
+            }
+          ],
+          "data": "0x000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25000000000000000000000000000000000000000000000000000000006a9d2453000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25"
+        },
+        {
+          "step": "budget",
+          "event": "BudgetSet(uint256,uint256)",
+          "topic0": "0x869e2577b006bf47ee981cf6fec2e25583548081c14b98deab587f77b5068038",
+          "txHash": "0x3078284c7fb88addd8ef03a21791e9ff00d722e0360cc48d2fa1a7853fcd4fab",
+          "block": 129405200,
+          "blockTimestamp": 1788678853,
+          "blockUtc": "2026-09-06T07:14:13Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xdd4ae9d4",
+          "gasUsed": 96162,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1034"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "fund",
+          "event": "JobFunded(uint256,address,address,uint256)",
+          "topic0": "0xbdb056de345bfeadca7c9fd7df6430bdb83c677c8eefbb601dff56f34d3dac52",
+          "txHash": "0x13f82776c6aadf0d88ca96e1e6a7936afef045253f3d54bc38cc6c1dbf360953",
+          "block": 129405206,
+          "blockTimestamp": 1788678856,
+          "blockUtc": "2026-09-06T07:14:16Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xd2e13f50",
+          "gasUsed": 107329,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1034"
+            },
+            {
+              "name": "payer",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0x0eac2f4d215a416f891c43bffa83329ec249ad5a"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "submit",
+          "event": "JobSubmitted(uint256,address,bytes32)",
+          "topic0": "0x80c17db79857f338a6a6df68a6883ecc0ce78e2202fe61ed979733573f40538e",
+          "txHash": "0x977e589315ebbacd8e80b983488827f8360b82958599479a9745ea98c7a325b1",
+          "block": 129405292,
+          "blockTimestamp": 1788678895,
+          "blockUtc": "2026-09-06T07:14:55Z",
+          "from": "0x0eac2f4d215a416f891c43bffa83329ec249ad5a",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x9e63798d",
+          "gasUsed": 219838,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1034"
+            },
+            {
+              "name": "provider",
+              "value": "0x0eac2f4d215a416f891c43bffa83329ec249ad5a"
+            }
+          ],
+          "data": "0x4d287bedb97189693e916fda3acdd75119852f1d4f8147e89f33d2c45adc83f0"
+        },
+        {
+          "step": "payout",
+          "event": "PaymentReleased(uint256,address,uint256)",
+          "topic0": "0x21d71db5be59bb9fa133895586b7404307dd33fb93b16db09dc6f1d9d7d231b0",
+          "txHash": "0xf2b1bbd3df6e2d08ecb23a577eecedc836bbb8fa81a3afc515a05c0974c675a9",
+          "block": 129407601,
+          "blockTimestamp": 1788679934,
+          "blockUtc": "2026-09-06T07:32:14Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1034"
+            },
+            {
+              "name": "recipient",
+              "value": "0x0eac2f4d215a416f891c43bffa83329ec249ad5a"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "settle",
+          "event": "JobCompleted(uint256,address,bytes32)",
+          "topic0": "0x0fd54bd364fa9e67f17b091aefe930932c09fe7651cf5ad02c71a418f3341444",
+          "txHash": "0xf2b1bbd3df6e2d08ecb23a577eecedc836bbb8fa81a3afc515a05c0974c675a9",
+          "block": 129407601,
+          "blockTimestamp": 1788679934,
+          "blockUtc": "2026-09-06T07:32:14Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1034"
+            },
+            {
+              "name": "module",
+              "value": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25"
+            }
+          ],
+          "data": "0x85bf18bc2ca1d797a2eb656e3ed3092023283af3714e18d3f13f4d3921885d96"
+        }
+      ],
+      "derived": {
+        "note": "Every figure below comes from BLOCK TIMESTAMPS on chain 97, not from polling. The polled figures published in E1 s2 are reproduced beside them so the difference is visible rather than quietly corrected.",
+        "quoteNegotiatedAtUnix": 1788678846,
+        "quotedCompletionSeconds": 120,
+        "fundedToSubmittedSeconds": 39,
+        "createdToSubmittedSeconds": 46,
+        "submittedToSettledSeconds": 1039,
+        "createdToSettledSeconds": 1085,
+        "submitSentByRegisteredWallet": true,
+        "submitSender": "0x0eac2f4d215a416f891c43bffa83329ec249ad5a",
+        "buyerGasUsedTotal": 1264011,
+        "buyerGasCostWei": "0",
+        "buyerGasCostTbnb": 0,
+        "providerGasUsedTotal": 219838,
+        "providerGasCostWei": "0",
+        "providerGasCostTbnb": 0,
+        "payoutRecipient": "0x0eac2f4d215a416f891c43bffa83329ec249ad5a"
+      }
+    },
+    {
+      "jobId": 1035,
+      "agent": {
+        "erc8004Id": 2034,
+        "name": "Canned Yield Scout",
+        "registeredWallet": "0x99E5Fee06CF247F522119314980c58B8501d5684"
+      },
+      "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+      "priceRawU": "1000000000000000",
+      "priceU": 0.001,
+      "rawArtefact": {
+        "file": "hire-97-2034-job-1035.json",
+        "sha256": "8b21bcb63c8a85c2fa1caaec3542db60af24efe9252ef901fdcc6428af4ed267"
+      },
+      "statusInRawArtefact": "SUBMITTED",
+      "onChainOutcome": "SUBMITTED and SETTLED",
+      "lifecycleComplete": true,
+      "steps": [
+        {
+          "step": "create",
+          "event": "JobCreated(uint256,address,address,address,uint256,address)",
+          "topic0": "0xb0f0239bfdd96453e24733e18bfc24b70d8fadf123dd977473518dd577ee79b9",
+          "txHash": "0xa790da5047feef188bf7cb49980e011361aea044763e6479563a4950f422c21d",
+          "block": 129405333,
+          "blockTimestamp": 1788678913,
+          "blockUtc": "2026-09-06T07:15:13Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x41528812",
+          "gasUsed": 874672,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1035"
+            },
+            {
+              "name": "client",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0x99e5fee06cf247f522119314980c58b8501d5684"
+            }
+          ],
+          "data": "0x000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25000000000000000000000000000000000000000000000000000000006a9d2493000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25"
+        },
+        {
+          "step": "budget",
+          "event": "BudgetSet(uint256,uint256)",
+          "topic0": "0x869e2577b006bf47ee981cf6fec2e25583548081c14b98deab587f77b5068038",
+          "txHash": "0x6d3cd566f48faac3d2658fc6ad0789b31dc18f96cd04f0908455e91eb739ec48",
+          "block": 129405344,
+          "blockTimestamp": 1788678918,
+          "blockUtc": "2026-09-06T07:15:18Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xdd4ae9d4",
+          "gasUsed": 96162,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1035"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "fund",
+          "event": "JobFunded(uint256,address,address,uint256)",
+          "topic0": "0xbdb056de345bfeadca7c9fd7df6430bdb83c677c8eefbb601dff56f34d3dac52",
+          "txHash": "0x970e7234028c7e92268a4d71107750938eee061a2dd04ccbc7a201ff667b969d",
+          "block": 129405349,
+          "blockTimestamp": 1788678921,
+          "blockUtc": "2026-09-06T07:15:21Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xd2e13f50",
+          "gasUsed": 107329,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1035"
+            },
+            {
+              "name": "payer",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0x99e5fee06cf247f522119314980c58b8501d5684"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "submit",
+          "event": "JobSubmitted(uint256,address,bytes32)",
+          "topic0": "0x80c17db79857f338a6a6df68a6883ecc0ce78e2202fe61ed979733573f40538e",
+          "txHash": "0xedb7be4183ceb9257583bae1735212700b5a61b13c2589b3fa5adaf1a3f83eba",
+          "block": 129405432,
+          "blockTimestamp": 1788678958,
+          "blockUtc": "2026-09-06T07:15:58Z",
+          "from": "0x99e5fee06cf247f522119314980c58b8501d5684",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x9e63798d",
+          "gasUsed": 213171,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1035"
+            },
+            {
+              "name": "provider",
+              "value": "0x99e5fee06cf247f522119314980c58b8501d5684"
+            }
+          ],
+          "data": "0xac7e582358e319871c8b30e97e159cc50df4db37bb86114e05b80c717c31c2a6"
+        },
+        {
+          "step": "payout",
+          "event": "PaymentReleased(uint256,address,uint256)",
+          "topic0": "0x21d71db5be59bb9fa133895586b7404307dd33fb93b16db09dc6f1d9d7d231b0",
+          "txHash": "0xa08dcc2f743f609cd80b421a20e2678726d41da618a559521bb39292db27b76f",
+          "block": 129407616,
+          "blockTimestamp": 1788679941,
+          "blockUtc": "2026-09-06T07:32:21Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1035"
+            },
+            {
+              "name": "recipient",
+              "value": "0x99e5fee06cf247f522119314980c58b8501d5684"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "settle",
+          "event": "JobCompleted(uint256,address,bytes32)",
+          "topic0": "0x0fd54bd364fa9e67f17b091aefe930932c09fe7651cf5ad02c71a418f3341444",
+          "txHash": "0xa08dcc2f743f609cd80b421a20e2678726d41da618a559521bb39292db27b76f",
+          "block": 129407616,
+          "blockTimestamp": 1788679941,
+          "blockUtc": "2026-09-06T07:32:21Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1035"
+            },
+            {
+              "name": "module",
+              "value": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25"
+            }
+          ],
+          "data": "0x85bf18bc2ca1d797a2eb656e3ed3092023283af3714e18d3f13f4d3921885d96"
+        }
+      ],
+      "derived": {
+        "note": "Every figure below comes from BLOCK TIMESTAMPS on chain 97, not from polling. The polled figures published in E1 s2 are reproduced beside them so the difference is visible rather than quietly corrected.",
+        "quoteNegotiatedAtUnix": 1788678911,
+        "quotedCompletionSeconds": 120,
+        "fundedToSubmittedSeconds": 37,
+        "createdToSubmittedSeconds": 45,
+        "submittedToSettledSeconds": 983,
+        "createdToSettledSeconds": 1028,
+        "submitSentByRegisteredWallet": true,
+        "submitSender": "0x99e5fee06cf247f522119314980c58b8501d5684",
+        "buyerGasUsedTotal": 1195794,
+        "buyerGasCostWei": "0",
+        "buyerGasCostTbnb": 0,
+        "providerGasUsedTotal": 213171,
+        "providerGasCostWei": "0",
+        "providerGasCostTbnb": 0,
+        "payoutRecipient": "0x99e5fee06cf247f522119314980c58b8501d5684"
+      }
+    },
+    {
+      "jobId": 1037,
+      "agent": {
+        "erc8004Id": 2045,
+        "name": "Canned Grid Keeper",
+        "registeredWallet": "0xA928DEBa3aD929A915eE26fD3394126364928460"
+      },
+      "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+      "priceRawU": "1000000000000000",
+      "priceU": 0.001,
+      "rawArtefact": {
+        "file": "hire-97-2045-job-1037.json",
+        "sha256": "dfabc80bfefe01b672e65a9235745ae1ad4998d13c698c99679be44ef0397e06"
+      },
+      "statusInRawArtefact": "SUBMITTED",
+      "onChainOutcome": "SUBMITTED and SETTLED",
+      "lifecycleComplete": true,
+      "steps": [
+        {
+          "step": "create",
+          "event": "JobCreated(uint256,address,address,address,uint256,address)",
+          "topic0": "0xb0f0239bfdd96453e24733e18bfc24b70d8fadf123dd977473518dd577ee79b9",
+          "txHash": "0x59d99f1f42d7c47d92eb7fd0e78158c67b9ca7a9771906cfa70369ffd89bd9cb",
+          "block": 129405475,
+          "blockTimestamp": 1788678977,
+          "blockUtc": "2026-09-06T07:16:17Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x41528812",
+          "gasUsed": 874672,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1037"
+            },
+            {
+              "name": "client",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0xa928deba3ad929a915ee26fd3394126364928460"
+            }
+          ],
+          "data": "0x000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25000000000000000000000000000000000000000000000000000000006a9d24d3000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25"
+        },
+        {
+          "step": "budget",
+          "event": "BudgetSet(uint256,uint256)",
+          "topic0": "0x869e2577b006bf47ee981cf6fec2e25583548081c14b98deab587f77b5068038",
+          "txHash": "0x8f4415a30ba9ce34931a323ba47392ea56b4b509eed0729b13561041bbcc5fd9",
+          "block": 129405485,
+          "blockTimestamp": 1788678982,
+          "blockUtc": "2026-09-06T07:16:22Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xdd4ae9d4",
+          "gasUsed": 96162,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1037"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "fund",
+          "event": "JobFunded(uint256,address,address,uint256)",
+          "topic0": "0xbdb056de345bfeadca7c9fd7df6430bdb83c677c8eefbb601dff56f34d3dac52",
+          "txHash": "0x7096799ef6bd4f15eb2d2386348eb7e627e5f43a161907463c0295b6aa68e963",
+          "block": 129405490,
+          "blockTimestamp": 1788678984,
+          "blockUtc": "2026-09-06T07:16:24Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xd2e13f50",
+          "gasUsed": 107329,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1037"
+            },
+            {
+              "name": "payer",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0xa928deba3ad929a915ee26fd3394126364928460"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "submit",
+          "event": "JobSubmitted(uint256,address,bytes32)",
+          "topic0": "0x80c17db79857f338a6a6df68a6883ecc0ce78e2202fe61ed979733573f40538e",
+          "txHash": "0x5242daca4c162da67d8b2cea2e614527f595f37415a158af0fd82d51d252f3d3",
+          "block": 129405536,
+          "blockTimestamp": 1788679005,
+          "blockUtc": "2026-09-06T07:16:45Z",
+          "from": "0xa928deba3ad929a915ee26fd3394126364928460",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x9e63798d",
+          "gasUsed": 213171,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1037"
+            },
+            {
+              "name": "provider",
+              "value": "0xa928deba3ad929a915ee26fd3394126364928460"
+            }
+          ],
+          "data": "0x57d3c490cc90e467d8fdca7b5ec9abc260dbd5acde26e9bdb2063fc7304d8237"
+        },
+        {
+          "step": "payout",
+          "event": "PaymentReleased(uint256,address,uint256)",
+          "topic0": "0x21d71db5be59bb9fa133895586b7404307dd33fb93b16db09dc6f1d9d7d231b0",
+          "txHash": "0x92e2e72a7b32ac9b74627e36c4a920ffd7c50aa582361e4da33d1bb51da84f91",
+          "block": 129407626,
+          "blockTimestamp": 1788679945,
+          "blockUtc": "2026-09-06T07:32:25Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1037"
+            },
+            {
+              "name": "recipient",
+              "value": "0xa928deba3ad929a915ee26fd3394126364928460"
+            }
+          ],
+          "data": "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+        },
+        {
+          "step": "settle",
+          "event": "JobCompleted(uint256,address,bytes32)",
+          "topic0": "0x0fd54bd364fa9e67f17b091aefe930932c09fe7651cf5ad02c71a418f3341444",
+          "txHash": "0x92e2e72a7b32ac9b74627e36c4a920ffd7c50aa582361e4da33d1bb51da84f91",
+          "block": 129407626,
+          "blockTimestamp": 1788679945,
+          "blockUtc": "2026-09-06T07:32:25Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25",
+          "functionSelector": "0x39c2ebb9",
+          "gasUsed": 117631,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1037"
+            },
+            {
+              "name": "module",
+              "value": "0xd7d36d66d2f1b608a0f943f722d27e3744f66f25"
+            }
+          ],
+          "data": "0x85bf18bc2ca1d797a2eb656e3ed3092023283af3714e18d3f13f4d3921885d96"
+        }
+      ],
+      "derived": {
+        "note": "Every figure below comes from BLOCK TIMESTAMPS on chain 97, not from polling. The polled figures published in E1 s2 are reproduced beside them so the difference is visible rather than quietly corrected.",
+        "quoteNegotiatedAtUnix": 1788678975,
+        "quotedCompletionSeconds": 120,
+        "fundedToSubmittedSeconds": 21,
+        "createdToSubmittedSeconds": 28,
+        "submittedToSettledSeconds": 940,
+        "createdToSettledSeconds": 968,
+        "submitSentByRegisteredWallet": true,
+        "submitSender": "0xa928deba3ad929a915ee26fd3394126364928460",
+        "buyerGasUsedTotal": 1195794,
+        "buyerGasCostWei": "0",
+        "buyerGasCostTbnb": 0,
+        "providerGasUsedTotal": 213171,
+        "providerGasCostWei": "0",
+        "providerGasCostTbnb": 0,
+        "payoutRecipient": "0xa928deba3ad929a915ee26fd3394126364928460"
+      }
+    },
+    {
+      "jobId": 1038,
+      "agent": {
+        "erc8004Id": 1840,
+        "name": "Relic Health Factor Monitor",
+        "registeredWallet": "0x323F064B777745703Fa8eB56109A763503AeE4Dd"
+      },
+      "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+      "priceRawU": "10000000000000000",
+      "priceU": 0.01,
+      "rawArtefact": {
+        "file": "hire-97-1840-job-1038.json",
+        "sha256": "8dccb21c030a31413fab659cf9a10868184827fcc73a27c93dc55f1014a8471d"
+      },
+      "statusInRawArtefact": "FUNDED",
+      "onChainOutcome": "FUNDED, never submitted",
+      "lifecycleComplete": false,
+      "steps": [
+        {
+          "step": "create",
+          "event": "JobCreated(uint256,address,address,address,uint256,address)",
+          "topic0": "0xb0f0239bfdd96453e24733e18bfc24b70d8fadf123dd977473518dd577ee79b9",
+          "txHash": "0x103074d3fdf54be450dda9aceb1f6f5120e1bfe651c36ad742467a8a2124ad8a",
+          "block": 129405600,
+          "blockTimestamp": 1788679033,
+          "blockUtc": "2026-09-06T07:17:13Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0x41528812",
+          "gasUsed": 829377,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1038"
+            },
+            {
+              "name": "client",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0x323f064b777745703fa8eb56109a763503aee4dd"
+            }
+          ],
+          "data": "0x000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25000000000000000000000000000000000000000000000000000000006a9d250a000000000000000000000000d7d36d66d2f1b608a0f943f722d27e3744f66f25"
+        },
+        {
+          "step": "budget",
+          "event": "BudgetSet(uint256,uint256)",
+          "topic0": "0x869e2577b006bf47ee981cf6fec2e25583548081c14b98deab587f77b5068038",
+          "txHash": "0xbfa7cde04c6d464fc0258606a5697abe38da6ade6de7bb4dc29147e4353b6125",
+          "block": 129405612,
+          "blockTimestamp": 1788679039,
+          "blockUtc": "2026-09-06T07:17:19Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xdd4ae9d4",
+          "gasUsed": 96150,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1038"
+            }
+          ],
+          "data": "0x000000000000000000000000000000000000000000000000002386f26fc10000"
+        },
+        {
+          "step": "fund",
+          "event": "JobFunded(uint256,address,address,uint256)",
+          "topic0": "0xbdb056de345bfeadca7c9fd7df6430bdb83c677c8eefbb601dff56f34d3dac52",
+          "txHash": "0x99503c6d08170277fb31d096f774ee2731b082131b449fe4876ba7d55907ac7d",
+          "block": 129405617,
+          "blockTimestamp": 1788679041,
+          "blockUtc": "2026-09-06T07:17:21Z",
+          "from": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37",
+          "to": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de",
+          "functionSelector": "0xd2e13f50",
+          "gasUsed": 107317,
+          "effectiveGasPriceWei": "0",
+          "gasCostWei": "0",
+          "gasCostTbnb": 0,
+          "txStatus": 1,
+          "indexedTopics": [
+            {
+              "name": "jobId",
+              "value": "1038"
+            },
+            {
+              "name": "payer",
+              "value": "0x5943f556aa1cecfad19cc7bd6f843e7d0a9dcd37"
+            },
+            {
+              "name": "provider",
+              "value": "0x323f064b777745703fa8eb56109a763503aee4dd"
+            }
+          ],
+          "data": "0x000000000000000000000000000000000000000000000000002386f26fc10000"
+        }
+      ],
+      "derived": {
+        "note": "Every figure below comes from BLOCK TIMESTAMPS on chain 97, not from polling. The polled figures published in E1 s2 are reproduced beside them so the difference is visible rather than quietly corrected.",
+        "quoteNegotiatedAtUnix": 1788679030,
+        "quotedCompletionSeconds": 120,
+        "fundedToSubmittedSeconds": null,
+        "createdToSubmittedSeconds": null,
+        "submittedToSettledSeconds": null,
+        "createdToSettledSeconds": null,
+        "submitSentByRegisteredWallet": null,
+        "submitSender": null,
+        "buyerGasUsedTotal": 1032844,
+        "buyerGasCostWei": "0",
+        "buyerGasCostTbnb": 0,
+        "providerGasUsedTotal": 0,
+        "providerGasCostWei": "0",
+        "providerGasCostTbnb": 0,
+        "payoutRecipient": null
+      }
+    }
+  ]
+}

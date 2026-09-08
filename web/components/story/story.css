@@ -1,0 +1,1067 @@
+/*
+ * The story devices shared by /brief and /report: reading progress, chapter rail,
+ * the hero (finding-as-headline + one big number + two supporting figures), the
+ * three-card stat row that opens every chapter, the sticky graphic with stepping
+ * text, and the chart frame (metric-forward title, caption, evidence chips,
+ * table + CSV behind every plot).
+ *
+ * Plain CSS scoped to `.story`, imported by the two routes only, no @apply: the
+ * same precedent as report.css. Tokens come from globals.css; nothing here
+ * writes a hex. Type sizes are the page's own scale (18px body on a research
+ * page, DESIGN.md §12 precedent) and are deliberately not the 14–16px UI ramp.
+ *
+ * Every number on these pages is a string read from a generated module; this
+ * file only decides where it sits and how large it is.
+ */
+
+.story {
+  --measure: 660px;
+  --wide: 72rem;
+  --rail: 220px;
+  --step: 28px;
+  --fig-ink: var(--foreground);
+  --fig-muted: var(--muted-foreground);
+  --fig-grid: var(--chart-grid);
+  --fig-null: rgba(234, 236, 239, 0.34);
+  --fig-rail: rgba(234, 236, 239, 0.055);
+  --fig-ground: var(--background);
+  --fig-font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --fig-font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--foreground);
+  background: var(--background);
+}
+@media (max-width: 430px) {
+  .story {
+    font-size: 17px;
+  }
+}
+
+.story a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklab, var(--foreground) 32%, transparent);
+  text-underline-offset: 3px;
+}
+.story a:hover {
+  text-decoration-color: var(--primary);
+}
+.story strong {
+  font-weight: 600;
+}
+.story code,
+.story .num {
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9em;
+  letter-spacing: -0.02em;
+}
+.story .muted {
+  color: var(--muted-foreground);
+}
+.story .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* --- the two containers ------------------------------------------------------ */
+
+.story-wide {
+  max-width: var(--wide);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+@media (min-width: 640px) {
+  .story-wide {
+    padding-inline: 24px;
+  }
+}
+@media (min-width: 1024px) {
+  .story-wide {
+    padding-inline: 32px;
+  }
+}
+
+/* The prose flow: one gap value, no margins on children. */
+.story-flow {
+  display: grid;
+  row-gap: var(--step);
+}
+.story-flow > * {
+  margin: 0;
+  min-width: 0;
+}
+.story :is(p, li, dd) {
+  max-width: 38em;
+}
+
+/* --- type roles ---------------------------------------------------------------- */
+
+.story .kicker {
+  max-width: none;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+}
+.story h1 {
+  font-size: clamp(36px, 2vw + 22px, 48px);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+  max-width: 20em;
+  text-wrap: balance;
+}
+.story .deck {
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  max-width: 30em;
+}
+.story .deck strong {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.story h2 {
+  scroll-margin-top: 96px;
+  font-size: clamp(28px, 0.8vw + 20px, 32px);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  max-width: 18em;
+  text-wrap: balance;
+}
+.story h3 {
+  scroll-margin-top: 96px;
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.story .chapter-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.story .chapter-eyebrow .n {
+  font-family: var(--fig-font-mono);
+  color: var(--foreground);
+}
+.story .chapter-eyebrow .evidence {
+  margin-left: auto;
+}
+
+/* --- the evidence word: plain footer text, sentence case, no box, no colour ------- */
+
+.story .evidence {
+  color: var(--muted-foreground);
+  text-transform: lowercase;
+}
+.story .chart-foot .evidence::before {
+  content: "evidence: ";
+}
+.story .chart-foot .evidence ~ .evidence::before {
+  content: "+ ";
+}
+
+/* --- reading progress: a hairline under the nav, chapter ticks on it ----------- */
+
+.story-progress {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 40;
+  pointer-events: none;
+}
+.story-progress .bar {
+  height: 100%;
+  background: var(--primary);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+/* --- the hero ---------------------------------------------------------------- */
+
+.story-hero {
+  padding: 3rem 0 2.5rem;
+  display: grid;
+  row-gap: 1.5rem;
+}
+@media (min-width: 1280px) {
+  .story-hero > * {
+    max-width: calc(100% - var(--rail) - 4rem);
+  }
+}
+@media (min-width: 1024px) {
+  .story-hero {
+    padding-top: 4rem;
+  }
+}
+
+/* The plate: Octoverse opens on one graphic panel of big numbers. Ours is the
+   brand light behind the three figures — the site's own hero light, not a
+   photograph — and it is the edge between the summary and the chapters. */
+.story-plate {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  margin-top: 1.5rem;
+  padding: 3rem 2.5rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+.story-plate > .story-bignum {
+  position: relative;
+  z-index: 1;
+}
+.story-rule {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0 0;
+}
+
+.story-bignum {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+@media (min-width: 900px) {
+  .story-bignum {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 3rem;
+  }
+}
+.story-bignum .lead-value {
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(64px, 7.5vw, 120px);
+  line-height: 0.95;
+  overflow-wrap: anywhere;
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  color: var(--foreground);
+}
+.story-bignum .lead-value .unit {
+  font-size: 0.42em;
+  letter-spacing: -0.02em;
+  color: var(--muted-foreground);
+  margin-left: 0.15em;
+}
+.story-bignum .lead-label {
+  margin: 0.9rem 0 0;
+  font-size: 17px;
+  line-height: 1.45;
+  max-width: 26em;
+}
+.story-bignum .lead-foot {
+  margin: 0.6rem 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 1rem;
+  align-items: center;
+}
+.story-bignum .support {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+@media (min-width: 640px) and (max-width: 899px) {
+  .story-bignum .support {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.story-bignum .support > div {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  display: grid;
+  gap: 4px;
+}
+.story-bignum .support .v {
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(32px, 2vw + 16px, 40px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.story-bignum .support .l {
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+/* --- the evidence index: three rows, each a link ------------------------------ */
+
+.story .tier-index {
+  border-top: 1px solid var(--border);
+  display: grid;
+}
+.story .tier-index a {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) auto auto;
+  gap: 0 1.25rem;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  font-size: 17px;
+  line-height: 1.4;
+}
+.story .tier-index a:hover .tier-name {
+  text-decoration: underline;
+  text-decoration-color: var(--primary);
+  text-underline-offset: 3px;
+}
+.story .tier-name {
+  font-weight: 500;
+}
+.story .tier-what,
+.story .tier-price {
+  color: var(--muted-foreground);
+}
+.story .tier-price {
+  font-family: var(--fig-font-mono);
+  font-size: 14px;
+  white-space: nowrap;
+}
+@media (max-width: 639px) {
+  .story .tier-index a {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 4px;
+  }
+  .story .tier-what {
+    grid-column: 1 / -1;
+    font-size: 17px;
+  }
+}
+
+/* the callout: Octoverse's note block — a brand rule on top, a filled ground, a heading, bullets */
+.story .callout {
+  background: var(--card);
+  border-top: 3px solid var(--primary);
+  padding: 22px 26px 24px;
+  display: grid;
+  gap: 12px;
+}
+.story .callout h3 {
+  font-size: 21px;
+  margin: 0;
+}
+.story .callout ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 10px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.story .callout li {
+  max-width: none;
+}
+.story .callout strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+/* --- body + table of contents ------------------------------------------------
+ * github.blog's article shell: the header runs the full width, then a two-column
+ * grid — the article and, on the right, a table of contents that starts where
+ * the article starts and sticks under the nav as the reader scrolls.
+ */
+
+.story-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 4rem;
+  align-items: start;
+  margin-top: 3rem;
+}
+@media (min-width: 1280px) {
+  .story-body {
+    grid-template-columns: minmax(0, 1fr) var(--rail);
+  }
+}
+.story-rail {
+  display: none;
+}
+@media (min-width: 1280px) {
+  .story-rail {
+    display: block;
+    position: sticky;
+    top: 96px;
+    order: 2;
+  }
+  .story-rail > div {
+    display: grid;
+    gap: 1.25rem;
+  }
+}
+.story-rail .rail-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.story-rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.story-rail li a {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  padding: 6px 0 6px 12px;
+  border-left: 2px solid transparent;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color 150ms, border-color 150ms;
+}
+.story-rail li a .n {
+  font-family: var(--fig-font-mono);
+  font-size: 14px;
+  padding-top: 2px;
+}
+.story-rail li a:hover {
+  color: var(--foreground);
+}
+.story-rail li a[aria-current="true"] {
+  color: var(--foreground);
+  border-left-color: var(--primary);
+}
+.story-rail .rail-back {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.story-rail .rail-back:hover {
+  color: var(--foreground);
+}
+
+/* Below 1280 the rail becomes a horizontal chip row under the hero. */
+.story-chapters-inline {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.story-chapters-inline::-webkit-scrollbar {
+  display: none;
+}
+.story-chapters-inline a {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.story-chapters-inline a .n {
+  font-family: var(--fig-font-mono);
+  font-size: 11px;
+}
+@media (min-width: 1280px) {
+  .story-chapters-inline {
+    display: none;
+  }
+}
+
+/* --- chapters ------------------------------------------------------------------ */
+
+.story-chapter {
+  padding: 4.5rem 0 4.5rem;
+  display: grid;
+  row-gap: var(--step);
+  border-top: 2px solid color-mix(in oklab, var(--foreground) 18%, transparent);
+}
+/* the chapter's close: the claim and its link sit together, a hairline above
+   them, so the chapter ends on a full stop rather than trailing into the next */
+.story-chapter > .claim {
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.story-chapter > .section-links {
+  margin-top: -0.5rem;
+}
+/* github.blog: the article is one centred column; only the figures break out.
+   Everything in a chapter but the sticky-figure section sits on the measure. */
+.story-chapter > :not(.scrolly) {
+  width: 100%;
+}
+.story-chapter :is(p, li, dd, h2, .claim, .caveat) {
+  max-width: 44em;
+}
+.story-chapter .story-stats {
+  grid-template-columns: minmax(0, 1fr);
+}
+.story-chapter .story-stat {
+  border-right: 0;
+  margin-right: 0;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  column-gap: 1.5rem;
+  align-items: baseline;
+}
+.story-chapter .story-stat:last-child {
+  border-bottom: 0;
+}
+.story-chapter .story-stat .label {
+  grid-row: 1 / span 2;
+  font-size: 17px;
+  color: var(--foreground);
+}
+.story-chapter .story-stat .caption {
+  grid-column: 2;
+}
+.story-chapter:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+/* --- the stat cards: three per row, one per chapter --------------------------- */
+
+.story-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 767px) {
+  .story-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.story-stat {
+  padding: 22px 24px 22px 0;
+  margin-right: 24px;
+  border-right: 1px solid var(--border);
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-width: 0;
+}
+.story-stat:last-child {
+  border-right: 0;
+  margin-right: 0;
+}
+@media (max-width: 767px) {
+  .story-stat {
+    border-right: 0;
+    margin-right: 0;
+    padding-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .story-stat:last-child {
+    border-bottom: 0;
+  }
+}
+.story-stat .label {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+}
+.story-stat .value {
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.story-stat[data-highlight="true"] .value {
+  color: var(--primary);
+}
+.story-stat .caption {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+/* --- the sticky graphic with stepping text ------------------------------------ */
+
+.scrolly {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 3rem;
+  position: relative;
+  margin: 1rem 0 2rem;
+}
+@media (min-width: 1024px) {
+  .scrolly {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+  .scrolly .scrolly-graphic {
+    order: 2;
+  }
+  .scrolly[data-side="left"] {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+  .scrolly[data-side="left"] .scrolly-graphic {
+    order: 0;
+  }
+}
+
+.scrolly-graphic {
+  position: sticky;
+  top: 72px;
+  align-self: start;
+  z-index: 1;
+  background: var(--background);
+}
+@media (min-width: 1024px) {
+  .scrolly-graphic {
+    top: 96px;
+    min-height: calc(100vh - 160px);
+    display: grid;
+    align-content: center;
+  }
+}
+@media (max-width: 1023px) {
+  .scrolly-graphic {
+    top: 64px;
+    padding: 10px 0 8px;
+    box-shadow: 0 16px 16px -8px var(--background);
+  }
+  /* While pinned on a phone the frame is just title, legend and plot: the
+     caption, footer and table would leave no room under it for the step. */
+  .scrolly-graphic .chart-dek,
+  .scrolly-graphic .chart-foot,
+  .scrolly-graphic details,
+  .scrolly-graphic .kicker {
+    display: none;
+  }
+  .scrolly-graphic .chart-title {
+    font-size: 17px;
+  }
+  .scrolly-graphic .chart-plot {
+    margin-top: 0;
+  }
+}
+
+.scrolly-steps {
+  display: grid;
+  gap: 0;
+}
+.scrolly-step {
+  min-height: calc(100vh - 160px);
+  display: grid;
+  align-content: center;
+  padding: 1rem 0;
+}
+/* Every step is exactly as tall as the pinned figure — one screen of scrolling
+   per step, and the first and last sit level with the figure's centre when it
+   pins and when it lets go. */
+@media (max-width: 1023px) {
+  .scrolly-step {
+    min-height: 0;
+    padding: 14vh 0;
+  }
+  .scrolly-step:first-child {
+    padding-top: 6vh;
+  }
+}
+.scrolly-step > div {
+  max-width: 22em;
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--foreground);
+  opacity: 0.45;
+  transition: opacity 300ms;
+}
+@media (max-width: 1023px) {
+  .scrolly-step > div {
+    background: color-mix(in oklab, var(--card) 92%, transparent);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    backdrop-filter: blur(6px);
+  }
+}
+.scrolly-step[data-active="true"] > div {
+  opacity: 1;
+}
+@media (max-width: 1023px) {
+  .scrolly-step[data-active="true"] > div {
+    border-color: color-mix(in oklab, var(--primary) 50%, var(--border));
+  }
+}
+.scrolly-step .step-n {
+  display: none;
+}
+.scrolly-step strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.scrolly-step .num {
+  color: var(--foreground);
+}
+
+/* --- the required table: both ways, time / cost / quality ---------------------- */
+
+.story .bothways {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.story .bothways figcaption {
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.story .bothways .table-wrap {
+  overflow-x: auto;
+}
+.story .bothways table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.story .bothways th,
+.story .bothways td {
+  text-align: left;
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.story .bothways thead tr:first-child th {
+  font-weight: 600;
+  color: var(--foreground);
+  border-bottom: 0;
+  padding-bottom: 2px;
+}
+.story .bothways thead tr.sub th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+  padding-top: 0;
+}
+.story .bothways .table-foot {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted-foreground);
+  max-width: none;
+}
+.story .bothways thead th.n {
+  font-family: inherit;
+}
+.story .bothways th.n,
+.story .bothways td.n {
+  text-align: right;
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.story .bothways td .task-title {
+  display: block;
+  max-width: 26em;
+  color: var(--muted-foreground);
+}
+.story .bothways tbody tr:last-child td {
+  border-bottom: 0;
+}
+.story .bothways tbody {
+  border-bottom: 1px solid var(--border);
+}
+
+/* --- the chart frame ------------------------------------------------------------ */
+
+.chart-frame {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.chart-frame .chart-title {
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  margin: 0;
+  text-wrap: balance;
+}
+.chart-frame .chart-dek {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+.chart-frame .chart-plot {
+  margin-top: 6px;
+  min-width: 0;
+}
+.chart-frame .chart-plot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--fig-font-sans);
+}
+.chart-frame .chart-foot {
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 1.1rem;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+.chart-frame .chart-foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.chart-frame details {
+  font-size: 14px;
+}
+.chart-frame summary {
+  cursor: pointer;
+  color: var(--muted-foreground);
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+.chart-frame summary::-webkit-details-marker {
+  display: none;
+}
+.chart-frame summary:hover {
+  color: var(--foreground);
+}
+.chart-frame .table-wrap {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+.chart-frame table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.chart-frame th,
+.chart-frame td {
+  text-align: left;
+  padding: 6px 10px 6px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  white-space: nowrap;
+}
+.chart-frame th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.chart-frame td.n,
+.chart-frame th.n {
+  text-align: right;
+  font-family: var(--fig-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chart legend: a coloured mark beside a text label, text in text tokens. */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.chart-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* --- claim, caveat, links, take-aways --------------------------------------------- */
+
+.story .claim {
+  font-size: 21px;
+  line-height: 1.4;
+  font-weight: 500;
+  border-left: 3px solid var(--primary);
+  padding: 0.4rem 0 0.4rem 1.2rem;
+  max-width: 28em;
+  text-wrap: balance;
+}
+.story .caveat {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 1.25rem;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  max-width: 44em;
+}
+.story .caveat .label {
+  font-size: 14px;
+  color: var(--foreground);
+  padding-top: 3px;
+  white-space: nowrap;
+}
+.story .caveat strong {
+  color: var(--foreground);
+  font-weight: 500;
+}
+@media (max-width: 480px) {
+  .story .caveat {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}
+.story .section-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 1.25rem;
+  font-size: 17px;
+  color: var(--muted-foreground);
+}
+.story .section-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.story .takeaways {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 767px) {
+  .story .takeaways {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.story .takeaways li {
+  padding: 22px 24px 22px 0;
+  margin-right: 24px;
+  border-right: 1px solid var(--border);
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  font-size: 17px;
+  line-height: 1.55;
+  max-width: none;
+}
+.story .takeaways li:last-child {
+  border-right: 0;
+  margin-right: 0;
+}
+@media (max-width: 767px) {
+  .story .takeaways li {
+    border-right: 0;
+    margin-right: 0;
+    padding-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .story .takeaways li:last-child {
+    border-bottom: 0;
+  }
+}
+.story .takeaways li strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+.story .takeaways li span {
+  color: var(--muted-foreground);
+}
+
+.story .keypoints {
+  border-block: 1px solid var(--border);
+  padding-block: 20px;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 14px 1.5rem;
+  margin: 0;
+}
+.story .keypoints dt {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  padding-top: 3px;
+}
+.story .keypoints dd {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+}
+@media (max-width: 480px) {
+  .story .keypoints {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px 0;
+  }
+}
+
+.story .close-link {
+  font-size: 17px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 2rem;
+}
+.story .close-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media print {
+  .story-progress,
+  .story-rail {
+    display: none;
+  }
+  .scrolly-graphic {
+    position: static;
+  }
+  .scrolly-step {
+    min-height: 0;
+    padding: 1rem 0;
+  }
+}

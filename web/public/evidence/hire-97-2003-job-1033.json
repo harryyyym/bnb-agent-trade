@@ -1,0 +1,82 @@
+{
+  "agent": {
+    "chain": 97,
+    "id": 2003,
+    "name": "Canned Health Guard",
+    "category": "health factor monitoring",
+    "endpoint": "https://health-guard.103-195-188-198.sslip.io/erc8183",
+    "provider": "0xD885bd3eEa76c3bDE6B49D7A16D5BAa35ce2F1D7",
+    "operator": "third-party"
+  },
+  "task": "Read the Venus Core Pool lending position of BSC address 0xD16460Ca3a2Fb0d1a9c9A5b3D3f6a49b4C2d7e81 and report its health factor, the balances behind it, and the smallest single repay that restores a health factor of at least 1.5, with the block the reads came from.",
+  "deliverables": "Structured health factor assessment: the assessment, the per-market balances it is derived from, the smallest sufficient repay, and the block number of the reads.",
+  "quote": {
+    "price": "1000000000000000",
+    "currency": "0xc70B8741B8B07A6d61E54fd4B20f22Fa648E5565",
+    "negotiationHash": "0x990f806bd6935d85dafa5a5f834481ba82109176927d5665cb41911fc772c16d",
+    "requestHash": "0x51666e8478652065b62479bf18ee71f7c8c34e70b5db67f648cd36e0797a4815",
+    "responseHash": "0x7ef9d07f58c81dea6467d3378b1fd04acb0ab4f067968ffc78b2b3043392ad09",
+    "providerSig": "0xba4cc5bae98d246da8b28cffaf1b8c60019098c5e21de8304cd28114dfce6ebf489cbc250f7a23052f7e7e5718ba5e08be8baa5b4251dee136d4cedc385f63921c",
+    "quoteExpiresAt": 1788679626,
+    "envelope": {
+      "request": {
+        "task_description": "Read the Venus Core Pool lending position of BSC address 0xD16460Ca3a2Fb0d1a9c9A5b3D3f6a49b4C2d7e81 and report its health factor, the balances behind it, and the smallest single repay that restores a health factor of at least 1.5, with the block the reads came from.",
+        "terms": {
+          "deliverables": "Structured health factor assessment: the assessment, the per-market balances it is derived from, the smallest sufficient repay, and the block number of the reads.",
+          "quality_standards": "as described by the agent card",
+          "evaluation_required": true,
+          "evaluator_type": "uma_oov3"
+        }
+      },
+      "request_hash": "0x51666e8478652065b62479bf18ee71f7c8c34e70b5db67f648cd36e0797a4815",
+      "response": {
+        "accepted": true,
+        "terms": {
+          "deliverables": "Structured health factor assessment: the assessment, the per-market balances it is derived from, the smallest sufficient repay, and the block number of the reads.",
+          "quality_standards": "as described by the agent card",
+          "evaluation_required": true,
+          "evaluator_type": "uma_oov3",
+          "price": "1000000000000000",
+          "currency": "0xc70B8741B8B07A6d61E54fd4B20f22Fa648E5565"
+        },
+        "estimated_completion_seconds": 120,
+        "quote_expires_at": 1788679626,
+        "negotiated_at": 1788678726
+      },
+      "response_hash": "0x7ef9d07f58c81dea6467d3378b1fd04acb0ab4f067968ffc78b2b3043392ad09",
+      "negotiation_hash": "0x990f806bd6935d85dafa5a5f834481ba82109176927d5665cb41911fc772c16d",
+      "provider_sig": "0xba4cc5bae98d246da8b28cffaf1b8c60019098c5e21de8304cd28114dfce6ebf489cbc250f7a23052f7e7e5718ba5e08be8baa5b4251dee136d4cedc385f63921c",
+      "chain_id": 97,
+      "verifying_contract": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE"
+    },
+    "priceU": 0.001,
+    "signatureRecoversToRegisteredWallet": true
+  },
+  "job": {
+    "id": 1033,
+    "status": "SUBMITTED",
+    "disputeWindowSeconds": 900
+  },
+  "deliverable": {
+    "success": true,
+    "version": 1,
+    "job_id": 1033,
+    "chain_id": 97,
+    "contracts": {
+      "commerce": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE",
+      "router": "0xD7d36D66d2F1B608A0F943f722D27e3744f66F25",
+      "policy": "0xd6a4217588F6B1F5657a92A3e94E6422aD771cEA"
+    },
+    "response": {
+      "content": "{\"assessment\":{\"currentHealthFactor\":null,\"liquidationProximity\":\"protocol_liquidity_fields_only\",\"liquidityRaw\":\"2349997739537201063\",\"shortfallRaw\":\"0\",\"status\":\"NO_SHORTFALL_OBSERVED\",\"validation\":{\"errors\":[],\"valid\":true}},\"category\":\"health_factor_monitoring\",\"changes\":{\"changes\":[],\"status\":\"not_enough_data\"},\"evidence\":{\"authoritativeProtocol\":\"Venus\",\"readSource\":{\"account\":\"0xD164600c50B4F35593Cdc24F808cDA6DcFB1D645\",\"args\":[\"0xD164600c50B4F35593Cdc24F808cDA6DcFB1D645\"],\"authoritative\":true,\"blockTag\":\"127521666\",\"chainId\":97,\"contract\":\"0x94d1820b2D1c7c7452A163983Dc888CEC546b77D\",\"contracts\":{\"chainId\":97,\"comptroller\":\"0x94d1820b2D1c7c7452A163983Dc888CEC546b77D\",\"oracle\":\"0x3cD69251D04A28d887Ac14cbe2E14c52F3D57823\",\"poolRegistry\":\"0xC85491616Fa949E048F3aAc39fbf5b0703800667\",\"poolType\":\"core\",\"source\":\"https://raw.githubusercontent.com/VenusProtocol/venus-protocol-documentation/main/deployed-contracts/markets.md\",\"usdt\":\"0xA11c8D9DC9b66E209Ef60F0C8D969D3CD988782c\",\"vBNB\":\"0x2E7222e51c0f6e98610A1543Aa3836E092CDe62c\",\"vUSDT\":\"0xb7526572FFE56AB9D7489838Bf2E18e3323b441A\"},\"markets\":[\"0x2E7222e51c0f6e98610A1543Aa3836E092CDe62c\",\"0xb7526572FFE56AB9D7489838Bf2E18e3323b441A\"],\"method\":\"getAccountLiquidity(address)\",\"poolType\":\"core\"},\"snapshotHash\":\"0xa0c4ca10c0f7af57983f8f8911bfe67d189c8ed6fe458950e161f7ab5f208cc4\"},\"jobId\":1033,\"observedAt\":\"2026-09-06T07:12:27.479Z\",\"origin\":\"CANNED_REFERENCE\",\"position\":{\"account\":\"0xD164600c50B4F35593Cdc24F808cDA6DcFB1D645\",\"asOfBlock\":\"127521666\",\"poolType\":\"core\",\"protocol\":\"Venus\",\"source\":\"onchain\"},\"recommendation\":{\"automaticActionTaken\":false,\"boundedAction\":\"No intervention recommended from this snapshot; continue monitoring at the declared interval.\",\"mode\":\"recommendation_only\",\"reason\":\"Canned Reference Agent is read-only by default and never moves capital without a separately approved policy.\"},\"schemaVersion\":\"1.0.0\"}",
+      "content_type": "text/plain"
+    },
+    "metadata": {
+      "origin": "CANNED_REFERENCE_HEALTH_FACTOR_V1",
+      "referenceOrigin": "CANNED_REFERENCE",
+      "taskVersion": "health-factor"
+    }
+  },
+  "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+  "recordedAt": "2026-09-06T07:12:53.340Z"
+}

@@ -1,0 +1,18 @@
+cell,shock,clock,books,n_paired_paths,median_gap_bps,ci50_lo_bps,ci50_hi_bps,ci95_lo_bps,ci95_hi_bps,a_ahead,h2_ahead,exact_ties,kind
+wick-1block-night-b1,wick-1block,night,1,50,5328.4975,5303.6615,5343.6934,0.0000,5359.3683,31,7,12,cell
+wick-1block-work-b1,wick-1block,work,1,50,5288.9262,5272.3560,5306.1002,0.0000,5341.7675,29,6,15,cell
+wick-1block-night-b3,wick-1block,night,3,50,1816.6846,1808.7524,1830.0229,1796.8985,3547.1496,44,2,4,cell
+wick-1block-work-b3,wick-1block,work,3,50,1795.1104,1790.4228,1806.0653,1783.4837,1818.8532,40,7,3,cell
+wick-persist-night-b1,wick-persist,night,1,50,425.3975,421.4094,436.0144,400.5990,446.6499,40,0,10,cell
+wick-persist-work-b1,wick-persist,work,1,50,409.4759,397.9821,423.7056,386.4425,438.2031,33,0,17,cell
+wick-persist-work-b3,wick-persist,work,3,50,266.2207,187.9658,276.5024,151.3350,280.9385,47,0,3,cell
+crash-work-b3,crash,work,3,50,169.2460,163.3841,173.0150,155.3540,180.6561,50,0,0,cell
+crash-night-b1,crash,night,1,50,169.0875,167.6582,172.0878,165.6133,188.4711,50,0,0,cell
+crash-night-b3,crash,night,3,50,168.9271,166.0695,171.3551,159.8260,179.6116,50,0,0,cell
+wick-persist-night-b3,wick-persist,night,3,50,162.1959,151.9644,200.9020,145.0075,260.7245,46,0,4,cell
+crash-work-b1,crash,work,1,50,159.0508,146.3753,165.4777,58.2792,175.7221,50,0,0,cell
+grind-night-b3,grind,night,3,50,90.1247,88.5612,93.1842,82.9987,99.8871,50,0,0,cell
+grind-night-b1,grind,night,1,50,88.2517,83.9574,93.5335,78.0242,103.1555,50,0,0,cell
+grind-work-b1,grind,work,1,50,0.0530,0.0496,0.0575,0.0361,0.0965,50,0,0,cell
+grind-work-b3,grind,work,3,50,0.0450,0.0392,0.0482,0.0304,0.0632,50,0,0,cell
+C1 pooled · n=800,,,,800,155.3540,,,145.9354,166.9612,710,22,68,pooled

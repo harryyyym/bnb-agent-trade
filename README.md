@@ -15,10 +15,14 @@ Live at **[bnbagent.trade](https://bnbagent.trade)**.
 
 ## What this repository holds
 
-Only what the site references:
+- [`web/`](web/): the marketplace site, as deployed at bnbagent.trade (Next.js 16). `cd web && pnpm install && pnpm build && pnpm start`.
+- [`contracts/`](contracts/): SurvivalGuard, its tests and deploy scripts (Foundry).
+- [`REPORT.md`](REPORT.md): the TermiX Agent Advantage Report, with its artefacts under [`evidence/`](evidence/).
+- [`deliverables/`](deliverables/): the ERC-8183 job manifests the site links to (jobs 736, 853, 1026, 1027).
 
-- [`REPORT.md`](REPORT.md): the TermiX Agent Advantage Report, with its artefacts under `evidence/`.
-- `deliverables/`: the ERC-8183 job manifests the site links to (jobs 736, 853, 1026, 1027).
+## State at submission
+
+The tag `v1.0-submitted` marks the repository as it stood at the hackathon submission on 2026-09-09; the site at bnbagent.trade was built from that `web/`. Later commits, if any, are improvements after the deadline.
 
 Every number on the report pages is read at build time from the artefact that produced it; those
 artefacts are served by the site under [bnbagent.trade/evidence/](https://bnbagent.trade/evidence/).

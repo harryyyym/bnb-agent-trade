@@ -1,0 +1,53 @@
+{
+  "$schema": "termix-demo-lab-human-run/v1",
+  "whatThisIs": "The human arm of the T1 measured run, recovered from BSC testnet after the fact: the visitor's own dip transaction and their unaided protect() call, with block timestamps, so the time a person took to act is a chain fact rather than a claim. AGENT-ADVANTAGE-REPORT.md \u00a71 recorded only the protect hash and the health factors.",
+  "chainId": 97,
+  "recoveredAtUtc": "2026-09-08T11:00:00Z",
+  "servedBy": "https://data-seed-prebsc-1-s1.binance.org:8545",
+  "readOnly": "eth_getTransactionByHash, eth_getTransactionReceipt, eth_getBlockByNumber, web3_sha3 only.",
+  "howFound": "From the protect transaction's sender, blocks were walked backwards until the same sender's previous transaction; it is MockPoolV2.dip(asset, 3500 bps) \u2014 the 35% dip the report describes. Selectors verified with web3_sha3 on a BNB Chain node.",
+  "visitor": "0x52708b181e109947ef19b82df8780c683c2c9762",
+  "labDelays": {
+    "hatchHiddenSeconds": 30,
+    "hatchOfferedSeconds": 45,
+    "source": "survivalguard/web/src/features/lab/dip-step.tsx ESCAPE_AFTER_S = 45; the lab hides the escape hatch for 30 s and offers it at 45 s after the dip, client-side"
+  },
+  "steps": [
+    {
+      "step": "dip",
+      "contract": "MockPoolV2",
+      "address": "0x364aeab3c6057aae6493c84b08c04d4e66878e87",
+      "function": "dip(address,uint16)",
+      "selector": "0x49d53957",
+      "dropBps": 3500,
+      "txHash": "0xadd77a012ad9c05b178d86d1be8e3fb75da8a8ca35c32734598fb48cc147c496",
+      "block": 129502423,
+      "blockTimestamp": 1788722605,
+      "blockUtc": "2026-09-06T19:23:25Z",
+      "txStatus": 1
+    },
+    {
+      "step": "protect",
+      "contract": "SurvivalGuard (testnet)",
+      "address": "0xef9a6aa0e62b367093c41d5147216089d895e4cf",
+      "function": "protect(address)",
+      "selector": "0x6c2754ef",
+      "txHash": "0xda75aae584a3d10b66f8aebc3ef280e3f09c7f5f49840ad2c14c09a6a5c76658",
+      "block": 129502545,
+      "blockTimestamp": 1788722660,
+      "blockUtc": "2026-09-06T19:24:20Z",
+      "txStatus": 1
+    }
+  ],
+  "timing": {
+    "dipToProtectMinedSeconds": 55,
+    "hatchOfferedAtSeconds": 45,
+    "offerToProtectMinedSeconds": 10,
+    "precisionSeconds": 1,
+    "note": "Block timestamps have one-second resolution and ~0.75 s blocks. The 55 s includes the lab's own 45 s before the escape hatch is offered; the person's own reaction, from the hatch appearing to the protect transaction mined, is about 10 s. It does not include the seconds the visitor spent staging the dip."
+  },
+  "limitations": [
+    "One visitor, one run, on a demo position. This is a measurement of one person who was watching, not a baseline.",
+    "The visitor was a team member operating the public lab, not a stopwatched arm-B run under HUMAN-RUNS.md."
+  ]
+}

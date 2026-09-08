@@ -1,0 +1,298 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * DESIGN.md §3 — tokens. The site is dark-only: :root and .dark carry the same
+ * values and app/layout.tsx puts `dark` on <html> so the `dark:` variants inside
+ * the generated shadcn components resolve. shadcn's semantic names *are* the
+ * palette; there is no second set of names. Everything else here is the stock
+ * shadcn base layer plus the Magic UI marquee keyframes — no custom utilities,
+ * no custom type ramp (DESIGN.md §4 uses Tailwind's scale at the call site).
+ */
+:root,
+.dark {
+  --radius: 0.5rem;
+
+  --background: #0b0e11;
+  --foreground: #eaecef;
+  --card: #12151b;
+  --card-foreground: #eaecef;
+  --popover: #12151b;
+  --popover-foreground: #eaecef;
+  --primary: #f0b90b;
+  --primary-foreground: #171203;
+  --secondary: #171b22;
+  --secondary-foreground: #eaecef;
+  --muted: #171b22;
+  --muted-foreground: #8b94a6;
+  --accent: #1c2129;
+  --accent-foreground: #eaecef;
+  --destructive: #f6465d;
+  --border: rgba(234, 236, 239, 0.09);
+  --input: rgba(234, 236, 239, 0.14);
+  --ring: #f0b90b;
+
+  /* Meaningful hues beyond the shadcn set (DESIGN.md §1.4). */
+  --success: #0ecb81;
+  --warning: #f59e0b;
+
+  /*
+   * Chart series for the study report at /report, brought over from main.
+   * These are NOT the brand palette and that is deliberate: a categorical mark
+   * on a dark ground has to sit in OKLCH L 0.48–0.67, --primary at L 0.813 fails
+   * that band, and --success / --destructive are reserved for status and may
+   * never be reused as a series. All three pass the six checks against this
+   * page's own #0b0e11 surface: chroma floor, CVD separation (worst adjacent
+   * ΔE 12.8 protan), normal-vision floor 21.9, and 3:1 contrast.
+   *
+   * Assigned in fixed order and never cycled: 1 is always the agent, 2 always
+   * the modelled human, 3 always passive, in every chart on the page. The
+   * report renders its figures to static SVG at build time, so these are read
+   * by scripts/render-figures.mjs rather than by a chart runtime.
+   */
+  --chart-1: #bd8a10; /* arm A  — the agent */
+  --chart-2: #4285e6; /* arm H2 — the modelled human */
+  --chart-3: #c76394; /* arm P  — passive */
+  --chart-grid: rgba(234, 236, 239, 0.06); /* axes recede */
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /*
+   * DESIGN.md §9, the live dot. A ring expanding out from behind a filled dot,
+   * slow enough to read as breathing rather than as a radar sweep. Its own
+   * animation rather than Tailwind's 1s `animate-ping`, so the duration is a
+   * token and not an arbitrary value at the call site.
+   */
+  --animate-live-ping: live-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  @keyframes live-ping {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    70%,
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+
+  /*
+   * DESIGN.md §9, the hero. A slow rise on first paint and a slow breath on the
+   * backdrop glow: the two motions a visitor sees before they have scrolled
+   * anything, and the reason the page reads as alive rather than as a poster.
+   */
+  --animate-rise: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-breathe: breathe 9s ease-in-out infinite;
+  --animate-cue: cue 2.2s ease-in-out infinite;
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+  }
+  @keyframes breathe {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+  }
+  @keyframes cue {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.35;
+    }
+    50% {
+      transform: translateY(6px);
+      opacity: 1;
+    }
+  }
+
+  /* Magic UI marquee (added by the registry). */
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
+
+/*
+ * The hero's backdrop glow (DESIGN.md §6). A named utility rather than an
+ * arbitrary value at the call site: §1.2 keeps sizes on the scale, and a
+ * decorative gradient has no place on it.
+ */
+@utility hero-glow {
+  background:
+    radial-gradient(
+      42% 52% at 72% 0%,
+      color-mix(in oklab, var(--primary) 26%, transparent) 0%,
+      color-mix(in oklab, var(--primary) 7%, transparent) 42%,
+      transparent 74%
+    ),
+    radial-gradient(
+      70% 44% at 20% 4%,
+      color-mix(in oklab, var(--foreground) 6%, transparent) 0%,
+      transparent 68%
+    );
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    /* Clears the 64px sticky nav when something is scrolled into view. No
+       `scroll-behavior: smooth`: on the App Router it fights the router's
+       scroll reset on navigation. */
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  /* Tailwind v4 dropped `cursor: pointer` on buttons; shadcn's docs restore it
+     here (DESIGN.md §10). */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    @apply bg-primary/40;
+  }
+}
+
+/*
+ * DESIGN.md §9, reduced motion. `MotionConfig reducedMotion="user"`
+ * (components/providers.tsx) stops motion's transform animations, but it cannot
+ * touch a CSS keyframe loop: the logo marquee kept scrolling for a visitor who
+ * had asked for reduced motion (measured, not assumed). The border beam — the
+ * other loop, animating `offsetDistance`, which `user` also leaves running — is
+ * not rendered at all (components/beam.tsx).
+ *
+ * This block is deliberately OUTSIDE `@layer base`: `animate-marquee` is a
+ * Tailwind utility, and every `@layer` loses to unlayered CSS, so the same rule
+ * inside `base` was silently overridden by the utility that sets the animation.
+ */
+@media (prefers-reduced-motion: reduce) {
+  /* 1. Every looping or entry keyframe the site defines. */
+  .animate-marquee,
+  .animate-marquee-vertical,
+  .animate-live-ping,
+  .animate-breathe,
+  .animate-cue {
+    animation: none;
+  }
+  /* The hero's rise must not leave its content at `opacity: 0`. */
+  .animate-rise {
+    animation: none;
+    opacity: 1;
+  }
+
+  /*
+   * 2. A parked marquee is not a static strip. The track is built to be read
+   * while it moves: stopped, it sits inside its own edge mask with the first
+   * mark faded to nothing, and below ~750px three of the six sources are
+   * outside the clip and never appear at all. So take the mask and the clip
+   * off, collapse the four repeats to one, and let that one wrap.
+   */
+  [data-logo-strip] {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow: visible;
+  }
+  [data-logo-strip] > :not(:first-child) {
+    display: none;
+  }
+  [data-logo-strip] > :first-child {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  /*
+   * 3. BlurFade animates `filter` as well as opacity, and motion's reduced
+   * motion only snaps positional properties, so the 6px blur still resolved on
+   * 35 wrappers. Suppressing it in CSS keeps the markup identical on server and
+   * client — reading the media query in the component instead would change the
+   * inline style between the two and break hydration. The selector matches for
+   * the whole animation because motion keeps writing `blur(...)` into the
+   * inline style; the fade in opacity is left alone, which is what the setting
+   * asks for.
+   */
+  [style*="blur("] {
+    filter: none !important;
+  }
+
+  /*
+   * 4. tw-animate-css `enter` / `exit` keyframes translate and scale, and ship
+   * with no reduced-motion rule of their own: the mobile nav sheet slid 75% of
+   * the viewport in over 500ms, the compare panel rose from the bottom edge,
+   * and every select and tooltip zoomed. Addressed by data-slot rather than by
+   * the utility class, because the sheet and the select carry the animation on
+   * `data-[state=open]:animate-in`, which a `.animate-in` selector never
+   * matches.
+   */
+  [data-slot="sheet-content"],
+  [data-slot="sheet-overlay"],
+  [data-slot="select-content"],
+  [data-slot="tooltip-content"] {
+    animation: none !important;
+  }
+}
