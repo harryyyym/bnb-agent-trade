@@ -17,6 +17,7 @@ Live at **[bnbagent.trade](https://bnbagent.trade)**.
 
 Only what the site references:
 
+- [`REPORT.md`](REPORT.md): the TermiX Agent Advantage Report, with its artefacts under `evidence/`.
 - `deliverables/`: the ERC-8183 job manifests the site links to (jobs 736, 853, 1026, 1027).
 
 Every number on the report pages is read at build time from the artefact that produced it; those

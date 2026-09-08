@@ -1,0 +1,82 @@
+{
+  "agent": {
+    "chain": 97,
+    "id": 2005,
+    "name": "Canned Range Keeper",
+    "category": "rebalancing",
+    "endpoint": "https://range-keeper.103-195-188-198.sslip.io/erc8183",
+    "provider": "0x0eAc2F4d215A416f891C43BFFa83329Ec249AD5a",
+    "operator": "third-party"
+  },
+  "task": "A PancakeSwap V3 WBNB/USDT 0.05% position holds ticks -66910 to -65000 and the pool is currently trading outside that band. Report whether the position is in range at the current tick, how far outside it is, and the tick band you would re-range to, with the pool address and the block the reads came from.",
+  "deliverables": "Structured re-range assessment: in-range yes or no, current tick versus the band, a proposed new band, and the block number of the reads.",
+  "quote": {
+    "price": "1000000000000000",
+    "currency": "0xc70B8741B8B07A6d61E54fd4B20f22Fa648E5565",
+    "negotiationHash": "0xc74b2fd6172d8ac2f6ef2743a2a5f1bcc779a2c3e3292875085a620994281916",
+    "requestHash": "0xbbf6e4a6832476d843e8ddb996dfcacf057da7decd1f77b46414b5df06143660",
+    "responseHash": "0x1a807fb6bf7431c7379e13585d7c3b45e0b8e7c39b2aed5f68545e273533cbfe",
+    "providerSig": "0x3c89a5a574486878a92d6f5b8fe5a2d106e0190e5edcfd1c9c3faf9f1566af556b1601f8deda34ce02a9afafda7be83684a391d440c68b124e12eb832397ac981b",
+    "quoteExpiresAt": 1788679746,
+    "envelope": {
+      "request": {
+        "task_description": "A PancakeSwap V3 WBNB/USDT 0.05% position holds ticks -66910 to -65000 and the pool is currently trading outside that band. Report whether the position is in range at the current tick, how far outside it is, and the tick band you would re-range to, with the pool address and the block the reads came from.",
+        "terms": {
+          "deliverables": "Structured re-range assessment: in-range yes or no, current tick versus the band, a proposed new band, and the block number of the reads.",
+          "quality_standards": "as described by the agent card",
+          "evaluation_required": true,
+          "evaluator_type": "uma_oov3"
+        }
+      },
+      "request_hash": "0xbbf6e4a6832476d843e8ddb996dfcacf057da7decd1f77b46414b5df06143660",
+      "response": {
+        "accepted": true,
+        "terms": {
+          "deliverables": "Structured re-range assessment: in-range yes or no, current tick versus the band, a proposed new band, and the block number of the reads.",
+          "quality_standards": "as described by the agent card",
+          "evaluation_required": true,
+          "evaluator_type": "uma_oov3",
+          "price": "1000000000000000",
+          "currency": "0xc70B8741B8B07A6d61E54fd4B20f22Fa648E5565"
+        },
+        "estimated_completion_seconds": 120,
+        "quote_expires_at": 1788679746,
+        "negotiated_at": 1788678846
+      },
+      "response_hash": "0x1a807fb6bf7431c7379e13585d7c3b45e0b8e7c39b2aed5f68545e273533cbfe",
+      "negotiation_hash": "0xc74b2fd6172d8ac2f6ef2743a2a5f1bcc779a2c3e3292875085a620994281916",
+      "provider_sig": "0x3c89a5a574486878a92d6f5b8fe5a2d106e0190e5edcfd1c9c3faf9f1566af556b1601f8deda34ce02a9afafda7be83684a391d440c68b124e12eb832397ac981b",
+      "chain_id": 97,
+      "verifying_contract": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE"
+    },
+    "priceU": 0.001,
+    "signatureRecoversToRegisteredWallet": true
+  },
+  "job": {
+    "id": 1034,
+    "status": "SUBMITTED",
+    "disputeWindowSeconds": 900
+  },
+  "deliverable": {
+    "success": true,
+    "version": 1,
+    "job_id": 1034,
+    "chain_id": 97,
+    "contracts": {
+      "commerce": "0xa206c0517B6371C6638CD9e4a42Cc9f02A33B0DE",
+      "router": "0xD7d36D66d2F1B608A0F943f722D27e3744f66F25",
+      "policy": "0xd6a4217588F6B1F5657a92A3e94E6422aD771cEA"
+    },
+    "response": {
+      "content": "{\"category\":\"rebalancing\",\"decision\":{\"action\":\"HOLD\",\"policyVersion\":\"range-keeper-policy-v1\",\"reason\":\"The position is still in range and drift does not justify paying gas, realising impermanent loss, and resetting fee accrual.\",\"rebalanceRecommended\":false,\"thresholds\":{\"edgeProximityActPct\":10,\"edgeProximityWarnPct\":25},\"triggers\":[]},\"evidence\":{\"authoritativeProtocol\":\"PancakeSwapV3\",\"limitations\":[\"A single frozen block describes one moment and does not predict the next one.\",\"Oracle mean ticks describe what happened, not what will happen.\"],\"oracleWindowsUsed\":[3600,300],\"readSource\":{\"authoritative\":true,\"blockTag\":\"118445030\",\"chainId\":56,\"factory\":\"0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865\",\"methods\":[\"slot0()\",\"liquidity()\",\"token0()\",\"token1()\",\"fee()\",\"tickSpacing()\",\"feeGrowthGlobal0X128()\",\"feeGrowthGlobal1X128()\",\"observe(uint32[])\",\"positions(uint256)\"],\"pool\":\"0x172fcD41E0913e95784454622d1c3724f546f849\",\"positionManager\":\"0x46A15B0b27311cedF172AB29E4f4766fbE7F4364\",\"source\":\"https://docs.pancakeswap.finance/trading-tools/building-trading-agents-on-pancakeswap-v3\"},\"snapshotHash\":\"0x98a5104e318d590bd791581c702ffa6a4cbf454a74357ef8cfb62d1332739e31\"},\"execution\":{\"automaticActionTaken\":false,\"capitalMoved\":false,\"futureBoundedPlan\":null,\"mode\":\"recommendation_only\",\"reason\":\"Canned Range Keeper v1 observes and recommends. It never removes liquidity, mints liquidity, swaps, or approves spending.\"},\"jobId\":1034,\"marketContext\":{\"available\":true,\"direction\":\"rising\",\"longestWindowSeconds\":3600,\"note\":\"Drift is the current tick minus the pool's own arithmetic-mean tick over each window. Tick direction is quote-dependent: a rising tick is a rising token1-per-token0 price and a falling token0-per-token1 price. It is a description of what happened, not a forecast.\",\"relativeToRange\":{\"available\":true,\"deltaPctOfRangeWidth\":7.5,\"directionRelativeToRange\":\"away from the lower edge\",\"materiality\":\"small\",\"note\":\"Movement measured against this position's own range width, so it reads the same in either price quote convention.\",\"tickDelta\":15,\"towardNearestEdge\":false,\"windowSeconds\":3600},\"shortestWindowSeconds\":300,\"tickDeltaOverLongestWindow\":15,\"windows\":[{\"meanTick\":-65669,\"secondsAgo\":3600,\"tickDelta\":15},{\"meanTick\":-65655,\"secondsAgo\":300,\"tickDelta\":1}]},\"observedAt\":\"2026-09-06T07:14:45.043Z\",\"origin\":\"CANNED_REFERENCE\",\"position\":{\"asOfBlock\":\"118445030\",\"chainId\":56,\"feePercent\":0.01,\"feeTier\":100,\"liquidity\":\"11964304490633407270133\",\"pair\":\"USDT/WBNB\",\"pool\":\"0x172fcD41E0913e95784454622d1c3724f546f849\",\"protocol\":\"PancakeSwapV3\",\"source\":\"onchain\",\"tickLower\":-65724,\"tickSpacing\":1,\"tickUpper\":-65524,\"tokenId\":\"7261944\"},\"proposedRange\":null,\"rangeStatus\":{\"composition\":\"Mixed token0 and token1; the split moves toward token0 as price falls and toward token1 as price rises.\",\"currentTick\":-65654,\"edgeProximityPct\":70,\"inRange\":true,\"nearestEdge\":\"lower\",\"positionInRange\":0.35,\"priceCurrent\":0.0014087228687618145,\"priceLower\":0.0013988967315806426,\"priceQuote\":\"WBNB per USDT\",\"priceUpper\":0.0014271548930571475,\"status\":\"IN_RANGE\",\"ticksToLower\":70,\"ticksToNearestEdge\":70,\"ticksToUpper\":130,\"widthTicks\":200},\"schemaVersion\":\"1.0.0\",\"tradeoffs\":{\"costOfActing\":[\"gas for decrease, collect, and mint\",\"realised impermanent loss at the current price\",\"fee accrual resets\",\"slippage if the position is rebalanced through a swap\"],\"costOfNotActing\":[\"the position may leave the range and stop earning fees\",\"a later rebalance may happen at a worse price\"],\"note\":\"Constant rebalancing is not automatically better. Holding is the correct answer whenever expected fees do not cover the cost of acting.\"},\"venue\":\"PancakeSwap\"}",
+      "content_type": "text/plain"
+    },
+    "metadata": {
+      "origin": "CANNED_REFERENCE_REBALANCING_V1",
+      "referenceOrigin": "CANNED_REFERENCE",
+      "taskVersion": "rebalancing"
+    }
+  },
+  "buyer": "0x5943F556aA1cEcfad19Cc7bd6F843e7D0a9dCd37",
+  "recordedAt": "2026-09-06T07:15:08.448Z"
+}

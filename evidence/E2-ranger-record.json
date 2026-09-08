@@ -1,0 +1,2448 @@
+{
+ "meta": {
+  "title": "Pancake Ranger: win rate, window and risk taken",
+  "purpose": "Turns the on-chain reconstruction in agents/ranger-history.json into the three quantities the TermiX track rubric names, with every definition stated before its number and every figure carrying the block it was read at.",
+  "generatedAt": "2026-09-06T10:15:52Z",
+  "readOnly": "No transaction was sent or signed and no private key was used or needed. Only eth_call, eth_getBlockByNumber and eth_blockNumber were issued by this stage; the underlying event data came from the reconstruction.",
+  "chain": {
+   "name": "BNB Smart Chain",
+   "chainId": 56
+  },
+  "agent": {
+   "name": "Pancake Ranger",
+   "operatorWallet": "0x1614f31E3DC2FC334C4C9742DE233265591f7674",
+   "strategy": "PancakeSwap V3 concentrated liquidity in WBNB/USDT 0.05%, position NFT staked in MasterChef V3 pid 5 to farm CAKE on top of swap fees; re-ranged by minting a new NFT each time",
+   "erc8004": {
+    "registry": "BSC testnet",
+    "agentId": 2011,
+    "note": "identity is on BSC testnet; all capital and all activity recorded here are on BSC mainnet chain 56"
+   },
+   "identityChainWarning": "The ERC-8004 identity (#2011) is registered on BSC TESTNET. Every position, every dollar and every figure in this document is on BSC MAINNET, chain 56. The registered identity and the money do not live on the same chain, and a reader should not assume they do."
+  },
+  "source": {
+   "file": "agents/ranger-history.json",
+   "generatedAt": "2026-09-06T09:46:29.648Z",
+   "whatItContains": "all 48 operator transactions (completeness proved by binary search on eth_getTransactionCount, nonces 0-47 with no gaps, every receipt status 0x1), 6 positions, 5 collects, 5 harvests, 8 swaps, and a 25,075-point event-driven pool tick series"
+  },
+  "contracts": {
+   "nonfungiblePositionManager": "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
+   "masterChefV3": "0x556B9306565093C855AEA9AE92A594704c2Cd59e",
+   "pancakeV3Factory": "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865",
+   "smartRouter": "0x13f4EA83D0bd40E75C8222255bc855a974568Dd4",
+   "pool_WBNB_USDT_005": "0x36696169C63e42cd08ce11f5deeBbCeBae652050",
+   "CAKE": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+   "WBNB": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+   "USDT": "0x55d398326f99059fF775485246999027B3197955"
+  },
+  "priceSources": {
+   "principle": "Every amount is converted at the rate in force at the block on which that amount was received or spent. No single closing rate is used anywhere.",
+   "usd": {
+    "source": "Chainlink price feeds on BSC mainnet, read through the proxy with getRoundData(roundId) at the current head, so no archive node is required: the round that was in force at a given block is the latest round whose updatedAt is at or before that block timestamp.",
+    "feeds": [
+     {
+      "pair": "BNB / USD",
+      "proxy": "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE",
+      "decimals": 8,
+      "phaseId": 3,
+      "aggregator": "0xa6e8fee84f9bd528ad71917c9ddbb1fd3214f280",
+      "descriptionOnChain": "BNB / USD",
+      "roundsInWindow": 23898,
+      "worstStalenessAtAnyPricedBlockSeconds": 32
+     },
+     {
+      "pair": "CAKE / USD",
+      "proxy": "0xB6064eD41d4f67e353768aA239cA86f4F73665a1",
+      "decimals": 8,
+      "phaseId": 3,
+      "aggregator": "0x6b247a09221e60ebafee77d2869f41ebd70448cd",
+      "descriptionOnChain": "CAKE / USD",
+      "roundsInWindow": 12236,
+      "worstStalenessAtAnyPricedBlockSeconds": 65
+     },
+     {
+      "pair": "USDT / USD",
+      "proxy": "0xB97Ad0E74fa7d920791E90258A6E2085088b4320",
+      "decimals": 8,
+      "phaseId": 4,
+      "aggregator": "0x63f4ff1c8c16c312f4b9792bdfde149622293934",
+      "descriptionOnChain": "USDT / USD",
+      "roundsInWindow": 867,
+      "worstStalenessAtAnyPricedBlockSeconds": 845
+     }
+    ],
+    "note": "decimals(), description() and version() were read on chain for all three feeds rather than assumed. The Chainlink CAKE/USD address matches the one configured in ranger/src/config.ts, but it was confirmed against the on-chain description() rather than trusted from the config."
+   },
+   "usdtVsUsd": {
+    "assumptionTested": "USDT is not assumed to be exactly one dollar. All 867 USDT/USD rounds inside the window were read.",
+    "minOverWindow": 0.99938,
+    "maxOverWindow": 1.00032618,
+    "maxAbsDeviationPercent": 0.062
+   },
+   "poolPriceAndCrossCheck": {
+    "formula": "USDT per BNB = 1.0001^(-tick); token0 is USDT and token1 is WBNB and both are 18 decimals, so no decimal correction applies and the LOWER tick is the HIGHER BNB price.",
+    "usedFor": "the 25,074-point intra-window mark-to-market curve, which cannot be priced from an oracle at that resolution",
+    "crossCheckAgainstChainlink": {
+     "checkpoints": 11,
+     "maxAbsDeviationPercent": 0.0598,
+     "note": "the pool tick and Chainlink BNB/USD were compared at all 11 mint and close blocks and never differed by more than 0.06%"
+    }
+   }
+  },
+  "readHeights": {
+   "windowEndBlock": 120279139,
+   "liveReReadBlock": 120282847,
+   "liveReReadIso": "2026-09-06T10:00:45Z",
+   "contractsVerifiedAtBlock": 120280012,
+   "chainHeadWhenSourceFileWritten": 120280942
+  },
+  "verification": [
+   "The V3 amount model used for every mark-to-market figure reproduces the USDT value of all 11 observed mints and closes to within 0.0000%, checked against the actual IncreaseLiquidity and DecreaseLiquidity amounts. It is a validated mark, not an estimate.",
+   "The operator wallet ledger was rebuilt from events alone (starting balances, then every swap, mint and collect applied in nonce order) and lands on the on-chain head balance exactly: 23281553009688326 wei USDT and 0 wei WBNB. This is an independent fifth reconciliation on top of the four in the source file.",
+   "The pool tick and Chainlink BNB/USD agree to within 0.0598% at all 11 mint and close blocks.",
+   "USDT/USD stayed within 0.062% of 1.000000 across all 867 feed rounds in the window, so the USDT-denominated and USD-denominated figures differ only at the fourth decimal.",
+   "The open position's uncollected fees were read by eth_call simulation of NonfungiblePositionManager.collect from the NFT owner; three independent RPC endpoints returned the same value to the wei, and the same call from a non-owner reverts with \"Not approved\", proving the simulation honours the real authorisation path.",
+   "Total gas across the 48 transactions, summed per transaction, equals the value in the source file to the wei and equals the operator BNB balance delta to the wei.",
+   "The still-open position was re-read at block 120282847: liquidity unchanged at 15630585959387618796, bounds unchanged at [-67110, -65200], owner still MasterChef V3, pool tick -66300, still in range."
+  ],
+  "caveats": [
+   "Nine days and five completed cycles is a small sample. Nothing here supports a claim about how the strategy behaves in a different market.",
+   "The largest sum ever at risk was about $40.54. Every percentage in this document is a percentage of that.",
+   "The tick series is resolved to the end of each block; 1.7% of swap-bearing blocks moved the tick more than once inside a block. At ~0.45 s per block this is a sub-second effect and cannot change the in-range result given 313 ticks of minimum headroom.",
+   "Fee income can only be attributed to a whole position lifetime, never to sub-intervals, because the agent collects only at close. There is no derivable daily fee curve, so no daily fee APR is asserted.",
+   "Chain data cannot prove the bot was running during the 5.68-day stretch with no operator transaction. No uptime claim is made.",
+   "The uncollected fees and pending CAKE on the open position were read 3708 blocks after the window end and are reported separately, not folded into window totals.",
+   "Standing token approvals from the operator to the SmartRouter and the position manager were counted but their allowance sizes were not read, so no statement is made about them."
+  ]
+ },
+ "window": {
+  "definition": "From the block of the first real-money mint (the first block at which agent capital was inside a live liquidity position) to the last block read on chain. Funding transfers and approvals before the first mint are excluded because no capital was at market risk yet.",
+  "whyThisDefinition": "A track record should start when money is exposed, not when a wallet is created; the wallet existed for 14.5 hours before any position was open.",
+  "start": {
+   "block": 118536451,
+   "timestamp": 1787902481,
+   "iso": "2026-08-28T07:34:41.000Z",
+   "tx": "0xebb5ccb4af24a0bd77407b9965b771ebc5b3cc4c9b512bcfa49f1fd5818ecb39",
+   "event": "mint of position NFT 7268711"
+  },
+  "end": {
+   "block": 120279139,
+   "timestamp": 1788687176,
+   "iso": "2026-09-06T09:32:56.000Z",
+   "event": "last block carrying a pool tick change in the reconstruction; the log scan covered every block through 120279152"
+  },
+  "elapsedSeconds": 784695,
+  "elapsedDays": 9.0821,
+  "elapsedBlocks": 1742688,
+  "alternatives": [
+   {
+    "name": "first operator transaction to last block read",
+    "startBlock": 118536426,
+    "startIso": "2026-08-28T07:34:30.000Z",
+    "seconds": 784706,
+    "days": 9.0822,
+    "note": "11 s longer; the first tx was a USDT approve, no capital at risk"
+   },
+   {
+    "name": "first wallet funding to last block read",
+    "startBlock": 118420212,
+    "startIso": "2026-08-27T17:02:42.000Z",
+    "seconds": 837014,
+    "days": 9.6877,
+    "note": "the first 0.0001 BNB arrived here; the 40 USDT arrived at block 118534816 (2026-08-28T07:22:25Z)"
+   }
+  ],
+  "holes": {
+   "definition": "time inside the window during which no liquidity position was open, so the record is not continuous",
+   "count": 5,
+   "totalSeconds": 185,
+   "coverageFraction": 0.99976424,
+   "coveragePercent": 99.9764,
+   "positionHoldingSeconds": 784510,
+   "gaps": [
+    {
+     "afterPosition": "7268711",
+     "beforePosition": "7272152",
+     "fromBlock": 118625020,
+     "fromIso": "2026-08-28T18:39:07.000Z",
+     "toBlock": 118625047,
+     "toIso": "2026-08-28T18:39:19.000Z",
+     "seconds": 12,
+     "whatHappened": "position closed and the next minted; capital sat in the operator wallet as idle USDT/WBNB and earned nothing"
+    },
+    {
+     "afterPosition": "7272152",
+     "beforePosition": "7316556",
+     "fromBlock": 119714487,
+     "fromIso": "2026-09-03T10:56:32.000Z",
+     "toBlock": 119714506,
+     "toIso": "2026-09-03T10:56:40.000Z",
+     "seconds": 8,
+     "whatHappened": "position closed and the next minted; capital sat in the operator wallet as idle USDT/WBNB and earned nothing"
+    },
+    {
+     "afterPosition": "7316556",
+     "beforePosition": "7319374",
+     "fromBlock": 119754973,
+     "fromIso": "2026-09-03T16:00:17.000Z",
+     "toBlock": 119755292,
+     "toIso": "2026-09-03T16:02:41.000Z",
+     "seconds": 144,
+     "whatHappened": "position closed and the next minted; capital sat in the operator wallet as idle USDT/WBNB and earned nothing"
+    },
+    {
+     "afterPosition": "7319374",
+     "beforePosition": "7336818",
+     "fromBlock": 120078128,
+     "fromIso": "2026-09-05T08:24:52.000Z",
+     "toBlock": 120078147,
+     "toIso": "2026-09-05T08:25:01.000Z",
+     "seconds": 9,
+     "whatHappened": "position closed and the next minted; capital sat in the operator wallet as idle USDT/WBNB and earned nothing"
+    },
+    {
+     "afterPosition": "7336818",
+     "beforePosition": "7340903",
+     "fromBlock": 120130205,
+     "fromIso": "2026-09-05T14:55:31.000Z",
+     "toBlock": 120130230,
+     "toIso": "2026-09-05T14:55:43.000Z",
+     "seconds": 12,
+     "whatHappened": "position closed and the next minted; capital sat in the operator wallet as idle USDT/WBNB and earned nothing"
+    }
+   ],
+   "longestHoleSeconds": 144,
+   "note": "Every hole is a same-minute handoff between a close and the next mint. The longest, 144 s, is the 2026-09-03T16:00-16:02 rebalance in which the agent swapped three times (nonces 23, 27, 30) before minting."
+  },
+  "observabilityGap": {
+   "definition": "the longest stretch inside the window with no operator transaction at all",
+   "fromIso": "2026-08-28T18:39:13.000Z",
+   "fromBlock": 118625034,
+   "toIso": "2026-09-03T10:56:32.000Z",
+   "toBlock": 119714487,
+   "seconds": 490639,
+   "days": 5.6787,
+   "note": "Position 7272152 was open and in range for the whole stretch, so the RECORD has no hole here. But chain data cannot distinguish \"the bot was up and correctly did nothing\" from \"the bot was down\". The passive evidence favours the former (spot never left the inner 60% of the band, and accrued CAKE stayed below the HARVEST_MIN_USD=0.5 threshold) but that is inference, not proof. No uptime claim is made from this file."
+  },
+  "stillRunning": {
+   "openPosition": "7340903",
+   "inRangeAtWindowEnd": true,
+   "reReadAtBlock": 120282847,
+   "reReadIso": "2026-09-06T10:00:45Z",
+   "poolTickAtReRead": -66300,
+   "inRangeAtReRead": true
+  }
+ },
+ "winRate": {
+  "nominated": "A_timeInRange",
+  "whyNominated": "Time-in-range is the only one of the three that measures what this agent actually decides. Pancake Ranger does not take directional positions; it chooses where to put a band and when to move it, and the entire value of that choice is whether the pool price is inside the band earning fees. Definitions B and C are reported beside it because a reviewer who reads \"win rate\" as \"did it make money\" is entitled to that number too, and it is a worse number.",
+  "definitions": {
+   "A_timeInRange": {
+    "definition": "The share of position-holding time during which the pool tick was inside the active position's band (tickLower <= tick < tickUpper), so the position was earning swap fees and CAKE emissions rather than sitting inert as a single asset.",
+    "defence": "This is the quantity the strategy optimises and the only one exactly computable from chain events with no price assumption; a concentrated-liquidity position out of range earns nothing, so range occupancy is the LP equivalent of a trade being on.",
+    "value": 1.0,
+    "percent": 100.0,
+    "inRangeSeconds": 784510,
+    "positionHoldingSeconds": 784510,
+    "rangeExits": 0,
+    "inRangeBlocks": 1742279,
+    "totalHeldBlocks": 1742279,
+    "measuredOverBlocks": [
+     118536451,
+     120279139
+    ],
+    "strictVariantChargingTheHandoffGaps": {
+     "definition": "the same fraction but with the denominator being the whole window, so the 185 s of un-deployed handoff time counts against the agent",
+     "percent": 99.9764,
+     "inRangeSeconds": 784510,
+     "windowSeconds": 784695
+    },
+    "closestApproachToAnyBound": {
+     "ticks": 313,
+     "percentOfPrice": 3.1793,
+     "position": "7268711",
+     "side": "upper (BNB price falling toward the band floor of 664.93 USDT)"
+    },
+    "perPosition": [
+     {
+      "tokenId": "7268711",
+      "mintBlock": 118536451,
+      "closeBlock": 118625020,
+      "heldSeconds": 39866,
+      "inRangeSeconds": 39866,
+      "inRangeFraction": 1,
+      "rangeExits": 0,
+      "observedTickMin": -65659,
+      "observedTickMax": -65314,
+      "headroomTicksBelowLower": 1251,
+      "headroomTicksAboveUpper": 313,
+      "smallestHeadroomTicks": 313,
+      "smallestHeadroomPercentOfPrice": 3.1793
+     },
+     {
+      "tokenId": "7272152",
+      "mintBlock": 118625047,
+      "closeBlock": 119714487,
+      "heldSeconds": 490633,
+      "inRangeSeconds": 490633,
+      "inRangeFraction": 1,
+      "rangeExits": 0,
+      "observedTickMin": -65593,
+      "observedTickMax": -65150,
+      "headroomTicksBelowLower": 367,
+      "headroomTicksAboveUpper": 1089,
+      "smallestHeadroomTicks": 367,
+      "smallestHeadroomPercentOfPrice": 3.738
+     },
+     {
+      "tokenId": "7316556",
+      "mintBlock": 119714506,
+      "closeBlock": 119754973,
+      "heldSeconds": 18217,
+      "inRangeSeconds": 18217,
+      "inRangeFraction": 1,
+      "rangeExits": 0,
+      "observedTickMin": -65904,
+      "observedTickMax": -65583,
+      "headroomTicksBelowLower": 336,
+      "headroomTicksAboveUpper": 1242,
+      "smallestHeadroomTicks": 336,
+      "smallestHeadroomPercentOfPrice": 3.4169
+     },
+     {
+      "tokenId": "7319374",
+      "mintBlock": 119755292,
+      "closeBlock": 120078128,
+      "heldSeconds": 145331,
+      "inRangeSeconds": 145331,
+      "inRangeFraction": 1,
+      "rangeExits": 0,
+      "observedTickMin": -66182,
+      "observedTickMax": -65647,
+      "headroomTicksBelowLower": 348,
+      "headroomTicksAboveUpper": 1026,
+      "smallestHeadroomTicks": 348,
+      "smallestHeadroomPercentOfPrice": 3.5411
+     },
+     {
+      "tokenId": "7336818",
+      "mintBlock": 120078147,
+      "closeBlock": 120130205,
+      "heldSeconds": 23430,
+      "inRangeSeconds": 23430,
+      "inRangeFraction": 1,
+      "rangeExits": 0,
+      "observedTickMin": -66462,
+      "observedTickMax": -66133,
+      "headroomTicksBelowLower": 368,
+      "headroomTicksAboveUpper": 1212,
+      "smallestHeadroomTicks": 368,
+      "smallestHeadroomPercentOfPrice": 3.7484
+     },
+     {
+      "tokenId": "7340903",
+      "mintBlock": 120130230,
+      "closeBlock": null,
+      "heldSeconds": 67033,
+      "inRangeSeconds": 67033,
+      "inRangeFraction": 1,
+      "rangeExits": 0,
+      "observedTickMin": -66600,
+      "observedTickMax": -66267,
+      "headroomTicksBelowLower": 510,
+      "headroomTicksAboveUpper": 1066,
+      "smallestHeadroomTicks": 510,
+      "smallestHeadroomPercentOfPrice": 5.232
+     }
+    ]
+   },
+   "B_reRangeSurvival": {
+    "definition": "The share of re-range decisions after which the pool tick stayed inside the NEWLY chosen band for at least a stated horizon H. Survival is measured on the pool tick series and continued past the position's own close, so the answer does not depend on when the agent chose to exit; a band whose position was closed after 5 hours can still be scored for 48 hours.",
+    "defence": "This scores the decision rather than the outcome of holding, and is immune to the circularity of \"the position never went out of range because the agent closed it first\"; the cost is right-censoring at the end of the observed series.",
+    "horizonNominated": 86400,
+    "reRangeDecisions": 5,
+    "atHorizons": [
+     {
+      "horizonSeconds": 3600,
+      "horizonHours": 1.0,
+      "survived": 5,
+      "failed": 0,
+      "censoredUndecided": 0,
+      "decided": 5,
+      "rateOfDecided": 1.0
+     },
+     {
+      "horizonSeconds": 21600,
+      "horizonHours": 6.0,
+      "survived": 5,
+      "failed": 0,
+      "censoredUndecided": 0,
+      "decided": 5,
+      "rateOfDecided": 1.0
+     },
+     {
+      "horizonSeconds": 43200,
+      "horizonHours": 12.0,
+      "survived": 5,
+      "failed": 0,
+      "censoredUndecided": 0,
+      "decided": 5,
+      "rateOfDecided": 1.0
+     },
+     {
+      "horizonSeconds": 86400,
+      "horizonHours": 24.0,
+      "survived": 4,
+      "failed": 0,
+      "censoredUndecided": 1,
+      "decided": 4,
+      "rateOfDecided": 1.0
+     },
+     {
+      "horizonSeconds": 172800,
+      "horizonHours": 48.0,
+      "survived": 3,
+      "failed": 0,
+      "censoredUndecided": 2,
+      "decided": 3,
+      "rateOfDecided": 1.0
+     },
+     {
+      "horizonSeconds": 259200,
+      "horizonHours": 72.0,
+      "survived": 1,
+      "failed": 2,
+      "censoredUndecided": 2,
+      "decided": 3,
+      "rateOfDecided": 0.3333
+     }
+    ],
+    "includingTheInitialDeployment": [
+     {
+      "horizonSeconds": 86400,
+      "horizonHours": 24.0,
+      "survived": 5,
+      "failed": 0,
+      "censoredUndecided": 1,
+      "decided": 5,
+      "rateOfDecided": 1.0
+     },
+     {
+      "horizonSeconds": 172800,
+      "horizonHours": 48.0,
+      "survived": 4,
+      "failed": 0,
+      "censoredUndecided": 2,
+      "decided": 4,
+      "rateOfDecided": 1.0
+     }
+    ],
+    "perDecision": [
+     {
+      "sequence": 1,
+      "kind": "initial deployment",
+      "tokenId": "7268711",
+      "mintBlock": 118536451,
+      "mintIso": "2026-08-28T07:34:41.000Z",
+      "band": [
+       -66910,
+       -65000
+      ],
+      "bandBreached": false,
+      "breachBlock": null,
+      "breachIso": null,
+      "breachTick": null,
+      "secondsBandHeld": 784695,
+      "hoursBandHeld": 217.97,
+      "censored": true,
+      "positionActuallyHeldSeconds": 39866,
+      "agentExitedAtFractionOfBandLife": 0.0508
+     },
+     {
+      "sequence": 2,
+      "kind": "re-range 1",
+      "tokenId": "7272152",
+      "mintBlock": 118625047,
+      "mintIso": "2026-08-28T18:39:19.000Z",
+      "band": [
+       -65960,
+       -64060
+      ],
+      "bandBreached": true,
+      "breachBlock": 120068570,
+      "breachIso": "2026-09-05T07:13:10Z",
+      "breachTick": -65961,
+      "secondsBandHeld": 650031,
+      "hoursBandHeld": 180.56,
+      "censored": false,
+      "positionActuallyHeldSeconds": 490633,
+      "agentExitedAtFractionOfBandLife": 0.7548
+     },
+     {
+      "sequence": 3,
+      "kind": "re-range 2",
+      "tokenId": "7316556",
+      "mintBlock": 119714506,
+      "mintIso": "2026-09-03T10:56:40.000Z",
+      "band": [
+       -66240,
+       -64340
+      ],
+      "bandBreached": true,
+      "breachBlock": 120100218,
+      "breachIso": "2026-09-05T11:10:35Z",
+      "breachTick": -66241,
+      "secondsBandHeld": 173635,
+      "hoursBandHeld": 48.23,
+      "censored": false,
+      "positionActuallyHeldSeconds": 18217,
+      "agentExitedAtFractionOfBandLife": 0.1049
+     },
+     {
+      "sequence": 4,
+      "kind": "re-range 3",
+      "tokenId": "7319374",
+      "mintBlock": 119755292,
+      "mintIso": "2026-09-03T16:02:41.000Z",
+      "band": [
+       -66530,
+       -64620
+      ],
+      "bandBreached": true,
+      "breachBlock": 120145336,
+      "breachIso": "2026-09-05T16:49:04Z",
+      "breachTick": -66538,
+      "secondsBandHeld": 175583,
+      "hoursBandHeld": 48.77,
+      "censored": false,
+      "positionActuallyHeldSeconds": 145331,
+      "agentExitedAtFractionOfBandLife": 0.8277
+     },
+     {
+      "sequence": 5,
+      "kind": "re-range 4",
+      "tokenId": "7336818",
+      "mintBlock": 120078147,
+      "mintIso": "2026-09-05T08:25:01.000Z",
+      "band": [
+       -66830,
+       -64920
+      ],
+      "bandBreached": false,
+      "breachBlock": null,
+      "breachIso": null,
+      "breachTick": null,
+      "secondsBandHeld": 90475,
+      "hoursBandHeld": 25.13,
+      "censored": true,
+      "positionActuallyHeldSeconds": 23430,
+      "agentExitedAtFractionOfBandLife": 0.259
+     },
+     {
+      "sequence": 6,
+      "kind": "re-range 5",
+      "tokenId": "7340903",
+      "mintBlock": 120130230,
+      "mintIso": "2026-09-05T14:55:43.000Z",
+      "band": [
+       -67110,
+       -65200
+      ],
+      "bandBreached": false,
+      "breachBlock": null,
+      "breachIso": null,
+      "breachTick": null,
+      "secondsBandHeld": 67033,
+      "hoursBandHeld": 18.62,
+      "censored": true,
+      "positionActuallyHeldSeconds": 67033,
+      "agentExitedAtFractionOfBandLife": 1.0
+     }
+    ],
+    "observation": "The bands the agent abandoned generally had a lot of life left: position 7316556, the band chosen by re-range 2, was closed after 18,217 s but its band was not breached for another 173,635 s from the mint. The agent moves at the inner-60% trigger, well before the band would actually fail. That buys headroom (minimum 313 ticks over the whole record) and costs a fixed gas fee and a crystallised token-mix change on every move."
+   },
+   "C1_perCycleVsHolding": {
+    "definition": "The share of completed position cycles in which swap fees plus CAKE emissions, each valued in USD at the block on which they were received, exceeded the loss versus simply holding the basket that was deposited at that mint (deposit and withdrawal both valued at the close block), plus the gas spent on that cycle.",
+    "defence": "This is the closest honest analogue to a trader's per-trade win rate, and it is the one a capital allocator cares about; it is reported per cycle rather than per day because the agent collects fees only at close, so no shorter attribution exists in the events.",
+    "wins": 0,
+    "cycles": 5,
+    "percent": 0.0,
+    "cycles_detail": [
+     {
+      "cycle": 1,
+      "tokenId": "7268711",
+      "nonceRange": [
+       0,
+       7
+      ],
+      "mintBlock": 118536451,
+      "mintIso": "2026-08-28T07:34:41.000Z",
+      "closeBlock": 118625020,
+      "closeIso": "2026-08-28T18:39:07.000Z",
+      "heldSeconds": 39866,
+      "entryNotionalUsd": 39.958556,
+      "entryPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132040370",
+       "answerRaw": "71030987168",
+       "decimals": 8,
+       "price": 710.30987168,
+       "updatedAt": 1787902459,
+       "updatedAtIso": "2026-08-28T07:34:19Z",
+       "stalenessSecondsAtBlock": 22
+      },
+      "exitPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132041586",
+       "answerRaw": "68576505690",
+       "decimals": 8,
+       "price": 685.7650569,
+       "updatedAt": 1787942340,
+       "updatedAtIso": "2026-08-28T18:39:00Z",
+       "stalenessSecondsAtBlock": 7
+      },
+      "bnbMovePercent": -3.4555,
+      "depositedBasketValuedAtCloseUsd": 39.053259,
+      "withdrawnPrincipalValuedAtCloseUsd": 38.926336,
+      "impermanentLossUsd": -0.126924,
+      "impermanentLossPercentOfDeposit": -0.325,
+      "swapFeesUsd": 0.017567,
+      "cakeUsd": 0.002436,
+      "gasUsd": 0.063557,
+      "gasWei": "90432300000000",
+      "gasTxCount": 8,
+      "netVsHoldingUsd": -0.170478,
+      "beatHolding": false
+     },
+     {
+      "cycle": 2,
+      "tokenId": "7272152",
+      "nonceRange": [
+       8,
+       15
+      ],
+      "mintBlock": 118625047,
+      "mintIso": "2026-08-28T18:39:19.000Z",
+      "closeBlock": 119714487,
+      "closeIso": "2026-09-03T10:56:32.000Z",
+      "heldSeconds": 490633,
+      "entryNotionalUsd": 38.958173,
+      "entryPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132041586",
+       "answerRaw": "68576505690",
+       "decimals": 8,
+       "price": 685.7650569,
+       "updatedAt": 1787942340,
+       "updatedAtIso": "2026-08-28T18:39:00Z",
+       "stalenessSecondsAtBlock": 19
+      },
+      "exitPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132056458",
+       "answerRaw": "70498770000",
+       "decimals": 8,
+       "price": 704.9877,
+       "updatedAt": 1788432991,
+       "updatedAtIso": "2026-09-03T10:56:31Z",
+       "stalenessSecondsAtBlock": 1
+      },
+      "bnbMovePercent": 2.8031,
+      "depositedBasketValuedAtCloseUsd": 39.327962,
+      "withdrawnPrincipalValuedAtCloseUsd": 39.246588,
+      "impermanentLossUsd": -0.081373,
+      "impermanentLossPercentOfDeposit": -0.2069,
+      "swapFeesUsd": 0.095367,
+      "cakeUsd": 0.039786,
+      "gasUsd": 0.05884,
+      "gasWei": "85040450000000",
+      "gasTxCount": 8,
+      "netVsHoldingUsd": -0.00506,
+      "beatHolding": false
+     },
+     {
+      "cycle": 3,
+      "tokenId": "7316556",
+      "nonceRange": [
+       16,
+       22
+      ],
+      "mintBlock": 119714506,
+      "mintIso": "2026-09-03T10:56:40.000Z",
+      "closeBlock": 119754973,
+      "closeIso": "2026-09-03T16:00:17.000Z",
+      "heldSeconds": 18217,
+      "entryNotionalUsd": 39.293144,
+      "entryPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132056458",
+       "answerRaw": "70498770000",
+       "decimals": 8,
+       "price": 704.9877,
+       "updatedAt": 1788432991,
+       "updatedAtIso": "2026-09-03T10:56:31Z",
+       "stalenessSecondsAtBlock": 9
+      },
+      "exitPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132057021",
+       "answerRaw": "72746450000",
+       "decimals": 8,
+       "price": 727.4645,
+       "updatedAt": 1788451217,
+       "updatedAtIso": "2026-09-03T16:00:17Z",
+       "stalenessSecondsAtBlock": 0
+      },
+      "bnbMovePercent": 3.1883,
+      "depositedBasketValuedAtCloseUsd": 39.740097,
+      "withdrawnPrincipalValuedAtCloseUsd": 39.639467,
+      "impermanentLossUsd": -0.10063,
+      "impermanentLossPercentOfDeposit": -0.2532,
+      "swapFeesUsd": 0.01446,
+      "cakeUsd": 0.00271,
+      "gasUsd": 0.058491,
+      "gasWei": "82156050000000",
+      "gasTxCount": 7,
+      "netVsHoldingUsd": -0.141952,
+      "beatHolding": false
+     },
+     {
+      "cycle": 4,
+      "tokenId": "7319374",
+      "nonceRange": [
+       23,
+       34
+      ],
+      "mintBlock": 119755292,
+      "mintIso": "2026-09-03T16:02:41.000Z",
+      "closeBlock": 120078128,
+      "closeIso": "2026-09-05T08:24:52.000Z",
+      "heldSeconds": 145331,
+      "entryNotionalUsd": 39.605351,
+      "entryPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132057025",
+       "answerRaw": "72572353849",
+       "decimals": 8,
+       "price": 725.72353849,
+       "updatedAt": 1788451350,
+       "updatedAtIso": "2026-09-03T16:02:30Z",
+       "stalenessSecondsAtBlock": 11
+      },
+      "exitPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132061468",
+       "answerRaw": "74799100000",
+       "decimals": 8,
+       "price": 747.991,
+       "updatedAt": 1788596667,
+       "updatedAtIso": "2026-09-05T08:24:27Z",
+       "stalenessSecondsAtBlock": 25
+      },
+      "bnbMovePercent": 3.0683,
+      "depositedBasketValuedAtCloseUsd": 40.025042,
+      "withdrawnPrincipalValuedAtCloseUsd": 39.927882,
+      "impermanentLossUsd": -0.09716,
+      "impermanentLossPercentOfDeposit": -0.2427,
+      "swapFeesUsd": 0.055877,
+      "cakeUsd": 0.012331,
+      "gasUsd": 0.076047,
+      "gasWei": "103950800000000",
+      "gasTxCount": 12,
+      "netVsHoldingUsd": -0.104999,
+      "beatHolding": false
+     },
+     {
+      "cycle": 5,
+      "tokenId": "7336818",
+      "nonceRange": [
+       35,
+       41
+      ],
+      "mintBlock": 120078147,
+      "mintIso": "2026-09-05T08:25:01.000Z",
+      "closeBlock": 120130205,
+      "closeIso": "2026-09-05T14:55:31.000Z",
+      "heldSeconds": 23430,
+      "entryNotionalUsd": 40.003445,
+      "entryPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132061469",
+       "answerRaw": "74864407029",
+       "decimals": 8,
+       "price": 748.64407029,
+       "updatedAt": 1788596700,
+       "updatedAtIso": "2026-09-05T08:25:00Z",
+       "stalenessSecondsAtBlock": 1
+      },
+      "exitPrice": {
+       "feed": "BNB/USD",
+       "roundId": "55340232221132062221",
+       "answerRaw": "76965940000",
+       "decimals": 8,
+       "price": 769.6594,
+       "updatedAt": 1788620121,
+       "updatedAtIso": "2026-09-05T14:55:21Z",
+       "stalenessSecondsAtBlock": 10
+      },
+      "bnbMovePercent": 2.8071,
+      "depositedBasketValuedAtCloseUsd": 40.387299,
+      "withdrawnPrincipalValuedAtCloseUsd": 40.301503,
+      "impermanentLossUsd": -0.085796,
+      "impermanentLossPercentOfDeposit": -0.2124,
+      "swapFeesUsd": 0.028454,
+      "cakeUsd": 0.002956,
+      "gasUsd": 0.067806,
+      "gasWei": "89805800000000",
+      "gasTxCount": 7,
+      "netVsHoldingUsd": -0.122192,
+      "beatHolding": false
+     }
+    ],
+    "totals": {
+     "swapFeesUsd": 0.211725,
+     "cakeUsd": 0.060218,
+     "impermanentLossUsd": -0.491883,
+     "gasUsdAcross5Cycles": 0.324741,
+     "netUsd": -0.544682,
+     "incomeAsShareOfInPositionImpermanentLoss": 0.5529
+    },
+    "reading": "Zero of five. Fee plus CAKE income covered 55.3% of the in-position impermanent loss before gas was counted at all, and gas across those five cycles was 1.53x the fee income they produced. This is the number that must not be dressed up."
+   },
+   "C2_perDayVsHolding": {
+    "definition": "The share of UTC days on which the agent's mark-to-market portfolio (open position valued at the pool tick, plus idle wallet balances, plus every fee already collected) returned at least as much as holding the basket it entered with at the first mint.",
+    "defence": "This is the daily version the rubric language hints at, and unlike C1 it is exactly computable at every one of the 25,074 tick points; its weakness is that it excludes CAKE and fees not yet collected, which arrive in five lumps rather than daily.",
+    "wins": 4,
+    "days": 10,
+    "percent": 40.0,
+    "perDay": [
+     {
+      "utcDay": "2026-08-28",
+      "firstBlock": 118536459,
+      "lastBlock": 118667698,
+      "tickPoints": 2312,
+      "bnbUsdtStart": 710.1468,
+      "bnbUsdtEnd": 691.2994,
+      "bnbMovePercent": -2.654,
+      "agentMoveAsMultipleOfHoldMove": 1.3071,
+      "portfolioReturnPercent": -2.26023,
+      "holdBasketReturnPercent": -1.72916,
+      "differencePercent": -0.53107,
+      "beatHolding": false,
+      "portfolioStartUsdt": 39.98619,
+      "portfolioEndUsdt": 39.08241
+     },
+     {
+      "utcDay": "2026-08-29",
+      "firstBlock": 118667804,
+      "lastBlock": 118857048,
+      "tickPoints": 986,
+      "bnbUsdtStart": 691.4377,
+      "bnbUsdtEnd": 692.4756,
+      "bnbMovePercent": 0.1501,
+      "agentMoveAsMultipleOfHoldMove": 0.4637,
+      "portfolioReturnPercent": 0.04492,
+      "holdBasketReturnPercent": 0.09688,
+      "differencePercent": -0.05196,
+      "beatHolding": false,
+      "portfolioStartUsdt": 39.084785,
+      "portfolioEndUsdt": 39.102343
+     },
+     {
+      "utcDay": "2026-08-30",
+      "firstBlock": 118861154,
+      "lastBlock": 119051693,
+      "tickPoints": 1761,
+      "bnbUsdtStart": 692.4064,
+      "bnbUsdtEnd": 685.106,
+      "bnbMovePercent": -1.0543,
+      "agentMoveAsMultipleOfHoldMove": 0.5028,
+      "portfolioReturnPercent": -0.34237,
+      "holdBasketReturnPercent": -0.68086,
+      "differencePercent": 0.33849,
+      "beatHolding": true,
+      "portfolioStartUsdt": 39.101187,
+      "portfolioEndUsdt": 38.967316
+     },
+     {
+      "utcDay": "2026-08-31",
+      "firstBlock": 119051699,
+      "lastBlock": 119243415,
+      "tickPoints": 2321,
+      "bnbUsdtStart": 685.0375,
+      "bnbUsdtEnd": 691.1612,
+      "bnbMovePercent": 0.8939,
+      "agentMoveAsMultipleOfHoldMove": 0.5091,
+      "portfolioReturnPercent": 0.29277,
+      "holdBasketReturnPercent": 0.57507,
+      "differencePercent": -0.28231,
+      "beatHolding": false,
+      "portfolioStartUsdt": 38.965947,
+      "portfolioEndUsdt": 39.080027
+     },
+     {
+      "utcDay": "2026-09-01",
+      "firstBlock": 119243968,
+      "lastBlock": 119435191,
+      "tickPoints": 1924,
+      "bnbUsdtStart": 691.2303,
+      "bnbUsdtEnd": 683.1905,
+      "bnbMovePercent": -1.1631,
+      "agentMoveAsMultipleOfHoldMove": 0.5214,
+      "portfolioReturnPercent": -0.39142,
+      "holdBasketReturnPercent": -0.75065,
+      "differencePercent": 0.35923,
+      "beatHolding": true,
+      "portfolioStartUsdt": 39.08122,
+      "portfolioEndUsdt": 38.92825
+     },
+     {
+      "utcDay": "2026-09-02",
+      "firstBlock": 119435646,
+      "lastBlock": 119627306,
+      "tickPoints": 2245,
+      "bnbUsdtStart": 683.3271,
+      "bnbUsdtEnd": 688.6776,
+      "bnbMovePercent": 0.783,
+      "agentMoveAsMultipleOfHoldMove": 0.5343,
+      "portfolioReturnPercent": 0.26889,
+      "holdBasketReturnPercent": 0.50327,
+      "differencePercent": -0.23438,
+      "beatHolding": false,
+      "portfolioStartUsdt": 38.931091,
+      "portfolioEndUsdt": 39.035772
+     },
+     {
+      "utcDay": "2026-09-03",
+      "firstBlock": 119627564,
+      "lastBlock": 119818481,
+      "tickPoints": 3587,
+      "bnbUsdtStart": 688.7465,
+      "bnbUsdtEnd": 725.0718,
+      "bnbMovePercent": 5.2741,
+      "agentMoveAsMultipleOfHoldMove": 0.4536,
+      "portfolioReturnPercent": 1.54192,
+      "holdBasketReturnPercent": 3.39943,
+      "differencePercent": -1.85751,
+      "beatHolding": false,
+      "portfolioStartUsdt": 39.037036,
+      "portfolioEndUsdt": 39.638956
+     },
+     {
+      "utcDay": "2026-09-04",
+      "firstBlock": 119819250,
+      "lastBlock": 120010603,
+      "tickPoints": 3333,
+      "bnbUsdtStart": 725.1443,
+      "bnbUsdtEnd": 721.1672,
+      "bnbMovePercent": -0.5485,
+      "agentMoveAsMultipleOfHoldMove": 0.5558,
+      "portfolioReturnPercent": -0.20004,
+      "holdBasketReturnPercent": -0.35993,
+      "differencePercent": 0.15989,
+      "beatHolding": true,
+      "portfolioStartUsdt": 39.640344,
+      "portfolioEndUsdt": 39.561047
+     },
+     {
+      "utcDay": "2026-09-05",
+      "firstBlock": 120011495,
+      "lastBlock": 120202722,
+      "tickPoints": 5349,
+      "bnbUsdtStart": 721.3114,
+      "bnbUsdtEnd": 766.6021,
+      "bnbMovePercent": 6.2789,
+      "agentMoveAsMultipleOfHoldMove": 0.4558,
+      "portfolioReturnPercent": 1.87493,
+      "holdBasketReturnPercent": 4.11309,
+      "differencePercent": -2.23816,
+      "beatHolding": false,
+      "portfolioStartUsdt": 39.564035,
+      "portfolioEndUsdt": 40.305834
+     },
+     {
+      "utcDay": "2026-09-06",
+      "firstBlock": 120202844,
+      "lastBlock": 120279139,
+      "tickPoints": 1256,
+      "bnbUsdtStart": 766.6788,
+      "bnbUsdtEnd": 758.5953,
+      "bnbMovePercent": -1.0543,
+      "agentMoveAsMultipleOfHoldMove": 0.5839,
+      "portfolioReturnPercent": -0.4117,
+      "holdBasketReturnPercent": -0.70505,
+      "differencePercent": 0.29335,
+      "beatHolding": true,
+      "portfolioStartUsdt": 40.307294,
+      "portfolioEndUsdt": 40.141347
+     }
+    ],
+    "reading": "Four of ten. BNB fell on five of the ten days and the agent beat the baseline on four of them; it lost on every day BNB rose. The mechanism is visible in the per-day rows: from 2026-08-29 onward the agent moved 0.45x to 0.58x as far as the baseline each day, because after its first re-range it carried about 34% BNB while the entry basket carried 65%. Half the exposure wins on down days and loses on up days, so this count mostly reports the direction of BNB rather than any judgement by the agent. The exception is instructive: 2026-08-28 was a down day on which the agent still held the same 65% BNB mix as the baseline, and it lost anyway, moving 1.31x as far down, because a concentrated liquidity position buys the falling asset and so loses against holding in both directions."
+   }
+  }
+ },
+ "riskTaken": {
+  "positionSize": {
+   "definition": "USD value of the tokens deposited at each mint, valued with Chainlink at that mint block.",
+   "capitalFunded": {
+    "usdt": "40.000000000000000000",
+    "usdtFundingBlock": 118534816,
+    "bnb": "0.050100000000000000",
+    "bnbFundingBlocks": [
+     118420212,
+     118534779
+    ],
+    "funder": "0x6173b50d11ed647812f16abd8b8152434a014646",
+    "note": "The 0.0501 BNB was a gas float, never deployed into a position: the wallet's native BNB only ever fell, by exactly the gas it burned."
+   },
+   "atEntry": {
+    "block": 118536451,
+    "iso": "2026-08-28T07:34:41.000Z",
+    "usd": 39.958556,
+    "composition": "13.899190658435500627 USDT + 0.036685558091333034 WBNB (65.2% BNB by value)"
+   },
+   "perPosition": [
+    {
+     "tokenId": "7268711",
+     "block": 118536451,
+     "iso": "2026-08-28T07:34:41.000Z",
+     "usdtDeposited": 13.89919066,
+     "wbnbDeposited": 0.036685558091,
+     "entryNotionalUsd": 39.958556,
+     "wbnbShareOfNotionalPercent": 65.21,
+     "bnbUsdAtMint": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132040370",
+      "answerRaw": "71030987168",
+      "decimals": 8,
+      "price": 710.30987168,
+      "updatedAt": 1787902459,
+      "updatedAtIso": "2026-08-28T07:34:19Z",
+      "stalenessSecondsAtBlock": 22
+     }
+    },
+    {
+     "tokenId": "7272152",
+     "block": 118625047,
+     "iso": "2026-08-28T18:39:19.000Z",
+     "usdtDeposited": 25.58045301,
+     "wbnbDeposited": 0.019517406245,
+     "entryNotionalUsd": 38.958173,
+     "wbnbShareOfNotionalPercent": 34.36,
+     "bnbUsdAtMint": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132041586",
+      "answerRaw": "68576505690",
+      "decimals": 8,
+      "price": 685.7650569,
+      "updatedAt": 1787942340,
+      "updatedAtIso": "2026-08-28T18:39:00Z",
+      "stalenessSecondsAtBlock": 19
+     }
+    },
+    {
+     "tokenId": "7316556",
+     "block": 119714506,
+     "iso": "2026-09-03T10:56:40.000Z",
+     "usdtDeposited": 25.77565186,
+     "wbnbDeposited": 0.019191265957,
+     "entryNotionalUsd": 39.293144,
+     "wbnbShareOfNotionalPercent": 34.43,
+     "bnbUsdAtMint": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132056458",
+      "answerRaw": "70498770000",
+      "decimals": 8,
+      "price": 704.9877,
+      "updatedAt": 1788432991,
+      "updatedAtIso": "2026-09-03T10:56:31Z",
+      "stalenessSecondsAtBlock": 9
+     }
+    },
+    {
+     "tokenId": "7319374",
+     "block": 119755292,
+     "iso": "2026-09-03T16:02:41.000Z",
+     "usdtDeposited": 25.91103288,
+     "wbnbDeposited": 0.018865061651,
+     "entryNotionalUsd": 39.605351,
+     "wbnbShareOfNotionalPercent": 34.57,
+     "bnbUsdAtMint": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132057025",
+      "answerRaw": "72572353849",
+      "decimals": 8,
+      "price": 725.72353849,
+      "updatedAt": 1788451350,
+      "updatedAtIso": "2026-09-03T16:02:30Z",
+      "stalenessSecondsAtBlock": 11
+     }
+    },
+    {
+     "tokenId": "7336818",
+     "block": 120078147,
+     "iso": "2026-09-05T08:25:01.000Z",
+     "usdtDeposited": 26.27884717,
+     "wbnbDeposited": 0.018328390472,
+     "entryNotionalUsd": 40.003445,
+     "wbnbShareOfNotionalPercent": 34.3,
+     "bnbUsdAtMint": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132061469",
+      "answerRaw": "74864407029",
+      "decimals": 8,
+      "price": 748.64407029,
+      "updatedAt": 1788596700,
+      "updatedAtIso": "2026-09-05T08:25:00Z",
+      "stalenessSecondsAtBlock": 1
+     }
+    },
+    {
+     "tokenId": "7340903",
+     "block": 120130230,
+     "iso": "2026-09-05T14:55:43.000Z",
+     "usdtDeposited": 26.44340076,
+     "wbnbDeposited": 0.018054387902,
+     "entryNotionalUsd": 40.340976,
+     "wbnbShareOfNotionalPercent": 34.45,
+     "bnbUsdAtMint": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132062221",
+      "answerRaw": "76965940000",
+      "decimals": 8,
+      "price": 769.6594,
+      "updatedAt": 1788620121,
+      "updatedAtIso": "2026-09-05T14:55:21Z",
+      "stalenessSecondsAtBlock": 22
+     }
+    }
+   ],
+   "largestAtEntry": {
+    "tokenId": "7340903",
+    "block": 120130230,
+    "usd": 40.340976
+   },
+   "largestMarkToMarket": {
+    "usd": 40.535564,
+    "block": 120148153,
+    "iso": "2026-09-05T17:10:12Z",
+    "tick": -66600,
+    "note": "peak mark-to-market of the whole portfolio (open position at the pool tick plus idle wallet), the largest sum ever exposed"
+   },
+   "smallestMarkToMarket": {
+    "usd": 38.728684,
+    "block": 119393722,
+    "iso": "2026-09-01T18:46:05Z",
+    "tick": -65150
+   },
+   "timeWeightedAverageUsd": 39.490415
+  },
+  "concentration": {
+   "definition": "How narrow the band was, in ticks and as a percentage of price. A narrower band earns more fee income per dollar but is breached sooner and must be re-ranged more often.",
+   "perPosition": [
+    {
+     "tokenId": "7268711",
+     "widthTicks": 1910,
+     "tickSpacing": 10,
+     "bnbPriceBandUsdt": [
+      664.9255,
+      804.8577
+     ],
+     "upperOverLowerPriceRatio": 1.210448,
+     "upsidePercentFromGeometricCentre": 10.02,
+     "downsidePercentFromGeometricCentre": 9.108,
+     "capitalEfficiencyVsFullRangeMultiple": 21.45,
+     "spotAtMintAsFractionOfTickBandFromLowerBound": 0.655,
+     "wbnbShareOfDepositPercent": 65.21
+    },
+    {
+     "tokenId": "7272152",
+     "widthTicks": 1900,
+     "tickSpacing": 10,
+     "bnbPriceBandUsdt": [
+      605.2731,
+      731.9193
+     ],
+     "upperOverLowerPriceRatio": 1.209238,
+     "upsidePercentFromGeometricCentre": 9.965,
+     "downsidePercentFromGeometricCentre": 9.062,
+     "capitalEfficiencyVsFullRangeMultiple": 21.56,
+     "spotAtMintAsFractionOfTickBandFromLowerBound": 0.34,
+     "wbnbShareOfDepositPercent": 34.36
+    },
+    {
+     "tokenId": "7316556",
+     "widthTicks": 1900,
+     "tickSpacing": 10,
+     "bnbPriceBandUsdt": [
+      622.4593,
+      752.7016
+     ],
+     "upperOverLowerPriceRatio": 1.209238,
+     "upsidePercentFromGeometricCentre": 9.965,
+     "downsidePercentFromGeometricCentre": 9.062,
+     "capitalEfficiencyVsFullRangeMultiple": 21.56,
+     "spotAtMintAsFractionOfTickBandFromLowerBound": 0.3405,
+     "wbnbShareOfDepositPercent": 34.43
+    },
+    {
+     "tokenId": "7319374",
+     "widthTicks": 1910,
+     "tickSpacing": 10,
+     "bnbPriceBandUsdt": [
+      640.1336,
+      774.8484
+     ],
+     "upperOverLowerPriceRatio": 1.210448,
+     "upsidePercentFromGeometricCentre": 10.02,
+     "downsidePercentFromGeometricCentre": 9.108,
+     "capitalEfficiencyVsFullRangeMultiple": 21.45,
+     "spotAtMintAsFractionOfTickBandFromLowerBound": 0.3419,
+     "wbnbShareOfDepositPercent": 34.57
+    },
+    {
+     "tokenId": "7336818",
+     "widthTicks": 1910,
+     "tickSpacing": 10,
+     "bnbPriceBandUsdt": [
+      659.6276,
+      798.4448
+     ],
+     "upperOverLowerPriceRatio": 1.210448,
+     "upsidePercentFromGeometricCentre": 10.02,
+     "downsidePercentFromGeometricCentre": 9.108,
+     "capitalEfficiencyVsFullRangeMultiple": 21.45,
+     "spotAtMintAsFractionOfTickBandFromLowerBound": 0.3393,
+     "wbnbShareOfDepositPercent": 34.3
+    },
+    {
+     "tokenId": "7340903",
+     "widthTicks": 1910,
+     "tickSpacing": 10,
+     "bnbPriceBandUsdt": [
+      678.3572,
+      821.1161
+     ],
+     "upperOverLowerPriceRatio": 1.210448,
+     "upsidePercentFromGeometricCentre": 10.02,
+     "downsidePercentFromGeometricCentre": 9.108,
+     "capitalEfficiencyVsFullRangeMultiple": 21.45,
+     "spotAtMintAsFractionOfTickBandFromLowerBound": 0.3408,
+     "wbnbShareOfDepositPercent": 34.45
+    }
+   ],
+   "summary": "Every band was 1900 or 1910 ticks wide (190 or 191 tick spacings of 10). That is a factor of 1.2104 from floor to ceiling in BNB price, i.e. about +10.0% / -9.1% around the geometric centre, and roughly 21.5x the capital efficiency of a full-range position. The agent placed spot at 34% of the tick band on every re-range (positions 2-6: 0.340, 0.341, 0.342, 0.339, 0.341) and at 65.5% on the initial mint, so from the first re-range onward it deliberately left about twice as much room for BNB to fall as to rise."
+  },
+  "leverage": {
+   "definition": "Borrowed capital, margin, or any position whose notional exceeds the capital posted.",
+   "value": "none",
+   "evidence": {
+    "distinctContractsCalled": 5,
+    "contractsCalled": [
+     "0x55d398326f99059ff775485246999027b3197955 (USDT, approve x10)",
+     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c (WBNB, approve x8)",
+     "0x13f4ea83d0bd40e75c8222255bc855a974568dd4 (PancakeSwap SmartRouter, exactInputSingle x8)",
+     "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364 (NonfungiblePositionManager: mint x6, safeTransferFrom x6, multicall x5)",
+     "0x556b9306565093c855aea9ae92a594704c2cd59e (MasterChefV3, withdraw x5)"
+    ],
+    "note": "No lending market, no margin venue, no perpetual exchange, no flash loan and no bridge appears anywhere in the 48 transactions. The wallet ledger reconstructed from events never goes negative in either token, and total deployed value never exceeded the 40 USDT funded plus accrued income. Maximum notional ever at risk was $40.54."
+   }
+  },
+  "maxDrawdown": {
+   "definition": "Largest peak-to-trough fall in the USD mark-to-market value of the whole deployed portfolio (open position valued at the pool tick, plus idle wallet USDT and WBNB, plus all fees already collected), evaluated at all 25,074 tick-change points in the window. Excludes the native BNB gas float, CAKE, and fees not yet collected.",
+   "percent": 3.1536,
+   "usd": 1.261105,
+   "peak": {
+    "block": 118536459,
+    "iso": "2026-08-28T07:34:44Z",
+    "tick": -65658,
+    "usd": 39.989789,
+    "bnbUsd": 710.2107
+   },
+   "trough": {
+    "block": 119393722,
+    "iso": "2026-09-01T18:46:05Z",
+    "tick": -65150,
+    "usd": 38.728684,
+    "bnbUsd": 674.7446
+   },
+   "denominatedInUsdt": {
+    "percent": 3.1119,
+    "usdt": 1.244334,
+    "note": "the same drawdown measured in USDT rather than USD, i.e. with no oracle at all; the two differ only because USDT/USD moved 0.062% at most across the window"
+   },
+   "comparisonHoldingTheEntryBasket": {
+    "percent": 3.2686,
+    "usd": 1.307087,
+    "peakBlock": 118536459,
+    "troughBlock": 119393722
+   },
+   "comparisonBnbItself": {
+    "percent": 4.9938,
+    "peakBlock": 118536459,
+    "peakBnbUsd": 710.21,
+    "troughBlock": 119393722,
+    "troughBnbUsd": 674.74
+   },
+   "reading": "The position drew down 3.15% while BNB itself drew down 4.99% and holding the entry basket drew down 3.27%. The concentrated band damped the drawdown slightly, as an LP does."
+  },
+  "timeOutOfRange": {
+   "definition": "Time the pool tick spent outside the active band, during which the position earns no swap fee and no CAKE and is fully converted into one of the two assets. This is the risk that actually bites a range keeper.",
+   "seconds": 0,
+   "percentOfPositionLife": 0.0,
+   "rangeExits": 0,
+   "undeployedHandoffSeconds": 185,
+   "note": "Zero, verified two independent ways in the source reconstruction (integration of the tick series, and observed tick extremes against each band). The 185 s of handoff gaps are the only time capital was not in a live band."
+  },
+  "gasVersusIncome": {
+   "definition": "BNB burned on transactions, priced with Chainlink at each transaction's own block, against the fee and CAKE income it produced.",
+   "transactions": 48,
+   "gasUsed": 10153487,
+   "gasBnb": 0.00050767435,
+   "gasUsd": 0.368063,
+   "gasPricePaidGwei": 0.05,
+   "swapFeesUsd": 0.211725,
+   "cakeUsd": 0.060218,
+   "incomeUsd": 0.271942,
+   "gasAsMultipleOfSwapFees": 1.7384,
+   "gasAsMultipleOfSwapFeesPlusCake": 1.3535,
+   "gasAsPercentOfEntryNotional": 0.9211,
+   "gasPerDeploymentCycleUsd": {
+    "mean": 0.061344,
+    "min": 0.043323,
+    "max": 0.076047,
+    "note": "six deployment cycles: the initial mint plus five re-ranges. Each cycle is 6 to 12 transactions (approve, swap, mint, stake, unstake, close), so a re-range costs a fixed dollar amount regardless of position size."
+   },
+   "breakEvenNotionalUsd": 53.45,
+   "reading": "Gas cost 1.35x the fee-plus-CAKE income. Gas is a fixed dollar cost per transaction while income scales with notional, so on this activity pattern income would only have covered gas above about $53.0 of notional. That is a size problem, not a strategy problem, and it is the single most important caveat on this record."
+  },
+  "smartContractExposure": {
+   "definition": "Which contracts actually held or could move the funds, and how much.",
+   "holders": [
+    {
+     "role": "held the deployed tokens for the entire window",
+     "contract": "0x36696169C63e42cd08ce11f5deeBbCeBae652050",
+     "what": "PancakeSwap V3 WBNB/USDT 0.05% pool",
+     "maxValueHeldUsd": 40.54,
+     "exposureSeconds": 784510,
+     "verifiedAtBlock": 120280012
+    },
+    {
+     "role": "held the position NFT (custody of the liquidity) whenever staked",
+     "contract": "0x556B9306565093C855AEA9AE92A594704c2Cd59e",
+     "what": "PancakeSwap MasterChef V3, pid 5",
+     "maxValueHeldUsd": 40.54,
+     "exposureSeconds": 784365,
+     "verifiedAtBlock": 120280012,
+     "note": "owner of NFT 7340903 at the window end and at re-read block 120282847"
+    },
+    {
+     "role": "the only contract able to add or remove the liquidity",
+     "contract": "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
+     "what": "PancakeSwap NonfungiblePositionManager",
+     "maxValueHeldUsd": 40.54,
+     "verifiedAtBlock": 120280012
+    },
+    {
+     "role": "transient custody during each rebalance swap",
+     "contract": "0x13f4EA83D0bd40E75C8222255bc855a974568Dd4",
+     "what": "PancakeSwap SmartRouter",
+     "maxValueHeldUsd": 26.07,
+     "occurrences": 8,
+     "note": "largest single swap was 26.0659 USDT, the opening conversion at block 118536432; each exposure lasted one transaction"
+    },
+    {
+     "role": "token contracts holding the balances themselves",
+     "contract": "0x55d398326f99059fF775485246999027B3197955 / 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c / 0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+     "what": "USDT, WBNB, CAKE",
+     "maxValueHeldUsd": 40.54
+    }
+   ],
+   "standingApprovals": {
+    "count": 18,
+    "note": "10 USDT approvals and 8 WBNB approvals were issued to the SmartRouter and the NonfungiblePositionManager over the window. These are the residual standing risk after the position is closed; their sizes were not read in this pass and are not asserted here."
+   },
+   "operatorKeyRisk": "Every position is owned by one externally owned account, 0x1614f31E3DC2FC334C4C9742DE233265591f7674. There is no multisig, no timelock and no withdrawal guard: the private key is a single point of failure for the whole balance."
+  },
+  "theHonestOne": {
+   "statement": "This is a small real-money position on a short record. The largest sum ever at risk was $40.54, the whole record is 9.08 days, and it is five completed rebalance cycles. The operational execution is genuinely clean and the economics over this window are negative.",
+   "peakCapitalAtRiskUsd": 40.54,
+   "windowDays": 9.08,
+   "completedCycles": 5,
+   "positions": 6,
+   "transactions": 48,
+   "failedTransactions": 0
+  }
+ },
+ "return": {
+  "priceMethod": "Every amount is converted at the rate in force at the block on which that amount was received or spent, never at a single closing rate. See meta.priceSources.",
+  "swapFees": {
+   "definition": "Trading fees credited to the position by the pool, separated from returned principal by subtracting the DecreaseLiquidity amount from the Collect amount in the same transaction. Collected only at close, five times.",
+   "token0": {
+    "symbol": "USDT",
+    "wei": "107709785861519102",
+    "amount": 0.10770978586151911
+   },
+   "token1": {
+    "symbol": "WBNB",
+    "wei": "143868974023043",
+    "amount": 0.000143868974023043
+   },
+   "usd": 0.211725,
+   "perCollect": [
+    {
+     "tokenId": "7268711",
+     "block": 118625020,
+     "iso": "2026-08-28T18:39:07.000Z",
+     "tx": "0xb51d84cbf336d6b17ea0f073b4c9acd90ce102d851f684ae8bc1a9705d3c99a6",
+     "feeToken0UsdtWei": "7672780652038375",
+     "feeToken0Usdt": 0.007672780652038375,
+     "feeToken1WbnbWei": "14430334026071",
+     "feeToken1Wbnb": 1.4430334026071e-05,
+     "usdtUsdAtBlock": {
+      "feed": "USDT/USD",
+      "roundId": "73786976294838207237",
+      "answerRaw": "99974062",
+      "decimals": 8,
+      "price": 0.99974062,
+      "updatedAt": 1787942130,
+      "updatedAtIso": "2026-08-28T18:35:30Z",
+      "stalenessSecondsAtBlock": 217
+     },
+     "bnbUsdAtBlock": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132041586",
+      "answerRaw": "68576505690",
+      "decimals": 8,
+      "price": 685.7650569,
+      "updatedAt": 1787942340,
+      "updatedAtIso": "2026-08-28T18:39:00Z",
+      "stalenessSecondsAtBlock": 7
+     },
+     "feeUsd": 0.01756661
+    },
+    {
+     "tokenId": "7272152",
+     "block": 119714487,
+     "iso": "2026-09-03T10:56:32.000Z",
+     "tx": "0xe9e537c4a8fa718791d066f39a8b9634373ace4828f6724d7cad528fa3b776a8",
+     "feeToken0UsdtWei": "48138379215795319",
+     "feeToken0Usdt": 0.04813837921579532,
+     "feeToken1WbnbWei": "67024106553417",
+     "feeToken1Wbnb": 6.7024106553417e-05,
+     "usdtUsdAtBlock": {
+      "feed": "USDT/USD",
+      "roundId": "73786976294838207779",
+      "answerRaw": "99953000",
+      "decimals": 8,
+      "price": 0.99953,
+      "updatedAt": 1788432802,
+      "updatedAtIso": "2026-09-03T10:53:22Z",
+      "stalenessSecondsAtBlock": 190
+     },
+     "bnbUsdAtBlock": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132056458",
+      "answerRaw": "70498770000",
+      "decimals": 8,
+      "price": 704.9877,
+      "updatedAt": 1788432991,
+      "updatedAtIso": "2026-09-03T10:56:31Z",
+      "stalenessSecondsAtBlock": 1
+     },
+     "feeUsd": 0.09536692
+    },
+    {
+     "tokenId": "7316556",
+     "block": 119754973,
+     "iso": "2026-09-03T16:00:17.000Z",
+     "tx": "0xf1e4b4003e34a76c8d7562a03f4463bf8125617b3acbd86f54db527aaf615697",
+     "feeToken0UsdtWei": "8265325858942411",
+     "feeToken0Usdt": 0.00826532585894241,
+     "feeToken1WbnbWei": "8513744824893",
+     "feeToken1Wbnb": 8.513744824893e-06,
+     "usdtUsdAtBlock": {
+      "feed": "USDT/USD",
+      "roundId": "73786976294838207799",
+      "answerRaw": "100013503",
+      "decimals": 8,
+      "price": 1.00013503,
+      "updatedAt": 1788450903,
+      "updatedAtIso": "2026-09-03T15:55:03Z",
+      "stalenessSecondsAtBlock": 314
+     },
+     "bnbUsdAtBlock": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132057021",
+      "answerRaw": "72746450000",
+      "decimals": 8,
+      "price": 727.4645,
+      "updatedAt": 1788451217,
+      "updatedAtIso": "2026-09-03T16:00:17Z",
+      "stalenessSecondsAtBlock": 0
+     },
+     "feeUsd": 0.01445989
+    },
+    {
+     "tokenId": "7319374",
+     "block": 120078128,
+     "iso": "2026-09-05T08:24:52.000Z",
+     "tx": "0xc9e86a7e2839f84ee3031608be79f011402fed9bd0bafd5818dc125e2a56e58c",
+     "feeToken0UsdtWei": "28537131682455144",
+     "feeToken0Usdt": 0.028537131682455145,
+     "feeToken1WbnbWei": "36546802933276",
+     "feeToken1Wbnb": 3.6546802933276e-05,
+     "usdtUsdAtBlock": {
+      "feed": "USDT/USD",
+      "roundId": "73786976294838207959",
+      "answerRaw": "100012015",
+      "decimals": 8,
+      "price": 1.00012015,
+      "updatedAt": 1788595858,
+      "updatedAtIso": "2026-09-05T08:10:58Z",
+      "stalenessSecondsAtBlock": 834
+     },
+     "bnbUsdAtBlock": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132061468",
+      "answerRaw": "74799100000",
+      "decimals": 8,
+      "price": 747.991,
+      "updatedAt": 1788596667,
+      "updatedAtIso": "2026-09-05T08:24:27Z",
+      "stalenessSecondsAtBlock": 25
+     },
+     "feeUsd": 0.05587724
+    },
+    {
+     "tokenId": "7336818",
+     "block": 120130205,
+     "iso": "2026-09-05T14:55:31.000Z",
+     "tx": "0x246b05fba2d0876badb571a02ecb66b3317da0c8d493f0f3a300de37be0f2c5b",
+     "feeToken0UsdtWei": "15096168452287853",
+     "feeToken0Usdt": 0.015096168452287853,
+     "feeToken1WbnbWei": "17353985685386",
+     "feeToken1Wbnb": 1.7353985685386e-05,
+     "usdtUsdAtBlock": {
+      "feed": "USDT/USD",
+      "roundId": "73786976294838207985",
+      "answerRaw": "100006980",
+      "decimals": 8,
+      "price": 1.0000698,
+      "updatedAt": 1788619440,
+      "updatedAtIso": "2026-09-05T14:44:00Z",
+      "stalenessSecondsAtBlock": 691
+     },
+     "bnbUsdAtBlock": {
+      "feed": "BNB/USD",
+      "roundId": "55340232221132062221",
+      "answerRaw": "76965940000",
+      "decimals": 8,
+      "price": 769.6594,
+      "updatedAt": 1788620121,
+      "updatedAtIso": "2026-09-05T14:55:21Z",
+      "stalenessSecondsAtBlock": 10
+     },
+     "feeUsd": 0.02845388
+    }
+   ],
+   "uncollectedOnOpenPosition": {
+    "tokenId": "7340903",
+    "readAtBlock": 120282847,
+    "readAtIso": "2026-09-06T10:00:45Z",
+    "method": "eth_call simulation of NonfungiblePositionManager.collect((7340903, MasterChefV3, 2^128-1, 2^128-1)) with from = MasterChefV3, the NFT owner. Read-only: eth_call changes nothing. Three independent RPC endpoints returned identical values to the wei; the same call from a non-owner reverts with \"Not approved\", which shows the simulation is honouring the real authorisation path.",
+    "token0UsdtWei": "18674590185015172",
+    "token0Usdt": 0.01867459018501517,
+    "token1WbnbWei": "25737897602017",
+    "token1Wbnb": 2.5737897602017e-05,
+    "usd": 0.038205,
+    "note": "read 3708 blocks past the window end, so it is reported separately and is NOT inside the window totals"
+   }
+  },
+  "cake": {
+   "definition": "CAKE emissions from MasterChef V3 pid 5. Every harvest happened inside the unstake transaction; there is not a single standalone harvest call.",
+   "harvestedWei": "30144731526194657",
+   "harvested": 0.03014473152619466,
+   "usd": 0.060218,
+   "perHarvest": [
+    {
+     "tokenId": "7268711",
+     "block": 118625015,
+     "iso": "2026-08-28T18:39:05.000Z",
+     "tx": "0xc6e5faf3a91c6c538a9322e5d22b80cb44cfcb59912b048eb2a1c1d66b4d2b66",
+     "cakeWei": "1437810659941809",
+     "cake": 0.001437810659941809,
+     "cakeUsdAtBlock": {
+      "feed": "CAKE/USD",
+      "roundId": "55340232221129671655",
+      "answerRaw": "169391620",
+      "decimals": 8,
+      "price": 1.6939162,
+      "updatedAt": 1787942331,
+      "updatedAtIso": "2026-08-28T18:38:51Z",
+      "stalenessSecondsAtBlock": 14
+     },
+     "usd": 0.00243553
+    },
+    {
+     "tokenId": "7272152",
+     "block": 119714482,
+     "iso": "2026-09-03T10:56:30.000Z",
+     "tx": "0xd4935595bc9f747fe4937abc6f3c0376b54b8999aa1f2757c99ff34a78b185de",
+     "cakeWei": "20058451925164000",
+     "cake": 0.020058451925164,
+     "cakeUsdAtBlock": {
+      "feed": "CAKE/USD",
+      "roundId": "55340232221129679219",
+      "answerRaw": "198349295",
+      "decimals": 8,
+      "price": 1.98349295,
+      "updatedAt": 1788432982,
+      "updatedAtIso": "2026-09-03T10:56:22Z",
+      "stalenessSecondsAtBlock": 8
+     },
+     "usd": 0.0397858
+    },
+    {
+     "tokenId": "7316556",
+     "block": 119754831,
+     "iso": "2026-09-03T15:59:13.000Z",
+     "tx": "0x797bb4f7c8b11dd41c8c082375753a5ef77b0fbd4feba7d09ca80f53b61445dd",
+     "cakeWei": "1354899103583558",
+     "cake": 0.001354899103583558,
+     "cakeUsdAtBlock": {
+      "feed": "CAKE/USD",
+      "roundId": "55340232221129679508",
+      "answerRaw": "199992618",
+      "decimals": 8,
+      "price": 1.99992618,
+      "updatedAt": 1788451117,
+      "updatedAtIso": "2026-09-03T15:58:37Z",
+      "stalenessSecondsAtBlock": 36
+     },
+     "usd": 0.0027097
+    },
+    {
+     "tokenId": "7319374",
+     "block": 120077987,
+     "iso": "2026-09-05T08:23:49.000Z",
+     "tx": "0x92213a3fb55b95d4b0e6c18114dea08c41e2b9e7596f2a30a35ad0a82e3218d6",
+     "cakeWei": "5970458159656372",
+     "cake": 0.005970458159656372,
+     "cakeUsdAtBlock": {
+      "feed": "CAKE/USD",
+      "roundId": "55340232221129681783",
+      "answerRaw": "206533960",
+      "decimals": 8,
+      "price": 2.0653396,
+      "updatedAt": 1788596587,
+      "updatedAtIso": "2026-09-05T08:23:07Z",
+      "stalenessSecondsAtBlock": 42
+     },
+     "usd": 0.01233102
+    },
+    {
+     "tokenId": "7336818",
+     "block": 120130200,
+     "iso": "2026-09-05T14:55:29.000Z",
+     "tx": "0x2a128d0f7643afd6c43fdd4657d45402a54afbd5dfb6fd0d01acc437cc3e559a",
+     "cakeWei": "1323111677848918",
+     "cake": 0.001323111677848918,
+     "cakeUsdAtBlock": {
+      "feed": "CAKE/USD",
+      "roundId": "55340232221129682191",
+      "answerRaw": "223383770",
+      "decimals": 8,
+      "price": 2.2338377,
+      "updatedAt": 1788620066,
+      "updatedAtIso": "2026-09-05T14:54:26Z",
+      "stalenessSecondsAtBlock": 63
+     },
+     "usd": 0.00295562
+    }
+   ],
+   "stillPending": {
+    "tokenId": "7340903",
+    "weiAtWindowEnd": "4645509528749395",
+    "weiAtReRead": "4736388854057463",
+    "readAtBlock": 120282847,
+    "readAtIso": "2026-09-06T10:00:45Z",
+    "amountAtReRead": 0.004736388854057463,
+    "usdAtReRead": 0.010403,
+    "method": "MasterChefV3.pendingCake(7340903) via eth_call"
+   },
+   "note": "Total harvested equals the operator wallet CAKE balance at the head of the reconstruction to the wei, so no CAKE has ever been sold and none of this income has been realised in USDT."
+  },
+  "gas": {
+   "definition": "BNB burned by the operator across all 48 transactions, each priced at its own block.",
+   "transactions": 48,
+   "gasUsed": 10153487,
+   "wei": "507674350000000",
+   "bnb": 0.00050767435,
+   "usd": 0.368063,
+   "reconciliation": "equals the operator BNB balance delta between block 118536425 and block 120279235 to the wei",
+   "perTransaction": [
+    {
+     "nonce": 0,
+     "block": 118536426,
+     "iso": "2026-08-28T07:34:30.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 46218,
+     "gasCostWei": "2310900000000",
+     "gasCostBnb": 2.3109e-06,
+     "bnbUsdAtBlock": 1787902470,
+     "gasUsd": 0.00164146
+    },
+    {
+     "nonce": 1,
+     "block": 118536432,
+     "iso": "2026-08-28T07:34:32.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 170904,
+     "gasCostWei": "8545200000000",
+     "gasCostBnb": 8.5452e-06,
+     "bnbUsdAtBlock": 1787902472,
+     "gasUsd": 0.00606974
+    },
+    {
+     "nonce": 2,
+     "block": 118536438,
+     "iso": "2026-08-28T07:34:35.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 46218,
+     "gasCostWei": "2310900000000",
+     "gasCostBnb": 2.3109e-06,
+     "bnbUsdAtBlock": 1787902475,
+     "gasUsd": 0.00164146
+    },
+    {
+     "nonce": 3,
+     "block": 118536445,
+     "iso": "2026-08-28T07:34:38.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 46064,
+     "gasCostWei": "2303200000000",
+     "gasCostBnb": 2.3032e-06,
+     "bnbUsdAtBlock": 1787902478,
+     "gasUsd": 0.00163599
+    },
+    {
+     "nonce": 4,
+     "block": 118536451,
+     "iso": "2026-08-28T07:34:41.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x88316456",
+     "gasUsed": 440703,
+     "gasCostWei": "22035150000000",
+     "gasCostBnb": 2.203515e-05,
+     "bnbUsdAtBlock": 1787902481,
+     "gasUsd": 0.01565178
+    },
+    {
+     "nonce": 5,
+     "block": 118536458,
+     "iso": "2026-08-28T07:34:44.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x42842e0e",
+     "gasUsed": 505948,
+     "gasCostWei": "25297400000000",
+     "gasCostBnb": 2.52974e-05,
+     "bnbUsdAtBlock": 1787902484,
+     "gasUsd": 0.01796899
+    },
+    {
+     "nonce": 6,
+     "block": 118625015,
+     "iso": "2026-08-28T18:39:05.000Z",
+     "to": "0x556b9306565093c855aea9ae92a594704c2cd59e",
+     "selector": "0x00f714ce",
+     "gasUsed": 302848,
+     "gasCostWei": "15142400000000",
+     "gasCostBnb": 1.51424e-05,
+     "bnbUsdAtBlock": 1787942345,
+     "gasUsd": 0.01038413
+    },
+    {
+     "nonce": 7,
+     "block": 118625020,
+     "iso": "2026-08-28T18:39:07.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0xac9650d8",
+     "gasUsed": 249743,
+     "gasCostWei": "12487150000000",
+     "gasCostBnb": 1.248715e-05,
+     "bnbUsdAtBlock": 1787942347,
+     "gasUsd": 0.00856325
+    },
+    {
+     "nonce": 8,
+     "block": 118625028,
+     "iso": "2026-08-28T18:39:11.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 46064,
+     "gasCostWei": "2303200000000",
+     "gasCostBnb": 2.3032e-06,
+     "bnbUsdAtBlock": 1787942351,
+     "gasUsd": 0.00157945
+    },
+    {
+     "nonce": 9,
+     "block": 118625034,
+     "iso": "2026-08-28T18:39:13.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 151589,
+     "gasCostWei": "7579450000000",
+     "gasCostBnb": 7.57945e-06,
+     "bnbUsdAtBlock": 1787942353,
+     "gasUsd": 0.00519772
+    },
+    {
+     "nonce": 10,
+     "block": 118625039,
+     "iso": "2026-08-28T18:39:16.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29130,
+     "gasCostWei": "1456500000000",
+     "gasCostBnb": 1.4565e-06,
+     "bnbUsdAtBlock": 1787942356,
+     "gasUsd": 0.00099882
+    },
+    {
+     "nonce": 11,
+     "block": 118625043,
+     "iso": "2026-08-28T18:39:17.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 28964,
+     "gasCostWei": "1448200000000",
+     "gasCostBnb": 1.4482e-06,
+     "bnbUsdAtBlock": 1787942357,
+     "gasUsd": 0.00099312
+    },
+    {
+     "nonce": 12,
+     "block": 118625047,
+     "iso": "2026-08-28T18:39:19.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x88316456",
+     "gasUsed": 440627,
+     "gasCostWei": "22031350000000",
+     "gasCostBnb": 2.203135e-05,
+     "bnbUsdAtBlock": 1787942359,
+     "gasUsd": 0.01510833
+    },
+    {
+     "nonce": 13,
+     "block": 118625052,
+     "iso": "2026-08-28T18:39:21.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x42842e0e",
+     "gasUsed": 468371,
+     "gasCostWei": "23418550000000",
+     "gasCostBnb": 2.341855e-05,
+     "bnbUsdAtBlock": 1787942361,
+     "gasUsd": 0.01605962
+    },
+    {
+     "nonce": 14,
+     "block": 119714482,
+     "iso": "2026-09-03T10:56:30.000Z",
+     "to": "0x556b9306565093c855aea9ae92a594704c2cd59e",
+     "selector": "0x00f714ce",
+     "gasUsed": 286356,
+     "gasCostWei": "14317800000000",
+     "gasCostBnb": 1.43178e-05,
+     "bnbUsdAtBlock": 1788432990,
+     "gasUsd": 0.01010039
+    },
+    {
+     "nonce": 15,
+     "block": 119714487,
+     "iso": "2026-09-03T10:56:32.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0xac9650d8",
+     "gasUsed": 249708,
+     "gasCostWei": "12485400000000",
+     "gasCostBnb": 1.24854e-05,
+     "bnbUsdAtBlock": 1788432992,
+     "gasUsd": 0.00880205
+    },
+    {
+     "nonce": 16,
+     "block": 119714492,
+     "iso": "2026-09-03T10:56:34.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 153974,
+     "gasCostWei": "7698700000000",
+     "gasCostBnb": 7.6987e-06,
+     "bnbUsdAtBlock": 1788432994,
+     "gasUsd": 0.00542749
+    },
+    {
+     "nonce": 17,
+     "block": 119714497,
+     "iso": "2026-09-03T10:56:36.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29118,
+     "gasCostWei": "1455900000000",
+     "gasCostBnb": 1.4559e-06,
+     "bnbUsdAtBlock": 1788432996,
+     "gasUsd": 0.00102639
+    },
+    {
+     "nonce": 18,
+     "block": 119714501,
+     "iso": "2026-09-03T10:56:38.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 28964,
+     "gasCostWei": "1448200000000",
+     "gasCostBnb": 1.4482e-06,
+     "bnbUsdAtBlock": 1788432998,
+     "gasUsd": 0.00102096
+    },
+    {
+     "nonce": 19,
+     "block": 119714506,
+     "iso": "2026-09-03T10:56:40.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x88316456",
+     "gasUsed": 440599,
+     "gasCostWei": "22029950000000",
+     "gasCostBnb": 2.202995e-05,
+     "bnbUsdAtBlock": 1788433000,
+     "gasUsd": 0.01553084
+    },
+    {
+     "nonce": 20,
+     "block": 119714511,
+     "iso": "2026-09-03T10:56:43.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x42842e0e",
+     "gasUsed": 468371,
+     "gasCostWei": "23418550000000",
+     "gasCostBnb": 2.341855e-05,
+     "bnbUsdAtBlock": 1788433003,
+     "gasUsd": 0.01650979
+    },
+    {
+     "nonce": 21,
+     "block": 119754831,
+     "iso": "2026-09-03T15:59:13.000Z",
+     "to": "0x556b9306565093c855aea9ae92a594704c2cd59e",
+     "selector": "0x00f714ce",
+     "gasUsed": 272399,
+     "gasCostWei": "13619950000000",
+     "gasCostBnb": 1.361995e-05,
+     "bnbUsdAtBlock": 1788451153,
+     "gasUsd": 0.0098933
+    },
+    {
+     "nonce": 22,
+     "block": 119754973,
+     "iso": "2026-09-03T16:00:17.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0xac9650d8",
+     "gasUsed": 249696,
+     "gasCostWei": "12484800000000",
+     "gasCostBnb": 1.24848e-05,
+     "bnbUsdAtBlock": 1788451217,
+     "gasUsd": 0.00908225
+    },
+    {
+     "nonce": 23,
+     "block": 119754979,
+     "iso": "2026-09-03T16:00:20.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 154047,
+     "gasCostWei": "7702350000000",
+     "gasCostBnb": 7.70235e-06,
+     "bnbUsdAtBlock": 1788451220,
+     "gasUsd": 0.00560319
+    },
+    {
+     "nonce": 24,
+     "block": 119754985,
+     "iso": "2026-09-03T16:00:23.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29130,
+     "gasCostWei": "1456500000000",
+     "gasCostBnb": 1.4565e-06,
+     "bnbUsdAtBlock": 1788451223,
+     "gasUsd": 0.00105955
+    },
+    {
+     "nonce": 25,
+     "block": 119754990,
+     "iso": "2026-09-03T16:00:25.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 28964,
+     "gasCostWei": "1448200000000",
+     "gasCostBnb": 1.4482e-06,
+     "bnbUsdAtBlock": 1788451225,
+     "gasUsd": 0.00105351
+    },
+    {
+     "nonce": 26,
+     "block": 119755131,
+     "iso": "2026-09-03T16:01:28.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29106,
+     "gasCostWei": "1455300000000",
+     "gasCostBnb": 1.4553e-06,
+     "bnbUsdAtBlock": 1788451288,
+     "gasUsd": 0.00105679
+    },
+    {
+     "nonce": 27,
+     "block": 119755136,
+     "iso": "2026-09-03T16:01:31.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 154039,
+     "gasCostWei": "7701950000000",
+     "gasCostBnb": 7.70195e-06,
+     "bnbUsdAtBlock": 1788451291,
+     "gasUsd": 0.00559291
+    },
+    {
+     "nonce": 28,
+     "block": 119755141,
+     "iso": "2026-09-03T16:01:33.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 28964,
+     "gasCostWei": "1448200000000",
+     "gasCostBnb": 1.4482e-06,
+     "bnbUsdAtBlock": 1788451293,
+     "gasUsd": 0.00105164
+    },
+    {
+     "nonce": 29,
+     "block": 119755282,
+     "iso": "2026-09-03T16:02:36.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 28964,
+     "gasCostWei": "1448200000000",
+     "gasCostBnb": 1.4482e-06,
+     "bnbUsdAtBlock": 1788451356,
+     "gasUsd": 0.00105099
+    },
+    {
+     "nonce": 30,
+     "block": 119755287,
+     "iso": "2026-09-03T16:02:39.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 151439,
+     "gasCostWei": "7571950000000",
+     "gasCostBnb": 7.57195e-06,
+     "bnbUsdAtBlock": 1788451359,
+     "gasUsd": 0.00549514
+    },
+    {
+     "nonce": 31,
+     "block": 119755292,
+     "iso": "2026-09-03T16:02:41.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x88316456",
+     "gasUsed": 440683,
+     "gasCostWei": "22034150000000",
+     "gasCostBnb": 2.203415e-05,
+     "bnbUsdAtBlock": 1788451361,
+     "gasUsd": 0.0159907
+    },
+    {
+     "nonce": 32,
+     "block": 119755298,
+     "iso": "2026-09-03T16:02:43.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x42842e0e",
+     "gasUsed": 505948,
+     "gasCostWei": "25297400000000",
+     "gasCostBnb": 2.52974e-05,
+     "bnbUsdAtBlock": 1788451363,
+     "gasUsd": 0.01835892
+    },
+    {
+     "nonce": 33,
+     "block": 120077987,
+     "iso": "2026-09-05T08:23:49.000Z",
+     "to": "0x556b9306565093c855aea9ae92a594704c2cd59e",
+     "selector": "0x00f714ce",
+     "gasUsed": 278002,
+     "gasCostWei": "13900100000000",
+     "gasCostBnb": 1.39001e-05,
+     "bnbUsdAtBlock": 1788596629,
+     "gasUsd": 0.01039384
+    },
+    {
+     "nonce": 34,
+     "block": 120078128,
+     "iso": "2026-09-05T08:24:52.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0xac9650d8",
+     "gasUsed": 249730,
+     "gasCostWei": "12486500000000",
+     "gasCostBnb": 1.24865e-05,
+     "bnbUsdAtBlock": 1788596692,
+     "gasUsd": 0.00933979
+    },
+    {
+     "nonce": 35,
+     "block": 120078133,
+     "iso": "2026-09-05T08:24:55.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29106,
+     "gasCostWei": "1455300000000",
+     "gasCostBnb": 1.4553e-06,
+     "bnbUsdAtBlock": 1788596695,
+     "gasUsd": 0.00108855
+    },
+    {
+     "nonce": 36,
+     "block": 120078137,
+     "iso": "2026-09-05T08:24:56.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 154039,
+     "gasCostWei": "7701950000000",
+     "gasCostBnb": 7.70195e-06,
+     "bnbUsdAtBlock": 1788596696,
+     "gasUsd": 0.00576099
+    },
+    {
+     "nonce": 37,
+     "block": 120078142,
+     "iso": "2026-09-05T08:24:59.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29130,
+     "gasCostWei": "1456500000000",
+     "gasCostBnb": 1.4565e-06,
+     "bnbUsdAtBlock": 1788596699,
+     "gasUsd": 0.00108945
+    },
+    {
+     "nonce": 38,
+     "block": 120078147,
+     "iso": "2026-09-05T08:25:01.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x88316456",
+     "gasUsed": 525869,
+     "gasCostWei": "26293450000000",
+     "gasCostBnb": 2.629345e-05,
+     "bnbUsdAtBlock": 1788596701,
+     "gasUsd": 0.01968444
+    },
+    {
+     "nonce": 39,
+     "block": 120078152,
+     "iso": "2026-09-05T08:25:03.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x42842e0e",
+     "gasUsed": 505948,
+     "gasCostWei": "25297400000000",
+     "gasCostBnb": 2.52974e-05,
+     "bnbUsdAtBlock": 1788596703,
+     "gasUsd": 0.01893875
+    },
+    {
+     "nonce": 40,
+     "block": 120130200,
+     "iso": "2026-09-05T14:55:29.000Z",
+     "to": "0x556b9306565093c855aea9ae92a594704c2cd59e",
+     "selector": "0x00f714ce",
+     "gasUsed": 289168,
+     "gasCostWei": "14458400000000",
+     "gasCostBnb": 1.44584e-05,
+     "bnbUsdAtBlock": 1788620129,
+     "gasUsd": 0.01112804
+    },
+    {
+     "nonce": 41,
+     "block": 120130205,
+     "iso": "2026-09-05T14:55:31.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0xac9650d8",
+     "gasUsed": 262856,
+     "gasCostWei": "13142800000000",
+     "gasCostBnb": 1.31428e-05,
+     "bnbUsdAtBlock": 1788620131,
+     "gasUsd": 0.01011548
+    },
+    {
+     "nonce": 42,
+     "block": 120130211,
+     "iso": "2026-09-05T14:55:34.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29106,
+     "gasCostWei": "1455300000000",
+     "gasCostBnb": 1.4553e-06,
+     "bnbUsdAtBlock": 1788620134,
+     "gasUsd": 0.00112009
+    },
+    {
+     "nonce": 43,
+     "block": 120130216,
+     "iso": "2026-09-05T14:55:36.000Z",
+     "to": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
+     "selector": "0x04e45aaf",
+     "gasUsed": 129565,
+     "gasCostWei": "6478250000000",
+     "gasCostBnb": 6.47825e-06,
+     "bnbUsdAtBlock": 1788620136,
+     "gasUsd": 0.00498605
+    },
+    {
+     "nonce": 44,
+     "block": 120130221,
+     "iso": "2026-09-05T14:55:39.000Z",
+     "to": "0x55d398326f99059ff775485246999027b3197955",
+     "selector": "0x095ea7b3",
+     "gasUsed": 29118,
+     "gasCostWei": "1455900000000",
+     "gasCostBnb": 1.4559e-06,
+     "bnbUsdAtBlock": 1788620139,
+     "gasUsd": 0.00112055
+    },
+    {
+     "nonce": 45,
+     "block": 120130225,
+     "iso": "2026-09-05T14:55:40.000Z",
+     "to": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+     "selector": "0x095ea7b3",
+     "gasUsed": 28964,
+     "gasCostWei": "1448200000000",
+     "gasCostBnb": 1.4482e-06,
+     "bnbUsdAtBlock": 1788620140,
+     "gasUsd": 0.00111462
+    },
+    {
+     "nonce": 46,
+     "block": 120130230,
+     "iso": "2026-09-05T14:55:43.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x88316456",
+     "gasUsed": 440655,
+     "gasCostWei": "22032750000000",
+     "gasCostBnb": 2.203275e-05,
+     "bnbUsdAtBlock": 1788620143,
+     "gasUsd": 0.01695771
+    },
+    {
+     "nonce": 47,
+     "block": 120130235,
+     "iso": "2026-09-05T14:55:45.000Z",
+     "to": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364",
+     "selector": "0x42842e0e",
+     "gasUsed": 468371,
+     "gasCostWei": "23418550000000",
+     "gasCostBnb": 2.341855e-05,
+     "bnbUsdAtBlock": 1788620145,
+     "gasUsd": 0.01802431
+    }
+   ]
+  },
+  "terminalPosition": {
+   "asOfBlock": 120279139,
+   "asOfIso": "2026-09-06T09:32:56.000Z",
+   "poolTick": -66318,
+   "bnbUsdAtBlock": {
+    "feed": "BNB/USD",
+    "roundId": "55340232221132064268",
+    "answerRaw": "75878684000",
+    "decimals": 8,
+    "price": 758.78684,
+    "updatedAt": 1788687169,
+    "updatedAtIso": "2026-09-06T09:32:49Z",
+    "stalenessSecondsAtBlock": 7
+   },
+   "usdtUsdAtBlock": {
+    "feed": "USDT/USD",
+    "roundId": "73786976294838208059",
+    "answerRaw": "100007170",
+    "decimals": 8,
+    "price": 1.0000717,
+    "updatedAt": 1788686505,
+    "updatedAtIso": "2026-09-06T09:21:45Z",
+    "stalenessSecondsAtBlock": 671
+   },
+   "cakeUsdAtBlock": {
+    "feed": "CAKE/USD",
+    "roundId": "55340232221129683281",
+    "answerRaw": "219631058",
+    "decimals": 8,
+    "price": 2.19631058,
+    "updatedAt": 1788687154,
+    "updatedAtIso": "2026-09-06T09:32:34Z",
+    "stalenessSecondsAtBlock": 22
+   },
+   "openPositionTokens": {
+    "tokenId": "7340903",
+    "usdt": 23.403943501367106,
+    "wbnb": 0.02203298965531562,
+    "method": "Uniswap/Pancake V3 amounts from liquidity 15630585959387618796 over band [-67110,-65200] at the end-of-window tick. This model reproduces the USDT value of all 11 observed mints and closes to within 0.0000%, so it is a validated mark, not an estimate.",
+    "usd": 40.123964
+   },
+   "idleWalletUsdt": 0.023281553009688326,
+   "cakeHeld": 0.03014473152619466,
+   "principalUsd": 40.147247,
+   "grossIncludingCakeUsd": 40.213455,
+   "netAfterGasUsd": 39.845391
+  },
+  "netVersusHolding": {
+   "definition": "The agent's terminal value against holding, unchanged, the two assets it entered with. All three baselines are anchored at real blocks and valued with Chainlink at the window-end block.",
+   "baseline1_entryBasket": {
+    "what": "hold 13.93405815 USDT + 0.0366855581 WBNB, the exact basket the wallet held after its opening swap at block 118536432, for the whole window",
+    "anchorBlock": 118536432,
+    "valueAtWindowEndUsd": 41.771576,
+    "agentNetUsd": 39.845391,
+    "differenceUsd": -1.926185,
+    "differencePercent": -4.6112,
+    "note": "This is the rubric's literal question and it is the worst-looking of the three, because the entry basket was 65% BNB while every subsequent position was about 34% BNB. The first re-range halved the BNB exposure at block 118625047, when BNB was $685.77, near the bottom of the window; BNB then rose to $758.79."
+   },
+   "baseline2_steadyStateBasket": {
+    "what": "hold 25.59604814 USDT + 0.0195174062 WBNB, the basket the agent actually ran with from its first re-range onward (34.4% BNB), from block 118625047 to the window end",
+    "anchorBlock": 118625047,
+    "anchorIso": "2026-08-28T18:39:19.000Z",
+    "elapsedSeconds": 744817,
+    "elapsedDays": 8.621,
+    "valueAtWindowEndUsd": 40.407434,
+    "agentPrincipalAtWindowEndUsd": 40.147247,
+    "differenceBeforeCakeAndGasUsd": -0.260187,
+    "differenceBeforeCakeAndGasPercent": -0.6439,
+    "differenceAfterCakeAndGasUsd": -0.506911,
+    "differenceAfterCakeAndGasPercent": -1.2545,
+    "note": "This isolates the band-keeping decision from the one-off initial sizing. Against its own steady-state mix the agent lost 0.64% of notional before costs and 1.25% after gas and CAKE over 8.62 days."
+   },
+   "baseline3_doNothing": {
+    "what": "hold the 40 USDT it was funded with and never deploy it",
+    "anchorBlock": 118534816,
+    "valueAtWindowEndUsd": 40.002868,
+    "agentNetUsd": 39.845391,
+    "differenceUsd": -0.157477,
+    "differencePercent": -0.3937
+   },
+   "impermanentLoss": {
+    "inPositionOnly": {
+     "definition": "sum over the five completed positions of (principal withdrawn - principal deposited), both valued at that position's close block; the baseline resets at every mint",
+     "usd": -0.491883,
+     "coveredByFeeAndCakeIncomePercent": 55.29
+    },
+    "cumulativeVsEntryBasket": {
+     "definition": "principal plus every fee already collected and redeployed, valued at the window-end block, against holding the entry basket over the same window; before CAKE and before gas, so it is comparable with the in-position figure above",
+     "usd": -1.624329,
+     "note": "This is 3.3x the sum of the in-position impermanent losses because the resetting per-position baseline does not charge the agent for the re-ranges themselves. Each re-range re-set the token mix toward USDT while BNB was rising, so from block 118625047 onward the agent carried roughly half the BNB exposure a holder of the entry basket would have had."
+    },
+    "allInVsEntryBasket": {
+     "definition": "the same comparison after CAKE income and after all 48 transactions of gas",
+     "usd": -1.926185
+    }
+   },
+   "marketContext": {
+    "bnbUsdAtWindowStart": 710.3099,
+    "bnbUsdAtWindowEnd": 758.7868,
+    "bnbMovePercent": 6.8248,
+    "bnbMinUsd": 674.7446,
+    "bnbMaxUsd": 780.3487,
+    "note": "BNB rose 6.8% over the window. A concentrated LP sells the asset that is rising, so this window was structurally unfavourable; a flat or falling window would look different, and nine days is not enough to know which is typical."
+   }
+  },
+  "yields": {
+   "definition": "Income over the window as a fraction of the time-weighted average notional. The per-annum figures are a linear restatement of a 9.08-day sample, not a forecast.",
+   "timeWeightedAverageNotionalUsd": 39.490415,
+   "swapFeeIncomePercentOfNotional": 0.5361,
+   "cakeIncomePercentOfNotional": 0.1525,
+   "grossIncomePercentOfNotional": 0.6886,
+   "gasCostPercentOfNotional": 0.932,
+   "grossIncomeAnnualisedPercent_linear": 27.69,
+   "gasCostAnnualisedPercent_linear": 37.48,
+   "netOfGasAnnualisedPercent_linear": -9.79,
+   "warning": "These exclude impermanent loss entirely. Including it, the agent underperformed holding. Do not quote the gross figure alone."
+  }
+ },
+ "headline": {
+  "note": "The five or six numbers a reader should remember, each with the block it was read at.",
+  "numbers": [
+   {
+    "label": "Window",
+    "value": "9.08 days, 2026-08-28T07:34:41Z to 2026-09-06T09:32:56Z",
+    "blocks": [
+     118536451,
+     120279139
+    ],
+    "detail": "99.976% of it with capital in a live band; the only holes are 185 s of same-minute handoffs"
+   },
+   {
+    "label": "Win rate (nominated: time in range)",
+    "value": "100.00%",
+    "blocks": [
+     118536451,
+     120279139
+    ],
+    "detail": "784,510 of 784,510 seconds of position life, 0 range exits across 6 positions, minimum headroom to any bound 313 ticks (3.18% of price)"
+   },
+   {
+    "label": "Win rate (economic, per completed cycle)",
+    "value": "0 of 5",
+    "blocks": [
+     118536451,
+     120130205
+    ],
+    "detail": "no completed cycle beat holding its own deposited basket after fees, CAKE and gas"
+   },
+   {
+    "label": "Risk: max drawdown",
+    "value": "-3.15% (-$1.26)",
+    "blocks": [
+     118536459,
+     119393722
+    ],
+    "detail": "peak $39.99 at block 118,536,459 to trough $38.73 at block 119,393,722, while BNB itself drew down 4.99%"
+   },
+   {
+    "label": "Risk: leverage and time out of range",
+    "value": "zero and zero",
+    "blocks": [
+     118536451,
+     120279139
+    ],
+    "detail": "5 distinct contracts ever called, none of them a lending or margin venue; 0 seconds outside a band"
+   },
+   {
+    "label": "Return: income vs gas",
+    "value": "$0.272 income, $0.368 gas",
+    "blocks": [
+     118536451,
+     120279139
+    ],
+    "detail": "$0.2117 swap fees + $0.0602 CAKE against $0.3681 of gas across 48 transactions; gas was 1.35x income, and would only have been covered above about $53 of notional"
+   },
+   {
+    "label": "Return: net versus holding",
+    "value": "-4.61% vs the entry basket, -0.64% vs its own steady-state basket",
+    "blocks": [
+     118536432,
+     120279139
+    ],
+    "detail": "agent net $39.845 against $41.772 for holding the 65%-BNB entry basket; against the 34%-BNB mix it actually ran, the gap is $0.260 before costs over 8.62 days. BNB rose 6.8% over the window."
+   }
+  ]
+ }
+}
