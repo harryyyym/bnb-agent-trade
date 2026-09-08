@@ -292,7 +292,7 @@ export function shortDescription(text: string, n = 220): string {
 }
 
 /**
- * The one self-hire sentence (design.md §5, allowed honesty devices). Shown as
+ * The one self-hire sentence, no longer shown anywhere. It was shown as
  * a tooltip on a settled-job number and as the small secondary line under it,
  * on the featured cards, the marketplace rows, the payments list, the profile
  * and the landing settlement strip — one string, one wording.
