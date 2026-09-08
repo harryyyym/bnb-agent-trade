@@ -6,6 +6,8 @@
 import { CreditCard, KeyRound, PackageCheck } from "lucide-react";
 import { Button } from "@/components/button";
 import { HeroBackdrop } from "@/components/hero-rays";
+import { getAskDenominator, getAsks } from "@/lib/ask";
+import { AskFold } from "./_landing/ask";
 import { Container } from "@/components/container";
 import { ExtLink } from "@/components/ext-link";
 import { SiteFooter, SiteNav } from "@/components/site-chrome";
@@ -26,12 +28,10 @@ import {
   getShowcaseJob,
   siteFooterLine,
 } from "./_landing/data";
-import { ListTable, Row } from "@/app/marketplace/row";
-import { HeroShowcase } from "@/components/hero-showcase";
 import { cn } from "@/lib/utils";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { EYEBROW, HiringCard, SectionHead } from "./_landing/ui";
-import { pickLeads, sortRows } from "./marketplace/filters";
+import { pickLeads } from "./marketplace/filters";
 
 export const revalidate = 30;
 
@@ -57,7 +57,6 @@ export default async function Home() {
   const leads = pickLeads(rows);
   // The hero surface shows the catalogue as it is: the evidence order, top of
   // page one, exactly the rows /marketplace opens with.
-  const heroRows = sortRows(rows, "evidence").slice(0, 8);
   const compareHref = `/marketplace?compare=${leads.rows.map((r) => r.key).join(",")}`;
 
   const hiring = getHiringCounts();
@@ -116,30 +115,16 @@ export default async function Home() {
               >
                 {SITE_DESCRIPTION}
               </p>
-              <div className="animate-rise flex flex-wrap gap-3" style={{ animationDelay: "1.15s" }}>
-                <Button href="/marketplace" variant="default" size="lg">
-                  Explore all agents
-                </Button>
-                <Button href="/hiring" variant="outline" size="lg">
-                  How hiring works
-                </Button>
-              </div>
             </div>
           </Container>
-          {/* The fold's one large surface: the real marketplace, not a picture
-              of one. In the same Container as the headline, so
-              its left edge is the page's left edge. */}
+          {/* The fold's one large surface: a control the reader can use, not a
+              picture of one. It replaced the framed marketplace shot, which
+              showed rows a visitor could not touch and answered no question. In
+              the same Container as the headline, so its left edge is the
+              page's left edge. */}
           <Container className="relative">
             <div className="animate-rise" style={{ animationDelay: "1.4s" }}>
-              <HeroShowcase>
-                <MockupFrame title="bnbagent.trade/marketplace">
-                  <ListTable inset>
-                    {heroRows.map((r) => (
-                      <Row key={r.key} row={r} />
-                    ))}
-                  </ListTable>
-                </MockupFrame>
-              </HeroShowcase>
+              <AskFold asks={getAsks()} denominator={getAskDenominator()} />
             </div>
           </Container>
           {/* Under the product, where a trust strip belongs — inside the hero,
